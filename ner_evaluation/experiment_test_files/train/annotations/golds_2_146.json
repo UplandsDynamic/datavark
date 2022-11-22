@@ -1,0 +1,1 @@
+{"classes": ["COLOR", "TYPE"], "annotations": [["The chevron was huge", {"entities": [[4, 11, "TYPE"]]}], ["The rod was huge", {"entities": [[4, 7, "TYPE"]]}], ["The disks was huge", {"entities": [[4, 8, "TYPE"], [4, 9, "TYPE"]]}], ["The boomerang was huge", {"entities": [[4, 13, "TYPE"]]}], ["The crescent was huge", {"entities": [[4, 12, "TYPE"]]}]]}

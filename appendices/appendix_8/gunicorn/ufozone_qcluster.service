@@ -5,7 +5,7 @@ After=network.target
 
 [Service]
 WorkingDirectory=/home/django/ufozone/UFOzone
-ExecStart=/home/django/.local/share/virtualenvs/ufozone-5_XuJzp3/bin/python /home/django/ufozone/UFOzone/manage.py qcluster
+ExecStart=/home/django/.local/share/virtualenvs/UFOzone-FrfBYLl8/bin/python /home/django/ufozone/UFOzone/manage.py qcluster
 Restart=always
 SyslogIdentifier=djangoQ
 User=django

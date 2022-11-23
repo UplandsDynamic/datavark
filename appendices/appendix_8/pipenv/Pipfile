@@ -11,6 +11,7 @@ psycopg2-binary = "*"
 postgres = "*"
 django-q = "*"
 django = "*"
+gevent = "*"
 
 [dev-packages]
 

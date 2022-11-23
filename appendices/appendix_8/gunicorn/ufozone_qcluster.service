@@ -4,8 +4,8 @@ Before=nginx.service
 After=network.target
 
 [Service]
-WorkingDirectory=/home/django/ufozone
-ExecStart=/home/django/.local/share/virtualenvs/ufozone-5_XuJzp3/bin/python /home/django/ufozone/manage.py qcluster
+WorkingDirectory=/home/django/ufozone/UFOzone
+ExecStart=/home/django/.local/share/virtualenvs/ufozone-5_XuJzp3/bin/python /home/django/ufozone/UFOzone/manage.py qcluster
 Restart=always
 SyslogIdentifier=djangoQ
 User=django

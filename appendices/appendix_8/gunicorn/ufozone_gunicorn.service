@@ -1,0 +1,16 @@
+[Unit]
+Description=Gunicorn daemon for Django projects
+Before=nginx.service
+After=network.target
+
+[Service]
+WorkingDirectory=/home/django/ufozone/UFOzone
+ExecStart=/home/django/.local/share/virtualenvs/ufozone-5_XuJzp3/bin/gunicorn --name=UFOzone --pythonpath=/home/django/ufozone/UFOzone --bind unix:/home/django/gunicorn-ufozone.socket --config /home/django/ufozone/UFOzone/UFOzone/gunicorn.py UFOzone.wsgi:application
+Restart=always
+SyslogIdentifier=gunicorn
+User=django
+Group=django
+
+
+[Install]
+WantedBy=multi-user.target

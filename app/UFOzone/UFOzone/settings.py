@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'ie.apps.IeConfig',
     # 'email_service.apps.EmailServiceConfig,
     'corsheaders',
     'django_q'

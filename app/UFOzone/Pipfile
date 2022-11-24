@@ -12,6 +12,9 @@ postgres = "*"
 django-q = "*"
 django = "*"
 gevent = "*"
+geos = "*"
+proj = "*"
+numpy = "*"
 
 [dev-packages]
 

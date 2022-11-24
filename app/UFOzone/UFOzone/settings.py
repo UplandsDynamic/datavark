@@ -46,8 +46,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # 'stock_control.apps.StockControlConfig',
-    # 'accounts.apps.AccountsConfig',
     # 'email_service.apps.EmailServiceConfig,
     'corsheaders',
     'django_q'

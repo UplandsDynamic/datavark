@@ -3,36 +3,43 @@ from urllib.parse import urlsplit
 import os, string, random, locale
 
 ### paths & hosts
+PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 BASE_DIR = Path(__file__).resolve().parent.parent
-ROOT_URLCONF = 'UFOzone.urls'
-X_FRAME_OPTIONS = 'DENY'
-SECURE_HSTS_SECONDS = 30 # 30s for testing. Set to more appropriate in production 
+ROOT_URLCONF = "UFOzone.urls"
+X_FRAME_OPTIONS = "DENY"
+SECURE_HSTS_SECONDS = 30  # 30s for testing. Set to more appropriate in production
 SECURE_CONTENT_TYPE_NOSNIFF = True
 SECURE_BROWSER_XSS_FILTER = True
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-ALLOWED_HOSTS = ['localhost','ufozone.co.uk']
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+ALLOWED_HOSTS = ["localhost", "ufozone.co.uk"]
 CORS_ORIGIN_ALLOW_ALL = True  # only set True for testing purposes
 CORS_ALLOW_CREDENTIALS = True
-CORS_ORIGIN_WHITELIST = ['http://localhost', 'https://ufozone.co.uk']
-CSRF_TRUSTED_ORIGINS = ['https://*.ufozone.co.uk', 'https://ufozone.co.uk']
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+CORS_ORIGIN_WHITELIST = ["http://localhost", "https://ufozone.co.uk"]
+CSRF_TRUSTED_ORIGINS = ["https://*.ufozone.co.uk", "https://ufozone.co.uk"]
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 ### SECURITY WARNING: keep the secret key used in production secret!
-#SECRET_KEY = 'django-insecure-+^w!t3^1eywb94sjhfxysxi&fm$*47ouh&kti@knfe%%-c90t5'
+# SECRET_KEY = 'django-insecure-+^w!t3^1eywb94sjhfxysxi&fm$*47ouh&kti@knfe%%-c90t5'
 
 # # # GENERATE A NEW UNIQUE SECRET KEY (secret_key.txt) IF DOES NOT ALREADY EXIST
 # # # Ensure 'secret_key' dir has been created in base directory
-KEY_PATH = os.path.join(BASE_DIR, 'secret_key', 'secret_key.txt')
+KEY_PATH = os.path.join(BASE_DIR, "secret_key", "secret_key.txt")
 try:
-    with open(KEY_PATH, 'r') as f:
+    with open(KEY_PATH, "r") as f:
         SECRET_KEY = f.read().strip()
 except IOError:
-    SECRET_KEY = ''.join([random.SystemRandom().choice(string.ascii_letters + string.digits + string.punctuation)
-                          for _ in range(50)])
-    with open(KEY_PATH, 'w') as f:
+    SECRET_KEY = "".join(
+        [
+            random.SystemRandom().choice(
+                string.ascii_letters + string.digits + string.punctuation
+            )
+            for _ in range(50)
+        ]
+    )
+    with open(KEY_PATH, "w") as f:
         f.write(SECRET_KEY)
 
 ### SECURITY WARNING: don't run with debug turned on in production!
@@ -40,49 +47,56 @@ DEBUG = True
 
 ### application definitions
 INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'ie.apps.IeConfig',
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
+    "ie.apps.IeConfig",
     # 'email_service.apps.EmailServiceConfig,
-    'corsheaders',
-    'django_q'
+    "corsheaders",
+    "django_q",
 ]
-    
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-WSGI_APPLICATION = 'UFOzone.wsgi.application'
+IE_SETTINGS = {
+    "data_sources": {
+        "nuforc": os.path.join(BASE_DIR, "nuforc", "nuforc_reports.csv"),
+        "reddit": "r/UFOs on Reddit.com",
+    }
+}
+
+
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+WSGI_APPLICATION = "UFOzone.wsgi.application"
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 10240  # set higher than the count of fields
 
 
 ### middleware
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django.middleware.locale.LocaleMiddleware',
+    "django.middleware.security.SecurityMiddleware",
+    "django.contrib.sessions.middleware.SessionMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
+    "django.middleware.common.CommonMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.messages.middleware.MessageMiddleware",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "django.middleware.locale.LocaleMiddleware",
 ]
 
 ### templates
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [],
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "context_processors": [
+                "django.template.context_processors.debug",
+                "django.template.context_processors.request",
+                "django.contrib.auth.context_processors.auth",
+                "django.contrib.messages.context_processors.messages",
             ],
         },
     },
@@ -90,37 +104,35 @@ TEMPLATES = [
 
 ### databases
 DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': 'ufozone',
-            'USER': 'dan',
-            'PASSWORD': 'yekOOej839*',
-            'HOST': 'localhost',
-            'PORT': '5432',
-        }
+    "default": {
+        "ENGINE": "django.contrib.gis.db.backends.postgis",
+        "NAME": "ufozone",
+        "USER": "dan",
+        "PASSWORD": "yekOOej839*",
+        "HOST": "localhost",
+        "PORT": "5432",
     }
+}
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
 
 ### internationalisation
-locale.setlocale(locale.LC_ALL, 'en_GB.UTF-8')  # set locale
-LANGUAGE_CODE = 'en-gb'  # set language code
-LOCALE_PATHS = (
-    os.path.join(BASE_DIR, 'locale'),
-)
+locale.setlocale(locale.LC_ALL, "en_GB.UTF-8")  # set locale
+LANGUAGE_CODE = "en-gb"  # set language code
+LOCALE_PATHS = (os.path.join(BASE_DIR, "locale"),)
 USE_I18N = True
 USE_L10N = True
 USE_THOUSAND_SEPARATOR = True
@@ -128,108 +140,120 @@ USE_TZ = True
 
 ### static files
 STATICFILES_DIRS = []
-STATIC_URL = '/static/'
-MEDIA_URL = '/media/'
-STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
+STATIC_URL = "/static/"
+MEDIA_URL = "/media/"
+STATICFILES_STORAGE = "django.contrib.staticfiles.storage.ManifestStaticFilesStorage"
 
 ### django_q
 Q_CLUSTER = {
-    'name': 'UFOzone',
-    'daemonize_workers': True,
-    'compress': True,
-    'workers': 2,
-    'recycle': 5000,
-    'timeout': 99999,
-    # 'django_redis': 'default',
-    'retry': 100000,
-    'queue_limit': 4,
-    'bulk': 1,
-    'orm': 'default',
-    'sync': False,  # Set True to debug in sync mode.
-    'guard_cycle': 5,
-    'cpu_affinity': 1,
-    'catch_up': True
+    "name": "UFOzone",
+    "daemonize_workers": True,
+    "compress": True,
+    "workers": 2,
+    "recycle": 5000,
+    "timeout": 99999,
+    'django_redis': 'django_q',
+    "retry": 100000,
+    "queue_limit": 4,
+    "bulk": 1,
+    #"orm": "default",
+    "sync": False,  # Set True to debug in sync mode.
+    "guard_cycle": 5,
+    "cpu_affinity": 1,
+    "catch_up": True,
 }
 
 ### caches
 DEFAULT_CACHES_TTL = 0  # 0 means equates to 'do not cache'. E.g. to cache for 24 hours: ((60 * 60) * 60) * 24
 CACHE_SESSION_SECONDS = 60 * 60
-CACHE_MIDDLEWARE_ALIAS = 'default'
+CACHE_MIDDLEWARE_ALIAS = "default"
 CACHE_MIDDLEWARE_SECONDS = DEFAULT_CACHES_TTL  # cache session data for an hour
-CACHE_MIDDLEWARE_KEY_PREFIX = 'ufozone_server'
-MIDDLEWARE.insert(0, 'django.middleware.cache.UpdateCacheMiddleware')  # HAS TO GO FIRST IN MIDDLEWARE LIST
-MIDDLEWARE.append('django.middleware.cache.FetchFromCacheMiddleware')  # HAS TO GO LAST IN MIDDLEWARE LIST
-CACHES = {'default':
-              {'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-               'TIMEOUT': DEFAULT_CACHES_TTL,
-               'LOCATION': 'ufozone-backend-cache'
-               },
-              'template_fragments':
-                  {'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-                   'TIMEOUT': DEFAULT_CACHES_TTL,
-                   'LOCATION': 'ufozone-template-fragments-cache'
-                   }
-              }
+CACHE_MIDDLEWARE_KEY_PREFIX = "ufozone_server"
+MIDDLEWARE.insert(
+    0, "django.middleware.cache.UpdateCacheMiddleware"
+)  # HAS TO GO FIRST IN MIDDLEWARE LIST
+MIDDLEWARE.append(
+    "django.middleware.cache.FetchFromCacheMiddleware"
+)  # HAS TO GO LAST IN MIDDLEWARE LIST
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+        "TIMEOUT": DEFAULT_CACHES_TTL,
+        "LOCATION": "ufozone-backend-cache",
+    },
+    "template_fragments": {
+        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+        "TIMEOUT": DEFAULT_CACHES_TTL,
+        "LOCATION": "ufozone-template-fragments-cache",
+    },
+     "django_q": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/1",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}
 
 ### email services
 EMAIL_BACKEND = ""
-DEFAULT_FROM_EMAIL = ''
+DEFAULT_FROM_EMAIL = ""
 ANYMAIL = {
-    'IGNORE_UNSUPPORTED_FEATURES': True,
+    "IGNORE_UNSUPPORTED_FEATURES": True,
 }
 
 ### password validation
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
 
 ### logging
-LOG_FILE = '/var/log/django/ufozone.log'  # this directory & file needs to be created first!
+LOG_FILE = (
+    "/var/log/django/ufozone.log"  # this directory & file needs to be created first!
+)
 LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'formatters': {
-        'verbose': {
-            'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "verbose": {
+            "format": "%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s"
         },
-        'simple': {
-            'format': '%(asctime)s %(levelname)s %(message)s'
+        "simple": {"format": "%(asctime)s %(levelname)s %(message)s"},
+    },
+    "handlers": {
+        "console": {
+            "level": "DEBUG",
+            "class": "logging.StreamHandler",
+            "formatter": "simple",
+        },
+        "file": {
+            "level": "DEBUG",
+            "class": "logging.FileHandler",
+            "filename": LOG_FILE,
+            "formatter": "verbose",
+        },
+    },
+    "loggers": {
+        "django": {
+            "handlers": ["file"],
+            "level": "INFO",
+            "propagate": True,
+        },
+        "django_q": {
+            "handlers": ["file"],
+            "level": "DEBUG",
+            "propagate": True,
         }
-    },
-    'handlers': {
-        'console': {
-            'level': 'DEBUG',
-            'class': 'logging.StreamHandler',
-            'formatter': 'simple'
-        },
-        'file': {
-            'level': 'DEBUG',
-            'class': 'logging.FileHandler',
-            'filename': LOG_FILE,
-            'formatter': 'verbose'
-        },
-    },
-    'loggers': {
-        'django': {
-            'handlers': ['file'],
-            'level': 'INFO',
-            'propagate': False,
-        },
-        'django_q': {
-            'handlers': ['file'],
-            'level': 'DEBUG',
-            'propagate': True,
-        },
     },
 }

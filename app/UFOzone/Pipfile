@@ -15,8 +15,12 @@ gevent = "*"
 geos = "*"
 proj = "*"
 numpy = "*"
+pandas = "*"
+django-celery-beat = "*"
+pyyaml = "*"
+django-redis = "*"
 
 [dev-packages]
 
 [requires]
-python_version = "3.8"
+python_version = "3"

@@ -19,7 +19,7 @@ class IEView(View):
 
     def get(self, request, *args, **kwargs):
         template = get_template(self.template_name)
-        self.data_scan(1, 5)
+        self.data_scan(1, 1)
         context = {"nuforc_data": "Coming soon .."}
         return HttpResponse(template.render(context))
 
@@ -33,21 +33,6 @@ class IEView(View):
             minutes=minutes,
             repeats=repeats,
         )
-    
-    def print_result(task):
-        # Get an instance of a logger
-        #logger.info(task.result)
-        print('Works...!')
-
-        # Schedule.objects.create(
-        #     func='tasks.get_data',
-        #     hook='hooks.print_result',
-        #     args=("tester",),
-        #     schedule_type=Schedule.MINUTES,
-        #     minutes=minutes,
-        #     repeats=repeats
-        # )
-        # args='/Users/dan/Dev/education/uhi/dissertation/finals/github_repo/app/UFOzone/nuforc/nuforc_reports.csv',
 
 
 # class DetailView(generic.DetailView):

@@ -8,7 +8,7 @@ import pandas as pd
 from django.template import Template, Context
 from django.template.loader import get_template
 from django_q.models import Schedule
-from django_q.tasks import schedule, async_task
+from django_q.tasks import schedule
 #from .tasks import get_data
 import logging
 
@@ -19,7 +19,7 @@ class IEView(View):
 
     def get(self, request, *args, **kwargs):
         template = get_template(self.template_name)
-        self.data_scan(1, 1)
+        self.data_scan(1,1)
         context = {"nuforc_data": "Coming soon .."}
         return HttpResponse(template.render(context))
 
@@ -27,12 +27,14 @@ class IEView(View):
         schedule(
             func='UFOzone.tasks.get_data',
             #get_data,
-            source="tester",
+            source=settings.IE_SETTINGS['data_sources']['nuforc'],
             hook='UFOzone.hooks.print_result',
             schedule_type=Schedule.MINUTES,
             minutes=minutes,
             repeats=repeats,
         )
+    
+    
 
 
 # class DetailView(generic.DetailView):

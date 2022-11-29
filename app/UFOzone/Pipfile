@@ -19,8 +19,20 @@ pandas = "*"
 django-celery-beat = "*"
 pyyaml = "*"
 django-redis = "*"
+spacy = "*"
+spacy-transformers = "*"
+csv-diff = "*"
+
+click = "*"
+elasticsearch = "==5.4.0"
+lxml = "*"
+scrapy = "==2.6.3"
+toolz = "<1.0"
+loguru = "*"
+dvc = {extras = ["gs"], version = "*"}
 
 [dev-packages]
+black = "*"
 
 [requires]
 python_version = "3"

@@ -62,6 +62,7 @@ INSTALLED_APPS = [
 IE_SETTINGS = {
     "data_sources": {
         "nuforc": os.path.join(BASE_DIR, "nuforc", "nuforc_reports.csv"),
+        "nuforc-prev": os.path.join(BASE_DIR, "nuforc", "nuforc_sample.csv"),
         "reddit": "r/UFOs on Reddit.com",
     }
 }
@@ -252,7 +253,7 @@ LOGGING = {
         },
         "django_q": {
             "handlers": ["file"],
-            "level": "DEBUG",
+            "level": "INFO",
             "propagate": True,
         }
     },

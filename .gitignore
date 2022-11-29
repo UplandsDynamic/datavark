@@ -7,3 +7,5 @@ nuforc/
 *.csv
 ner_test.ipynb
 __pycache__
+static/
+media/

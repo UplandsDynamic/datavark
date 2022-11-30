@@ -9,7 +9,6 @@ from django.template import Template, Context
 from django.template.loader import get_template
 from django_q.models import Schedule
 from django_q.tasks import schedule
-#from .tasks import get_data
 import logging
 
 logger = logging.getLogger('django')
@@ -19,15 +18,17 @@ class IEView(View):
 
     def get(self, request, *args, **kwargs):
         template = get_template(self.template_name)
-        self.data_scan(1,1)
+        # note: when form set up, move this to be called on POST
+        source = settings.IE_SETTINGS['data_sources']['nuforc']
+        self.set_data_scan(source=source,minutes=1,repeats=1)
+        # return dashboard
         context = {"nuforc_data": "Coming soon .."}
         return HttpResponse(template.render(context))
 
-    def data_scan(self, minutes, repeats):
+    def set_data_scan(self, source, minutes, repeats):
         schedule(
             func='UFOzone.tasks.get_data',
-            #get_data,
-            source=settings.IE_SETTINGS['data_sources']['nuforc'],
+            source=source,
             hook='UFOzone.hooks.print_result',
             schedule_type=Schedule.MINUTES,
             minutes=minutes,

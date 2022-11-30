@@ -61,8 +61,22 @@ INSTALLED_APPS = [
 
 IE_SETTINGS = {
     "data_sources": {
-        "nuforc": os.path.join(BASE_DIR, "nuforc", "nuforc_reports.csv"),
-        "nuforc-prev": os.path.join(BASE_DIR, "nuforc", "nuforc_sample.csv"),
+        "nuforc": os.path.join(
+            BASE_DIR,
+            "nuforc",
+            "nuforc_sightings_data",
+            "data",
+            "processed",
+            "nuforc_reports.csv",
+        ),
+        "nuforc-prev": os.path.join(
+            BASE_DIR,
+            "nuforc",
+            "nuforc_sightings_data",
+            "data",
+            "processed",
+            "nuforc_reports_prev.csv",
+        ),
         "reddit": "r/UFOs on Reddit.com",
     }
 }
@@ -153,11 +167,11 @@ Q_CLUSTER = {
     "workers": 2,
     "recycle": 5000,
     "timeout": 99999,
-    'django_redis': 'django_q',
+    "django_redis": "django_q",
     "retry": 100000,
     "queue_limit": 4,
     "bulk": 1,
-    #"orm": "default",
+    # "orm": "default",
     "sync": False,  # Set True to debug in sync mode.
     "guard_cycle": 5,
     "cpu_affinity": 1,
@@ -187,13 +201,13 @@ CACHES = {
         "TIMEOUT": DEFAULT_CACHES_TTL,
         "LOCATION": "ufozone-template-fragments-cache",
     },
-     "django_q": {
+    "django_q": {
         "BACKEND": "django_redis.cache.RedisCache",
         "LOCATION": "redis://127.0.0.1:6379/1",
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
-        }
-    }
+        },
+    },
 }
 
 ### email services
@@ -255,6 +269,6 @@ LOGGING = {
             "handlers": ["file"],
             "level": "INFO",
             "propagate": True,
-        }
+        },
     },
 }

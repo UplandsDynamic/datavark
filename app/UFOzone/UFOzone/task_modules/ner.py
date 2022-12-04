@@ -3,6 +3,10 @@ import spacy
 
 class Ner:
 
+    """
+    Run the NER processes
+    """
+
     nlp = None
     data = []
 

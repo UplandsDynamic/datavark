@@ -22,8 +22,8 @@ class Capture:
     def capture(self):
         errors = []
         # do any post-processing
-        preprocess = PostProcess(data=self.data, source=self.source)
-        processed_data = preprocess.get_processed_data()
+        process = PostProcess(data=self.data, source=self.source)
+        processed_data = process.get_processed_data()
 
         if settings.IE_SETTINGS["test"]:
             return processed_data

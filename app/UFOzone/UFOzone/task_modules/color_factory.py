@@ -1,7 +1,8 @@
 class ColorFactory:
-    def __new__(self, endings=["ISH", "EY", "Y"]):
-        self.endings = endings
-        return self.get_colors(self)
+    def __new__(cls, endings=["ISH", "EY", "Y"]):
+        obj = super().__new__(cls)
+        obj.endings = endings
+        return obj.get_colors()
 
     def get_colors(self):
         new_colors = []

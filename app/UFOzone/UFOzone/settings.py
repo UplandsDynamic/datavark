@@ -105,6 +105,7 @@ IE_SETTINGS = {
                 "archive",
                 f"nuforc_reports_archive_",
             ),
+            "scraper_path": os.path.join(BASE_DIR, "nuforc", "nuforc_sightings_data"),
         },
         "reddit": {
             "source_name": "REDDIT",
@@ -209,7 +210,7 @@ Q_CLUSTER = {
     "queue_limit": 4,
     "bulk": 1,
     # "orm": "default",
-    "sync": 1 if IE_SETTINGS['test'] else 0,  # Set True to debug in sync mode.
+    "sync": 1 if IE_SETTINGS["test"] else 0,  # Set True to debug in sync mode.
     "guard_cycle": 5,
     "cpu_affinity": 1,
     "catch_up": True,

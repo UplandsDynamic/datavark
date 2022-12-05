@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "87f918189f7f66985a4cd492af527fac69561e22c49e9971ba8ff13b5b650dd7"
+            "sha256": "5f89d0d5a2a23f4e57330dce8723391d83fa8aae0d7b00864cdf8ca16a88189a"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -594,11 +594,11 @@
         },
         "dpath": {
             "hashes": [
-                "sha256:01d97387cb4165ca4053497318c068a8e6bbdbd289d180330ab8e03c4dede08c",
-                "sha256:5e33b5717070fe6b7450945aa22c0a6af22bb39d371fd06e71eb49a5d2a6a0ec"
+                "sha256:20824820a640a977d7264e9d6124fb590c638795b9a0599a8345a217a4f10bf5",
+                "sha256:a6ee533154375a1c88a1dc6651724167b823ed6c3f2411dd150ec0f0b8299894"
             ],
             "markers": "python_version >= '3.7'",
-            "version": "==2.1.1"
+            "version": "==2.1.2"
         },
         "dulwich": {
             "hashes": [
@@ -745,11 +745,11 @@
         },
         "filelock": {
             "hashes": [
-                "sha256:55447caa666f2198c5b6b13a26d2084d26fa5b115c00d065664b2124680c4edc",
-                "sha256:617eb4e5eedc82fc5f47b6d61e4d11cb837c56cb4544e39081099fa17ad109d4"
+                "sha256:7565f628ea56bfcd8e54e42bdc55da899c85c1abfe1b5bcfd147e9188cebb3b2",
+                "sha256:8df285554452285f79c035efb0c861eb33a4bcfa5b7a137016e32e6a90f9792c"
             ],
             "markers": "python_version >= '3.7'",
-            "version": "==3.8.0"
+            "version": "==3.8.2"
         },
         "flask": {
             "hashes": [
@@ -887,6 +887,14 @@
             ],
             "markers": "python_version >= '3.7'",
             "version": "==2022.11.0"
+        },
+        "geoip2": {
+            "hashes": [
+                "sha256:745e2d7a665072690056f9566774727da89216c7858793f89804f6945f969714",
+                "sha256:f0e80bce80b06bb38bd08bf4877d5a84e354e932095e6ccfb4d27bb598fa4f83"
+            ],
+            "index": "pypi",
+            "version": "==4.6.0"
         },
         "geos": {
             "hashes": [
@@ -1422,6 +1430,13 @@
             ],
             "markers": "python_version >= '3.7'",
             "version": "==2.1.1"
+        },
+        "maxminddb": {
+            "hashes": [
+                "sha256:e37707ec4fab115804670e0fb7aedb4b57075a8b6f80052bdc648d3c005184e5"
+            ],
+            "markers": "python_version >= '3.6'",
+            "version": "==2.2.0"
         },
         "multidict": {
             "hashes": [

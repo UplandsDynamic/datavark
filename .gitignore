@@ -4,7 +4,9 @@ ner_models/
 dev_notes.md
 .vscode/
 nuforc/
+*.zip
 *.csv
+*.mmdb
 ner_test.ipynb
 __pycache__
 static/

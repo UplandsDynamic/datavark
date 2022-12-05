@@ -11,37 +11,31 @@ class PostProcess:
 
     """
     Processes the data to produce standardised input for the model fields
+
+    Data for 'nuforc' data_source looks like this example (a list (the corpus) of dicts (the docs):
+
+    [{'summary': 'Summary of observation', 'city': 'New York City', 'state': 'NY', 'date_time': '2021-12-15T21:45:00', 'shape': 'light', 'duration': '2 minutes', 'stats': 'Occurred : 12/15/2021 21:45  (Entered as : 12/15/2021 9:45 PM) Reported: 12/15/2021 10:30:54 PM 22:30 Posted: 12/19/2021 Location: New York City, NY Shape: Light Duration:2 minutes', 'report_link': 'http://www.nuforc.org/webreports/382/S165832.html', 'text': 'Description of observation.', 'posted': '2021-12-19T00:00:00', 'city_latitude': 36.35665012722647, 'city_longitude': -119.34793664122137, 'entities': [('red', 'COLOR'), ('lights', 'TYPE'), ('New York City', 'GPE'), ('NY', 'GPE')]}]
+
+    Data for 'reddit' data_source looks like this example (a list (the corpus) of dicts (the docs)):
+
+    [{'report_link': 'https://www.reddit.com/r/UFOs/comments/z5wc7d/weekly_ufo_sightings_november_27_december_03_2022/', 'text': 'Description of observation.', 'posted': '2023-02-19T00:00:00', 'loc_latitude': 36.35665012722647, 'loc_longitude': -119.34793664122137, 'entities': [('red', 'COLOR'), ('lights', 'TYPE'), ('New York City', 'GPE', -119.34793664122137,36.35665012722647), ('NY', 'GPE', -119.34793664122137,36.35665012722647)]}]
     """
 
-    data = []
-    source = ""
-
-    def __init__(self, data=[], source=""):
-        """
-        Data for 'nuforc' data_source looks like this example (a list (the corpus) of dicts (the docs):
-
-        [{'summary': 'Summary of observation', 'city': 'New York City', 'state': 'NY', 'date_time': '2021-12-15T21:45:00', 'shape': 'light', 'duration': '2 minutes', 'stats': 'Occurred : 12/15/2021 21:45  (Entered as : 12/15/2021 9:45 PM) Reported: 12/15/2021 10:30:54 PM 22:30 Posted: 12/19/2021 Location: New York City, NY Shape: Light Duration:2 minutes', 'report_link': 'http://www.nuforc.org/webreports/382/S165832.html', 'text': 'Description of observation.', 'posted': '2021-12-19T00:00:00', 'city_latitude': 36.35665012722647, 'city_longitude': -119.34793664122137, 'entities': [('red', 'COLOR'), ('lights', 'TYPE'), ('New York City', 'GPE'), ('NY', 'GPE')]}]
-
-        Data for 'reddit' data_source looks like this example (a list (the corpus) of dicts (the docs)):
-
-        [{'report_link': 'https://www.reddit.com/r/UFOs/comments/z5wc7d/weekly_ufo_sightings_november_27_december_03_2022/', 'text': 'Description of observation.', 'posted': '2023-02-19T00:00:00', 'loc_latitude': 36.35665012722647, 'loc_longitude': -119.34793664122137, 'entities': [('red', 'COLOR'), ('lights', 'TYPE'), ('New York City', 'GPE', -119.34793664122137,36.35665012722647), ('NY', 'GPE', -119.34793664122137,36.35665012722647)]}]
-        """
-
-        self.data = data
-        self.source = source
-
-    def get_processed_data(self):
-        return self._process()
+    def __new__(cls, data=[], source=""):
+        obj = super().__new__(cls)
+        obj.data = data
+        obj.source = source
+        return obj._process()
 
     def _process(self):
         processed_docs = []
         # if NUFORC data
-        if self.source == settings.IE_SETTINGS["data_sources"]["nuforc"]:
-            logger.info("Post processing for NUFORC data")
+        if self.source == settings.DA_SETTINGS["data_sources"]["nuforc"]:
+            logger.info("Running post-processing for NUFORC data.")
             for doc in self.data:  # for every document
                 processed_docs.append(
                     {
-                        "source_name": settings.IE_SETTINGS["data_sources"]["nuforc"][
+                        "source_name": settings.DA_SETTINGS["data_sources"]["nuforc"][
                             "source_name"
                         ],
                         "source_url": self._process_source_url(doc["report_link"]),
@@ -72,12 +66,12 @@ class PostProcess:
                         ),
                     }
                 )
-        elif self.source == settings.IE_SETTINGS["data_sources"]["reddit"]:
+        elif self.source == settings.DA_SETTINGS["data_sources"]["reddit"]:
             logger.info("Preprocessing for Reddit data")
             for doc in self.data:  # for every document
                 processed_docs.append(
                     {
-                        "source_name": settings.IE_SETTINGS["data_sources"]["reddit"][
+                        "source_name": settings.DA_SETTINGS["data_sources"]["reddit"][
                             "source_name"
                         ],
                         "source_url": self._process_source_url(doc["report_link"]),
@@ -289,7 +283,7 @@ class Scrubbers:
     # function to change standardise variations of 'disk'.
     def _standardise_disk(self):
         self.input = re.sub(r"\b.*DISC.*\b", "DISK", self.input)
-        self.input = re.sub(r"\b.*DISK\b", "DISK", self.input)
+        self.input = re.sub(r"\b.*DISK.*\b", "DISK", self.input)
         self.input = re.sub(r"\b.*SAUCER.*\b", "SAUCER", self.input)
 
     # function to change standardise variations of 'circle'.
@@ -305,3 +299,4 @@ class Scrubbers:
         self.input = re.sub(r"\bOTHER\b", "NOT DESCRIBED", self.input)
         self.input = re.sub(r"\bUNKNOWN\b", "NOT DESCRIBED", self.input)
         self.input = re.sub(r"\bOBJECT.*\b", "NOT DESCRIBED", self.input)
+        self.input = re.sub(r"\UFO.*\b", "NOT DESCRIBED", self.input)

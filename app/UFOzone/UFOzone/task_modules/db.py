@@ -6,42 +6,34 @@ from django.conf import settings
 logger = logging.getLogger("django")
 
 
-class Capture:
+class WriteToDB:
 
     """
     Write the data to the model (insert into database)
     """
 
-    data = []
-    source = ""
+    def __new__(cls, data=[]):
+        obj = super().__new__(cls)
+        obj.data = data
+        return obj._insert_data()
 
-    def __init__(self, data=[], source=""):
-        self.data = data
-        self.source = source
-
-    def capture(self):
+    def _insert_data(self):
+        logger.info(f"Inserting data into database.")
         errors = []
-        # do any post-processing
-        process = PostProcess(data=self.data, source=self.source)
-        processed_data = process.get_processed_data()
-
-        if settings.IE_SETTINGS["test"]:
-            return processed_data
-        else:
-            # write to database, one doc (observation report) at a time
-            for doc in processed_data:
-                try:
-                    self._write_to_database(data=doc)
-                except Exception as e:
-                    errors.append(e)
-            success_report = (
-                f"There were some errors writing to the database: {' | '.join([str(e) for e in errors])}"
-                if errors
-                else "All records were successfully databased."
-                if processed_data
-                else "There was no data to process!"
-            )
-            return success_report
+        # write to database, one doc (observation report) at a time
+        for doc in self.data:
+            try:
+                self._write_to_database(data=doc)
+            except Exception as e:
+                errors.append(e)
+        success_report = (
+            f"There were some errors writing to the database: {' | '.join([str(e) for e in errors])}"
+            if errors
+            else "All records were successfully databased."
+            if self.data
+            else "There was no data to process!"
+        )
+        return success_report
 
     def _write_to_database(self, data):
         # create a report object

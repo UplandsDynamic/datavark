@@ -33,6 +33,19 @@ def get_data(source=""):
     elif source == s.DA_SETTINGS["data_sources"]["reddit"]:
         data_acquired = DownloadReddit()  # returns true/false for success/failure
         if data_acquired:
-            return "TO DO..."  # as per NUFORC, above
-        pass
+            prepared_data = PrepareData(source=source)  # prepare the data CSV
+            # create the data dictionary
+            data = prepared_data["added"]
+            # get ents for each doc and add to the data
+            data_with_ents = Ner(
+                model_name=s.DA_SETTINGS["ner_model_name"],
+                model_url=s.DA_SETTINGS["ner_model_path"],
+                data_dict=data,
+            )
+            # post-processing
+            processed_data = PostProcess(data=data_with_ents, source=source)
+            # write to database
+            return WriteToDB(
+                data=processed_data
+            )  # return result (success message) to hook
     return f"There was an error retrieving data for {source['source_name']}"

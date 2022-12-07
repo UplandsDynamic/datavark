@@ -32,6 +32,10 @@ dvc = {extras = ["gs"], version = "*"}
 tailer = "*"
 nltk = "*"
 geoip2 = "*"
+geopy = "*"
+praw = "*"
+pmaw = "*"
+configparser = "*"
 
 [dev-packages]
 black = "*"

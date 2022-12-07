@@ -27,7 +27,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 # # # GENERATE A NEW UNIQUE SECRET KEY (secret_key.txt) IF DOES NOT ALREADY EXIST
 # # # Ensure 'secret_key' dir has been created in base directory
-KEY_PATH = os.path.join(BASE_DIR, "secret_key", "secret_key.txt")
+KEY_PATH = os.path.join(BASE_DIR, "secrets", "secret_key.txt")
 try:
     with open(KEY_PATH, "r") as f:
         SECRET_KEY = f.read().strip()
@@ -159,7 +159,7 @@ Q_CLUSTER = {
     "sync": 0,
     "guard_cycle": 5,
     "cpu_affinity": 1,
-    "catch_up": True,
+    "catch_up": False,
 }
 
 ### caches

@@ -3,6 +3,7 @@ from django.contrib.gis.geos import Point
 from django.conf import settings
 from dateutil.parser import ParserError
 from .color_factory import ColorFactory
+from geopy.geocoders import Nominatim
 
 logger = logging.getLogger("django")
 
@@ -11,29 +12,21 @@ class PostProcess:
 
     """
     Processes the data to produce standardised input for the model fields
-
-    Data for 'nuforc' data_source looks like this example (a list (the corpus) of dicts (the docs):
-
-    [{'summary': 'Summary of observation', 'city': 'New York City', 'state': 'NY', 'date_time': '2021-12-15T21:45:00', 'shape': 'light', 'duration': '2 minutes', 'stats': 'Occurred : 12/15/2021 21:45  (Entered as : 12/15/2021 9:45 PM) Reported: 12/15/2021 10:30:54 PM 22:30 Posted: 12/19/2021 Location: New York City, NY Shape: Light Duration:2 minutes', 'report_link': 'http://www.nuforc.org/webreports/382/S165832.html', 'text': 'Description of observation.', 'posted': '2021-12-19T00:00:00', 'city_latitude': 36.35665012722647, 'city_longitude': -119.34793664122137, 'entities': [('red', 'COLOR'), ('lights', 'TYPE'), ('New York City', 'GPE'), ('NY', 'GPE')]}]
-
-    Data for 'reddit' data_source looks like this example (a list (the corpus) of dicts (the docs)):
-
-    [{'report_link': 'https://www.reddit.com/r/UFOs/comments/z5wc7d/weekly_ufo_sightings_november_27_december_03_2022/', 'text': 'Description of observation.', 'posted': '2023-02-19T00:00:00', 'loc_latitude': 36.35665012722647, 'loc_longitude': -119.34793664122137, 'entities': [('red', 'COLOR'), ('lights', 'TYPE'), ('New York City', 'GPE', -119.34793664122137,36.35665012722647), ('NY', 'GPE', -119.34793664122137,36.35665012722647)]}]
     """
 
     def __new__(cls, data=[], source=""):
         obj = super().__new__(cls)
-        obj.data = data
-        obj.source = source
+        obj._data = data
+        obj._source = source
         return obj._process()
 
     def _process(self):
-        processed_docs = []
-        # if NUFORC data
-        if self.source == settings.DA_SETTINGS["data_sources"]["nuforc"]:
+        _processed_docs = []
+        # NUFORC
+        if self._source == settings.DA_SETTINGS["data_sources"]["nuforc"]:
             logger.info("Running post-processing for NUFORC data.")
-            for doc in self.data:  # for every document
-                processed_docs.append(
+            for doc in self._data:  # for every document
+                _processed_docs.append(
                     {
                         "source_name": settings.DA_SETTINGS["data_sources"]["nuforc"][
                             "source_name"
@@ -66,10 +59,12 @@ class PostProcess:
                         ),
                     }
                 )
-        elif self.source == settings.DA_SETTINGS["data_sources"]["reddit"]:
+        # REDDIT
+        elif self._source == settings.DA_SETTINGS["data_sources"]["reddit"]:
             logger.info("Preprocessing for Reddit data")
-            for doc in self.data:  # for every document
-                processed_docs.append(
+            for doc in self._data:  # for every document
+                doc = self._geocode(doc)  # add long/lat to GPE & LOC entity tuples
+                _processed_docs.append(
                     {
                         "source_name": settings.DA_SETTINGS["data_sources"]["reddit"][
                             "source_name"
@@ -103,7 +98,7 @@ class PostProcess:
                         ),
                     }
                 )
-        return processed_docs
+        return _processed_docs
 
     # process observation types
     def _process_colors(self, colors=[]):
@@ -123,6 +118,25 @@ class PostProcess:
             type = s.run_type_scrubbers()
             formatted.append(type)
         return list(set(formatted))
+
+    # geocode locations with longitude & latitude
+    def _geocode(self, doc):
+        for idx, entity in enumerate(doc["entities"]):
+            if entity[1] in ["GPE", "LOC"]:
+                try:
+                    geolocator = Nominatim(user_agent="UAP_Database")
+                    location = geolocator.geocode(entity[0])
+                    doc["entities"][idx] = (
+                        entity[0],
+                        entity[1],
+                        location.longitude,
+                        location.latitude,
+                    )
+                except Exception as e:
+                    logger.error(
+                        f"A problem occurred during geocoding - entity {idx} has NOT been geocoded!: {str(e)}"
+                    )
+        return doc
 
     # process place name. Returns list [{"place name": "name string", "coordinates": Point(longitude,latitude)})]
     def _process_locs(self, locs=[]):
@@ -299,4 +313,4 @@ class Scrubbers:
         self.input = re.sub(r"\bOTHER\b", "NOT DESCRIBED", self.input)
         self.input = re.sub(r"\bUNKNOWN\b", "NOT DESCRIBED", self.input)
         self.input = re.sub(r"\bOBJECT.*\b", "NOT DESCRIBED", self.input)
-        self.input = re.sub(r"\UFO.*\b", "NOT DESCRIBED", self.input)
+        self.input = re.sub(r"\bUFO.*\b", "NOT DESCRIBED", self.input)

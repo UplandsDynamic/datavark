@@ -1,6 +1,7 @@
 import shutil, datetime, logging, subprocess
 from django.conf import settings as s
 from os.path import exists
+from .reddit_scraper import RedditScraper
 
 logger = logging.getLogger("django")
 
@@ -12,6 +13,7 @@ class DownloadNUFORC:
     _prev_data_csv_path = s.DA_SETTINGS["data_sources"]["nuforc"]["data_path_prev"]
     _data_archive_root = s.DA_SETTINGS["data_sources"]["nuforc"]["data_path_archive"]
     _scraper_path = s.DA_SETTINGS["data_sources"]["nuforc"]["scraper_path"]
+    _archive = s.DA_SETTINGS["data_sources"]["nuforc"]["archive_dl_csvs"]
 
     def __new__(cls, args=None, kwargs={}):
         obj = super().__new__(cls)
@@ -39,14 +41,21 @@ class DownloadNUFORC:
         return 0
 
     def _archive_data(self):
-        logger.info(f"Archiving older NUFORC data.")
-        if exists(self._prev_data_csv_path):
-            shutil.copy2(
-                self._prev_data_csv_path,
-                f"{self._data_archive_root}{datetime.datetime.now().strftime('%Y_%m_%d_%H_%M_%S')}.csv",
-            )
+        if self._archive:
+            logger.info(f"Archiving older NUFORC data.")
+            if exists(self._prev_data_csv_path):
+                shutil.copy2(
+                    self._prev_data_csv_path,
+                    f"{self._data_archive_root}{datetime.datetime.now().strftime('%Y_%m_%d_%H_%M_%S')}.csv",
+                )
+            else:
+                logger.warning(
+                    f"No NUFORC data to archive at {self._prev_data_csv_path}"
+                )
         else:
-            logger.warning(f"No NUFORC data to archive at {self._prev_data_csv_path}")
+            logger.info(
+                f"Archiving of older downloaded NUFORC data (CSV files) is disabled in configurations."
+            )
 
     def _copy_data(self):
         logger.info(
@@ -66,11 +75,11 @@ class DownloadReddit:
     _current_data_csv_path = s.DA_SETTINGS["data_sources"]["reddit"]["data_path"]
     _prev_data_csv_path = s.DA_SETTINGS["data_sources"]["reddit"]["data_path_prev"]
     _data_archive_root = s.DA_SETTINGS["data_sources"]["reddit"]["data_path_archive"]
-    _scraper_path = s.DA_SETTINGS["data_sources"]["reddit"]["scraper_path"]
+    _archive = s.DA_SETTINGS["data_sources"]["reddit"]["archive_dl_csvs"]
 
     def __new__(cls, args=None, kwargs={}):
         obj = super().__new__(cls)
-        return obj._get_data()
+        return 1 if s.DA_SETTINGS["test"] else obj._get_data()
 
     def _get_data(self):
         try:
@@ -86,8 +95,7 @@ class DownloadReddit:
     def _scrape_data(self):
         logger.info(f"Scraping data for REDDIT ...")
         try:
-            subprocess.call(["python", f"{self._scraper_path}/reddit_scraper.py"])
-            return 1
+            return RedditScraper()
         except Exception as e:
             logger.error(
                 f"An error occurred during the REDDIT download process: {str(e)}"
@@ -95,14 +103,21 @@ class DownloadReddit:
         return 0
 
     def _archive_data(self):
-        logger.info(f"Archiving older REDDIT data.")
-        if exists(self._prev_data_csv_path):
-            shutil.copy2(
-                self._prev_data_csv_path,
-                f"{self._data_archive_root}{datetime.datetime.now().strftime('%Y_%m_%d_%H_%M_%S')}.csv",
-            )
+        if self._archive:
+            logger.info(f"Archiving older REDDIT data.")
+            if exists(self._prev_data_csv_path):
+                shutil.copy2(
+                    self._prev_data_csv_path,
+                    f"{self._data_archive_root}{datetime.datetime.now().strftime('%Y_%m_%d_%H_%M_%S')}.csv",
+                )
+            else:
+                logger.warning(
+                    f"No REDDIT data to archive at {self._prev_data_csv_path}"
+                )
         else:
-            logger.warning(f"No REDDIT data to archive at {self._prev_data_csv_path}")
+            logger.info(
+                f"Archiving of older downloaded Reddit data (CSV files) is disabled in configurations."
+            )
 
     def _copy_data(self):
         logger.info(

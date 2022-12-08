@@ -1,7 +1,11 @@
 from pathlib import Path
 from urllib.parse import urlsplit
-import os, string, random, locale
+import os, string, random, locale, logging
 from .da_settings import DA_SETTINGS
+from configparser import ConfigParser
+
+logger = logging.getLogger("django")
+
 
 ### paths & hosts
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
@@ -101,14 +105,27 @@ TEMPLATES = [
 ]
 
 ### databases
+
+DB_CONFIG_PATH = os.path.join(BASE_DIR, "secrets", "db.ini")
+try:
+    db_config = ConfigParser()
+    db_config.read(DB_CONFIG_PATH)
+    db_name = db_config.get("DEFAULT", "db_name")
+    db_username = db_config.get("DEFAULT", "db_username")
+    db_password = db_config.get("DEFAULT", "db_password")
+    db_host = db_config.get("DEFAULT", "db_host")
+    db_port = db_config.get("DEFAULT", "db_port")
+except Exception as e:
+    logger.error(f"There was a problem with the DB configuration: {str(e)}")
+
 DATABASES = {
     "default": {
         "ENGINE": "django.contrib.gis.db.backends.postgis",
-        "NAME": "ufozone",
-        "USER": "dan",
-        "PASSWORD": "yekOOej839*",
-        "HOST": "localhost",
-        "PORT": "5432",
+        "NAME": db_name,
+        "USER": db_username,
+        "PASSWORD": db_password,
+        "HOST": db_host,
+        "PORT": db_port,
     }
 }
 

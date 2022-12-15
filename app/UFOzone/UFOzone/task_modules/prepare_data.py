@@ -1,6 +1,7 @@
 import logging, shutil
 from django.conf import settings as s
 import pandas as pd
+from pandas.errors import EmptyDataError
 from csv_diff import load_csv, compare
 from os.path import exists
 
@@ -35,26 +36,33 @@ class PrepareData:
 
     def _prepare_csv(self):
         return_dict = dict()
-        logger.info(f"Preparing CSVs for {self._source['source_name']}.")
+        logger.info(
+            f"Preparing CSVs for {self._source['source_name']} from data path: {self._source['data_path']}"
+        )
         # just get latest n rows of new data
-        latest_n = pd.read_csv(self._filename_full).head(s.DA_SETTINGS["most_recent_n"])
-        latest_n.to_csv(self._filename_latest, index=False)
-        if exists(self._prev_filename_latest):
-            # compare data from previous pull & put changes in dict
-            return_dict = compare(
-                load_csv(
-                    open(self._prev_filename_latest),
-                    key="report_link",
-                ),
-                load_csv(
-                    open(self._filename_latest),
-                    key="report_link",
-                ),
+        try:
+            latest_n = pd.read_csv(self._filename_full).head(
+                s.DA_SETTINGS["most_recent_n"]
             )
-        else:
-            logger.warning(
-                f"No previous data file existed, therefore all downloaded data considered new."
-            )
-            return_dict = {"added": latest_n.to_dict('records')}
-        self._copy_latest()  # copy to previous for next time's comparison
+            latest_n.to_csv(self._filename_latest, index=False)
+            if exists(self._prev_filename_latest):
+                # compare data from previous pull & put changes in dict
+                return_dict = compare(
+                    load_csv(
+                        open(self._prev_filename_latest),
+                        key="report_link",
+                    ),
+                    load_csv(
+                        open(self._filename_latest),
+                        key="report_link",
+                    ),
+                )
+            else:
+                logger.warning(
+                    f"No previous data file existed, therefore all downloaded data considered new."
+                )
+                return_dict = {"added": latest_n.to_dict("records")}
+            self._copy_latest()  # copy to previous for next time's comparison
+        except EmptyDataError:
+            logger.warning(f"The CSV was empty - no new data was acquired.")
         return return_dict

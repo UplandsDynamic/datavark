@@ -23,8 +23,8 @@ CORS_ORIGIN_ALLOW_ALL = True  # only set True for testing purposes
 CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_WHITELIST = ["http://localhost", "https://ufozone.co.uk"]
 CSRF_TRUSTED_ORIGINS = ["https://*.ufozone.co.uk", "https://ufozone.co.uk"]
-STATIC_ROOT = os.path.join(BASE_DIR, "static")
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+
+# STATICFILES_STORAGE = "django.contrib.staticfiles.storage.ManifestStaticFilesStorage"
 
 ### SECURITY WARNING: keep the secret key used in production secret!
 # SECRET_KEY = 'django-insecure-+^w!t3^1eywb94sjhfxysxi&fm$*47ouh&kti@knfe%%-c90t5'
@@ -50,19 +50,29 @@ except IOError:
 ### SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+# static files
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "ie", "static"),
+]
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+STATIC_URL = "/static/"
+MEDIA_URL = "/media/"
+
 ### application definitions
 INSTALLED_APPS = [
+    "django.contrib.staticfiles",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
-    "django.contrib.staticfiles",
     "ie.apps.IeConfig",
     # 'email_service.apps.EmailServiceConfig,
     "corsheaders",
     "django_q",
     "django.contrib.gis",
+    "django_tables2",
 ]
 
 ### Data acquisition (DA) settings
@@ -91,7 +101,7 @@ MIDDLEWARE = [
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [os.path.join(BASE_DIR, "templates")],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -99,6 +109,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "django.template.context_processors.request",
             ],
         },
     },
@@ -154,12 +165,6 @@ USE_THOUSAND_SEPARATOR = True
 TIME_ZONE = "UTC"
 USE_TZ = True
 
-### static files
-STATICFILES_DIRS = []
-STATIC_URL = "/static/"
-MEDIA_URL = "/media/"
-STATICFILES_STORAGE = "django.contrib.staticfiles.storage.ManifestStaticFilesStorage"
-
 ### django_q
 Q_CLUSTER = {
     "name": "UFOzone",
@@ -193,14 +198,20 @@ MIDDLEWARE.append(
 )  # HAS TO GO LAST IN MIDDLEWARE LIST
 CACHES = {
     "default": {
-        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/1",
         "TIMEOUT": DEFAULT_CACHES_TTL,
-        "LOCATION": "ufozone-backend-cache",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        },
     },
     "template_fragments": {
-        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/1",
         "TIMEOUT": DEFAULT_CACHES_TTL,
-        "LOCATION": "ufozone-template-fragments-cache",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        },
     },
     "django_q": {
         "BACKEND": "django_redis.cache.RedisCache",

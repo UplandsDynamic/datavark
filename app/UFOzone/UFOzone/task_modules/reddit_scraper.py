@@ -1,8 +1,6 @@
-import logging
-from datetime import datetime, timedelta
+import logging, praw
+from datetime import datetime
 from django.conf import settings as s
-import praw
-from pmaw import PushshiftAPI
 import pandas as pd
 
 logger = logging.getLogger("django")
@@ -24,16 +22,15 @@ class RedditScraper:
             user_agent=_praw_config["praw_user_agent"],
         )
         _data = []
-        _api_praw = PushshiftAPI(praw=reddit)
-        _start_epoch = int((datetime.today() - timedelta(days=7)).timestamp())
+        _weekly_report_page_ids = []
         """
-        !Note: if changing "start_epoch", remember to also change "limit". Otherwise will still only get 7 days, as only the earliest 1 "submission" will be returned. E.g. 14 days in the timedelta function, requires a limit of at least 2 (equating to submission returns, which equals 2 weeks, as each "submission" under which its sighting report comments are posted is dedicated to 1 calendar week (as per the report submissions on the r/UFOs subreddit, here: https://www.reddit.com/r/UFOs/search?q=%22Weekly%20UFO%20Sightings%3A%22&restrict_sr=on&include_over_18=on&sort=new&t=all).
+        !Note: if changing download schedule to allow additional options to DAILY & WEEKLY, "limit" also has to change. Otherwise will still only get 7 days, as only the earliest 1 "submission" will be returned. E.g. 14 days in the timedelta function, requires a limit of at least 2 (equating to submission returns, which equals 2 weeks, as each "submission" under which its sighting report comments are posted is dedicated to 1 calendar week (as per the report submissions on the r/UFOs subreddit, here: https://www.reddit.com/r/UFOs/search?q=%22Weekly%20UFO%20Sightings%3A%22&restrict_sr=on&include_over_18=on&sort=new&t=all).
         """
-        _submissions_search = _api_praw.search_submissions(
-            title="Weekly UFO Sightings:", subreddit="ufos", limit=1, after=_start_epoch
-        )
-        for submission_found in _submissions_search:
-            submission = reddit.submission(submission_found.get("id"))
+        _all_submissions = reddit.subreddit("ufos")
+        for i in _all_submissions.search("Weekly UFO Sightings", limit=1):
+            _weekly_report_page_ids.append(i.id)
+        for report_page_id in _weekly_report_page_ids:
+            submission = reddit.submission(report_page_id)
             submission.comments.replace_more(limit=0)
             comments = submission.comments.list()
             for comment in comments:
@@ -48,5 +45,10 @@ class RedditScraper:
                         }
                     )
         _df = pd.DataFrame(_data)
-        _df.to_csv(s.DA_SETTINGS["data_sources"]["reddit"]["data_path"], index=False)
-        return 1
+        if not _df.empty:
+            _df.to_csv(
+                s.DA_SETTINGS["data_sources"]["reddit"]["data_path"], index=False
+            )
+            return True
+        logger.warning("No new REDDIT data acquired - the download was empty.")
+        return False

@@ -1,40 +1,71 @@
-from django.http import HttpResponse
-from django.shortcuts import get_object_or_404, render
-from django.urls import reverse
+from django.shortcuts import render
 from django.views import View
-from .models import Report
 from django.conf import settings as s
 import pandas as pd
-from django.template import Template, Context
 from django.template.loader import get_template
 from django_q.models import Schedule
-from django_q.tasks import schedule
+from django_q.tasks import schedule, result_group
 import logging
+from django import template
+from django_tables2 import SingleTableMixin, LazyPaginator
+from .tables import ScheduleTable, ResultsTable
+from django.http import JsonResponse
+from django.core import serializers
+from .forms import ScheduleForm
 
+register = template.Library()
 logger = logging.getLogger("django")
 
 
-class IEView(View):
-    template_name = "ie/index.html"
+class IEView(SingleTableMixin, View):
 
-    def get(self, request, *args, **kwargs):
-        template = get_template(self.template_name)
-        # note: when form set up, move this to be called on POST & also source defined from there
-        source = s.DA_SETTINGS["data_sources"]["reddit"]
-        self._set_data_scan(
-            source=source, download_schedule=source["download_schedule"]
-        )
-        # return dashboard
-        context = {"nuforc_data": "Coming soon .."}
-        return HttpResponse(template.render(context))
+    _template_name = "ie/index.html"
+    _schedule_model = Schedule
+    _schedule_table_class = ScheduleTable
+    _form_class = ScheduleForm
+    _results_table_class = ResultsTable
+    paginator_class = LazyPaginator
 
-    def _set_data_scan(self, source, download_schedule):
-        schedule(
-            func="UFOzone.tasks.get_data",
-            source=source,
-            hook="UFOzone.hooks.print_result",
-            schedule_type=Schedule.WEEKLY
-            if download_schedule == "WEEKLY"
-            else Schedule.DAILY,  # update with additional options if new options added to config
-            repeats=-1,
+    def get(self, *args, **kwargs):
+
+        form = self._form_class(initial=self._get_initial_form_values())
+        context = {
+            "schedule_table": self._schedule_table_class(
+                self._schedule_model.objects.all()
+            ),
+            "results_table": self._results_table_class(
+                self._get_task_results()
+            ).paginate(page=self.request.GET.get("page", 1), per_page=5),
+            "request": self.request,
+            "form": form,
+            "sources": s.DA_SETTINGS["active_data_sources"],
+        }
+        return render(self.request, self._template_name, context)
+
+    def post(self, *args, **kwargs):
+        if self.request.method == "POST":
+            form = self._form_class(self.request.POST)
+            if form.is_valid():
+                data = form.save()
+                return JsonResponse(
+                    {"success": True, "status_report": data}, status=200
+                )
+            else:
+                return JsonResponse(
+                    {"success": False, "status_report": form.errors}, status=400
+                )
+        return JsonResponse(
+            {"success": False, "status_report": "undefined"}, status=400
         )
+
+    def _get_initial_form_values(self):
+        initial_values = dict()
+        for source, config in s.DA_SETTINGS["data_sources"].items():
+            source_name = config["source_name"]
+            initial_values[source_name] = (
+                True if Schedule.objects.filter(name=source_name).exists() else False
+            )
+        return initial_values
+
+    def _get_task_results(self):
+        return result_group("REDDIT", failures=True).values()

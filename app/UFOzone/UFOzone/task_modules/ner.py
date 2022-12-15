@@ -37,7 +37,9 @@ class Ner:
         self.extracted_entities = []
         processed_doc = None
         for doc in self.doc_texts:
-            processed_doc = self.nlp(doc)
+            processed_doc = self.nlp(
+                doc.lower()
+            )  # lower case all characters. Found through trial & error to work best.
             ents = []
             if processed_doc.ents:
                 for ent in processed_doc.ents:

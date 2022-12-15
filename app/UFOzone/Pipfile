@@ -36,6 +36,7 @@ geopy = "*"
 praw = "*"
 pmaw = "*"
 configparser = "*"
+django-tables2 = "*"
 
 [dev-packages]
 black = "*"

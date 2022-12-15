@@ -134,6 +134,7 @@ DA_SETTINGS = {
             "archive_dl_csvs": True,  # whether to archive previously downloaded CSV data files
         },
     },
+    "active_data_sources": ["REDDIT", "NUFORC"],
     "most_recent_n": 500,  # limits how many records to process from latest downloaded data
     "ner_model_name": "trf-model-best-tuned",  # NER model used
     "ner_model_path": "UFOzone/ner_models/trf-model-best-tuned/",  # NER model path

@@ -25,13 +25,13 @@ class PrepareData:
 
     def _copy_latest(self):
         logger.info(
-            f"Copying latest {s.DA_SETTINGS['most_recent_n']} rows (as user defined) of data, to avoid overwrite with new & allow comparison between the two dataset upon next download."
+            f"Copying latest data, to avoid overwrite with new & allow comparison between the two dataset upon next download."
         )
         if exists(self._filename_latest):  # make copy of original data
             shutil.copy2(self._filename_latest, self._prev_filename_latest)
         else:
             logger.warning(
-                f"No existing latest 'n' REDDIT data to copy at {self._filename_latest}"
+                f"No existing latest REDDIT data to copy at {self._filename_latest}"
             )
 
     def _prepare_csv(self):
@@ -41,8 +41,11 @@ class PrepareData:
         )
         # just get latest n rows of new data
         try:
-            latest_n = pd.read_csv(self._filename_full).head(
-                s.DA_SETTINGS["most_recent_n"]
+            n = s.DA_SETTINGS["most_recent_n"]
+            latest_n = (
+                pd.read_csv(self._filename_full).head(n)
+                if n
+                else pd.read_csv(self._filename_full)
             )
             latest_n.to_csv(self._filename_latest, index=False)
             if exists(self._prev_filename_latest):

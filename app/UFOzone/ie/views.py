@@ -62,10 +62,19 @@ class IEView(SingleTableMixin, View):
         initial_values = dict()
         for source, config in s.DA_SETTINGS["data_sources"].items():
             source_name = config["source_name"]
-            initial_values[source_name] = (
-                True if Schedule.objects.filter(name=source_name).exists() else False
-            )
+            try:
+                schedule = Schedule.objects.filter(name=source_name)[0].schedule_type
+                if schedule == "D":
+                    initial_value = ScheduleForm.CADENCE[1]
+                elif schedule == "W":
+                    initial_value = ScheduleForm.CADENCE[2]
+            except IndexError:
+                initial_value = ScheduleForm.CADENCE[0]
+            initial_values[source_name] = initial_value
         return initial_values
 
     def _get_task_results(self):
-        return result_group("REDDIT", failures=True).values()
+        results = []
+        for source, config in s.DA_SETTINGS["data_sources"].items():
+            results += result_group(config["source_name"], failures=True).values()
+        return results

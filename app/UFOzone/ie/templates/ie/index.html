@@ -33,8 +33,7 @@
 {% block javascript %}
 <script type="text/javascript">
     $(document).ready(() => {
-        {% for source in sources %}
-        $('#id_{{source}}').click(() => {
+        $('.change-schedule').change(() => {
             let formData = $('#schedule-form').serialize();
             console.log('Posting: ', formData);
             $.ajax({
@@ -51,7 +50,6 @@
                 }
             });
         });
-        {% endfor %}
     });
 </script>
 {% endblock %}

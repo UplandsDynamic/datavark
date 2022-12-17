@@ -207,7 +207,7 @@ class Scrubbers:
     def run_color_scrubbers(self):
         self._remove_whitespace()
         self._capitalize()
-        self._remove_punctuation()
+        self._remove_nonalphanumeric()
         self._remove_single_chars()
         self._standardise_color()
         return self.input
@@ -215,7 +215,7 @@ class Scrubbers:
     def run_type_scrubbers(self):
         self._remove_whitespace()
         self._capitalize()
-        self._remove_punctuation()
+        self._remove_nonalphanumeric()
         self._remove_single_chars()
         self._standardise_light()
         self._standardise_tictac()
@@ -238,6 +238,10 @@ class Scrubbers:
         )
         self.input = " ".join(filtered)
 
+    # function to remove the appended word "shaped"
+    def _remove_shaped(self):
+        self.input = re.sub(re.sub(r"\bSHAPED.*\b", "", self.input))
+
     # function to remote whitespace leading/trailing whitespace
     def _remove_whitespace(self):
         self.input = self.input.strip()
@@ -246,13 +250,9 @@ class Scrubbers:
     def _capitalize(self):
         self.input = self.input.upper()
 
-    # function to remove punctuation
-    def _remove_punctuation(self):
-        self.input = self.input.translate(str.maketrans("", "", string.punctuation))
-        # remove quotation marks that are not in the punctuation definition
-        self.input = "".join(
-            s for s in self.input if s not in ["\u201c", "\u201d", "\u2018", "\u2019"]
-        )
+    # function to remove non-alphanumeric characters (preserve whitespace, replace with space)
+    def _remove_nonalphanumeric(self):
+        self.input = re.sub(r"[^\w\s]", " ", self.input)
 
     # function to remove strings with single char
     def _remove_single_chars(self):
@@ -310,7 +310,6 @@ class Scrubbers:
 
     # function to change standardise miscellaneous misfits'.
     def _standardise_misc(self):
-        self.input = re.sub(r"\bOTHER\b", "NOT DESCRIBED", self.input)
-        self.input = re.sub(r"\bUNKNOWN\b", "NOT DESCRIBED", self.input)
-        self.input = re.sub(r"\bOBJECT.*\b", "NOT DESCRIBED", self.input)
-        self.input = re.sub(r"\bUFO.*\b", "NOT DESCRIBED", self.input)
+        self.input = re.sub(r"\bUNKNOWN\b", "OTHER", self.input)
+        self.input = re.sub(r"\bOBJECT.*\b", "OTHER", self.input)
+        self.input = re.sub(r"\bUFO.*\b", "OTHER", self.input)

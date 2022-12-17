@@ -11,67 +11,74 @@ _data_sources = s.DA_SETTINGS["data_sources"]
 
 
 class ScheduleForm(forms.ModelForm):
-    REDDIT = forms.BooleanField(
+    class Meta:
+        model = Schedule
+        fields = ()  # ("field name",) or __all__ for all fields
+
+    CADENCE = (("0", "OFF"), ("1", "DAILY"), ("2", "WEEKLY"))
+
+    # helper function to switch how schedules are expressed
+    @staticmethod
+    def _config_cadence(cadence):
+        if cadence == 1:
+            return Schedule.DAILY
+        elif cadence == 2:
+            return Schedule.WEEKLY
+
+    REDDIT = forms.ChoiceField(
         label="Schedule Reddit data acquisition",
-        widget=forms.CheckboxInput(attrs={"class": "change-schedule"}),
-        required=False,
+        choices=CADENCE,
+        widget=forms.Select(
+            attrs={"class": "change-schedule form-control", "id": "REDDIT"}
+        ),
     )
 
-    NUFORC = forms.BooleanField(
+    NUFORC = forms.ChoiceField(
         label="Schedule NUFORC data acquisition",
-        widget=forms.CheckboxInput(attrs={"class": "change-schedule"}),
-        required=False,
+        choices=CADENCE,
+        widget=forms.Select(
+            attrs={"class": "change-schedule form-control", "id": "NUFORC"}
+        ),
     )
 
     def __init__(self, *args, **kwargs):
         super(ScheduleForm, self).__init__(*args, **kwargs)
-        # add "form-control" class to enable bootstrap - if wanted
-        # for name in self.fields.keys():
-        #     self.fields[name].widget.attrs.update(
-        #         {
-        #             "class": "form-control",
-        #         }
-        #     )
 
     def save(self):
         for source, config in _data_sources.items():
-            logger.info(f"Looking for source: {source}")
+            source_name = config["source_name"]
+            logger.info(f"Looking for source: {source_name}")
             try:
-                acquire_data = self.cleaned_data[config["source_name"]]
+                cadence = int(self.cleaned_data[source_name])
                 logger.info(
-                    f"{'Starting' if acquire_data else 'Querying'} {config['source_name']} data acquisition process."
+                    f"{'Starting' if cadence else 'Querying'} {source_name} data acquisition process."
                 )
-                if acquire_data:
+                if cadence:
+                    schedule = self._config_cadence(cadence=int(cadence))
                     try:
-                        if not Schedule.objects.filter(
-                            name=config["source_name"]
-                        ).exists():
+                        if not Schedule.objects.filter(name=source_name).exists():
                             Schedule.objects.create(
                                 func="UFOzone.tasks.get_data",
                                 args=f"{config}",
-                                name=f"{config['source_name']}",
+                                name=f"{source_name}",
                                 hook="UFOzone.hooks.print_result",
-                                schedule_type=Schedule.WEEKLY
-                                if config["download_schedule"] == "WEEKLY"
-                                else Schedule.DAILY,  # update with additional options if new options added to config
+                                schedule_type=schedule,  # update with additional options if new options added to config
                                 repeats=-1,
                             )
                         else:
                             logger.info(
-                                f"Schedule for {config['source_name']} is currently running, so not adding to schedule."
+                                f"Changing schedule for {source_name} ..."
+                            )
+                            Schedule.objects.filter(name=f"{source_name}").update(
+                                schedule_type=schedule
                             )
                     except Exception as e:
                         logger.error(
                             f"There was a problem setting the schedule: {str(e)}"
                         )
                 else:  # delete schedule
-                    Schedule.objects.filter(name=config["source_name"]).delete()
+                    logger.info(f"Deleting schedule for {source_name}")
+                    Schedule.objects.filter(name=source_name).delete()
             except KeyError as e:
-                logger.warning(
-                    f"There is no form field for source {config['source_name']}"
-                )
+                logger.warning(f"There is no form field for source {source_name}")
         return self.cleaned_data
-
-    class Meta:
-        model = Schedule
-        fields = ()  # ("field name",) or __all__ for all fields

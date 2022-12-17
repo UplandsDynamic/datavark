@@ -77,7 +77,6 @@ DA_SETTINGS = {
             "scraper_path": os.path.join(
                 BASE_DIR, "data_collection", "nuforc", "nuforc_sightings_data"
             ),
-            "download_schedule": "WEEKLY",  # NUFORC data download schedule: "WEEKLY" or "DAILY"
             "archive_dl_csvs": True,  # whether to archive previously downloaded CSV data files
         },
         "reddit": {
@@ -130,12 +129,11 @@ DA_SETTINGS = {
                 f"reddit_reports_archive_",
             ),
             "praw_config": PRAW_CONFIG,
-            "download_schedule": "WEEKLY",  # REDDIT data download schedule: "DAILY" or "WEEKLY"
             "archive_dl_csvs": True,  # whether to archive previously downloaded CSV data files
         },
     },
     "active_data_sources": ["REDDIT", "NUFORC"],
-    "most_recent_n": 500,  # limits how many records to process from latest downloaded data
+    "most_recent_n": 500,  # limits how many records to process from latest downloaded data. Set 0 for everything.
     "ner_model_name": "trf-model-best-tuned",  # NER model used
     "ner_model_path": "UFOzone/ner_models/trf-model-best-tuned/",  # NER model path
     "test": 0,  # setting to 1 does everything except pull from external source

@@ -19,7 +19,9 @@ class ResultsTable(tables.Table):
 
     def render_result(self, value, record):
         return (
-            value
+            value[0:99] + "..."
+            if len(value) > 102
+            else value
             if record["success"]
             else format_html(
                 f"Error acquiring data. See more in the <a href='/admin/django_q/failure/{record['id']}'>admin dashboard.</a>"

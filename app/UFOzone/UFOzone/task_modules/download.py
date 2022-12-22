@@ -34,10 +34,10 @@ class DownloadNUFORC:
     def _scrape_data(self):
         logger.info(f"Scraping data for NUFORC ...")
         try:
-            subprocess.call(f"dvc --cd {self._scraper_path} repro", shell=True)
+            subprocess.check_output(f"dvc --cd {self._scraper_path} repro", shell=True)
             return True
-        except Exception as e:
-            logger.error(f"An error occurred during the NUFORC download process.")
+        except subprocess.CalledProcessError as e:
+            logger.error(f"An error occurred during the NUFORC download process: {e}")
         return False
 
     def _archive_data(self):

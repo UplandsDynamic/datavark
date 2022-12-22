@@ -31,7 +31,7 @@ class PrepareData:
             shutil.copy2(self._filename_latest, self._prev_filename_latest)
         else:
             logger.warning(
-                f"No existing latest REDDIT data to copy at {self._filename_latest}"
+                f"No existing latest data to copy at {self._filename_latest}"
             )
 
     def _prepare_csv(self):
@@ -42,12 +42,13 @@ class PrepareData:
         # just get latest n rows of new data
         try:
             n = s.DA_SETTINGS["most_recent_n"]
-            latest_n = (
-                pd.read_csv(self._filename_full).head(n)
-                if n
-                else pd.read_csv(self._filename_full)
-            )
-            latest_n.to_csv(self._filename_latest, index=False)
+            df = pd.read_csv(self._filename_full)
+            if n:
+                df.sort_values(
+                    "posted", ascending=False, inplace=True
+                )  # sort by date of submission
+                df = df.head(n)
+            df.to_csv(self._filename_latest, index=False)
             if exists(self._prev_filename_latest):
                 # compare data from previous pull & put changes in dict
                 return_dict = compare(
@@ -64,7 +65,7 @@ class PrepareData:
                 logger.warning(
                     f"No previous data file existed, therefore all downloaded data considered new."
                 )
-                return_dict = {"added": latest_n.to_dict("records")}
+                return_dict = {"added": df.to_dict("records")}
             self._copy_latest()  # copy to previous for next time's comparison
         except EmptyDataError:
             logger.warning(f"The CSV was empty - no new data was acquired.")

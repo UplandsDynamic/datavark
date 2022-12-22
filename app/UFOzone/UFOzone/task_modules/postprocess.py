@@ -1,4 +1,4 @@
-import datetime, dateutil, re, logging, string
+import datetime, dateutil, re, logging
 from django.contrib.gis.geos import Point
 from django.conf import settings
 from dateutil.parser import ParserError
@@ -18,87 +18,99 @@ class PostProcess:
         obj = super().__new__(cls)
         obj._data = data
         obj._source = source
+        obj._location_entity_class_types = [
+            "GPE",
+            "LOC",
+        ]
         return obj._process()
 
     def _process(self):
         _processed_docs = []
-        # NUFORC
-        if self._source == settings.DA_SETTINGS["data_sources"]["nuforc"]:
-            logger.info("Running post-processing for NUFORC data.")
-            for doc in self._data:  # for every document
-                _processed_docs.append(
-                    {
-                        "source_name": settings.DA_SETTINGS["data_sources"]["nuforc"][
-                            "source_name"
-                        ],
-                        "source_url": self._process_source_url(doc["report_link"]),
-                        "obs_txt": self._process_text(doc["text"]),
-                        "obs_types": self._process_types(
-                            # to txt NER also adds 'shape' as defined in structured NUFORC data
-                            [e[0] for e in doc["entities"] if e[1] == "TYPE"]
-                            + [doc["shape"]]
-                        ),
-                        "obs_colors": self._process_colors(
-                            [e[0] for e in doc["entities"] if e[1] == "COLOR"]
-                        ),
-                        "obs_dates": self._process_dates([doc["date_time"]])[0],
-                        "obs_times": self._process_times([doc["date_time"]])[0],
-                        "obs_locs": self._process_locs(
-                            [
-                                [
-                                    doc["city"],
-                                    doc["state"],
-                                    float(doc["city_longitude"])
-                                    if doc["city_longitude"]
-                                    else float(0),
-                                    float(doc["city_latitude"])
-                                    if doc["city_latitude"]
-                                    else float(0),
-                                ]
-                            ]
-                        ),
-                    }
+        logger.info(f"Running post-processing for {self._source['source_name']} data.")
+        for doc in self._data:  # for every document
+            # REDDIT
+            if self._source["source_name"] == "REDDIT":
+                doc = self._geocode(
+                    doc
+                )  # add long/lat to GPE & LOC & PLACE entity tuples
+                # attribute data to variables - default structure
+                obs_dates = self._process_dates(
+                    [e[0] for e in doc["entities"] if e[1] == "DATE"]
+                )[0]
+                obs_times = self._process_times(
+                    [e[0] for e in doc["entities"] if e[1] == "TIME"]
+                )[0]
+                source_name = self._source["source_name"]
+                source_url = self._process_source_url(doc["report_link"])
+                obs_txt = self._process_text(doc["text"])
+                obs_types = self._process_types(
+                    [e[0] for e in doc["entities"] if e[1] == "TYPE"]
                 )
-        # REDDIT
-        elif self._source == settings.DA_SETTINGS["data_sources"]["reddit"]:
-            logger.info("Preprocessing for Reddit data")
-            for doc in self._data:  # for every document
-                doc = self._geocode(doc)  # add long/lat to GPE & LOC entity tuples
-                _processed_docs.append(
-                    {
-                        "source_name": settings.DA_SETTINGS["data_sources"]["reddit"][
-                            "source_name"
-                        ],
-                        "source_url": self._process_source_url(doc["report_link"]),
-                        "obs_txt": self._process_text(doc["text"]),
-                        "obs_types": self._process_types(
-                            # to txt NER also adds 'shape' as defined in structured NUFORC data
-                            [e[0] for e in doc["entities"] if e[1] == "TYPE"]
-                        ),
-                        "obs_colors": self._process_colors(
-                            [e[0] for e in doc["entities"] if e[1] == "COLOR"]
-                        ),
-                        "obs_dates": self._process_dates(
-                            [e[0] for e in doc["entities"] if e[1] == "DATE"]
-                        )[0],
-                        "obs_times": self._process_times(
-                            [e[0] for e in doc["entities"] if e[1] == "TIME"]
-                        )[0],
-                        "obs_locs": self._process_locs(
-                            [  # required empty 'state' list, as not distinguished in GPE from unstructured NER
-                                [
-                                    e[0],
-                                    [],
-                                    float(e[2]) if e[2] else float(0),
-                                    float(e[3]) if e[3] else float(0),
-                                ]
-                                for e in doc["entities"]
-                                if e[1] in ["GPE", "LOC"]
-                            ]
-                        ),
-                    }
+                obs_colors = self._process_colors(
+                    [e[0] for e in doc["entities"] if e[1] == "COLOR"]
                 )
+                obs_locs = self._process_locs(
+                    [
+                        [
+                            e[0],
+                            float(e[2]) if e[2] else float(0),
+                            float(e[3]) if e[3] else float(0),
+                        ]
+                        for e in doc["entities"]
+                        if e[1] in self._location_entity_class_types
+                    ]
+                )
+            # NUFORC
+            elif self._source["source_name"] == "NUFORC":
+                self._location_entity_class_types = ["PLACE"]
+                doc = self._reshape_nuforc_data(doc)  # reshape data for NUFORC
+                doc = self._geocode(doc)
+                source_name = self._source["source_name"]
+                source_url = self._process_source_url(doc["report_link"])
+                obs_txt = self._process_text(doc["text"])
+                obs_dates = self._process_dates([doc["date_time"]])[0]
+                obs_times = self._process_times([doc["date_time"]])[0]
+                obs_types = obs_types = self._process_types(
+                    [e[0] for e in doc["entities"] if e[1] == "TYPE"]
+                ) + [doc["shape"]]
+                obs_colors = self._process_colors(
+                    [e[0] for e in doc["entities"] if e[1] == "COLOR"]
+                )
+                obs_locs = self._process_locs(
+                    [
+                        [
+                            e[0],
+                            float(e[2]) if e[2] else float(0),
+                            float(e[3]) if e[3] else float(0),
+                        ]
+                        for e in doc["entities"]
+                        if e[1] in self._location_entity_class_types
+                    ]
+                )
+            # add results to list
+            _processed_docs.append(
+                {
+                    "source_name": source_name,
+                    "source_url": source_url,
+                    "obs_txt": obs_txt,
+                    "obs_types": obs_types,
+                    "obs_colors": obs_colors,
+                    "obs_dates": obs_dates,
+                    "obs_times": obs_times,
+                    "obs_locs": obs_locs,
+                }
+            )
         return _processed_docs
+
+    # reshape NUFORC location data to make it consistent with other source types
+    def _reshape_nuforc_data(self, doc):
+        doc["entities"].append(
+            (
+                f"{doc['city'] if doc['city'] else ''}, {doc['state'] if doc['state'] else ''}",
+                "PLACE",
+            )
+        )
+        return doc
 
     # process observation types
     def _process_colors(self, colors=[]):
@@ -122,7 +134,9 @@ class PostProcess:
     # geocode locations with longitude & latitude
     def _geocode(self, doc):
         for idx, entity in enumerate(doc["entities"]):
-            if entity[1] in ["GPE", "LOC"]:
+            if (
+                entity[1] in self._location_entity_class_types
+            ):  # note: PLACE is custom class type added in NUFORC reshape to denote value obtained from structured NUFORC data rather than NER
                 try:
                     geolocator = Nominatim(user_agent="UAP_Database")
                     location = geolocator.geocode(entity[0])
@@ -136,6 +150,12 @@ class PostProcess:
                     logger.error(
                         f"A problem occurred during geocoding - entity {idx} has NOT been geocoded!: {str(e)}"
                     )
+                    doc["entities"][idx] = (
+                        entity[0],
+                        entity[1],
+                        0,
+                        0,
+                    )
         return doc
 
     # process place name. Returns list [{"place name": "name string", "coordinates": Point(longitude,latitude)})]
@@ -144,12 +164,12 @@ class PostProcess:
         for loc in locs:
             formatted.append(
                 {
-                    "place_name": f"{loc[0]}, {loc[1] if loc[1] else ''}".rstrip(", "),
-                    "coordinates": Point(loc[2], loc[3])
-                    if loc[2] and loc[3]
+                    "place_name": f"{loc[0]}".rstrip(", "),
+                    "coordinates": Point(loc[1], loc[2])
+                    if loc[1] and loc[2]
                     else Point(0, 0),
                 }
-            ) if Point(loc[2], loc[3]) not in [
+            ) if Point(loc[1], loc[2]) not in [
                 f["coordinates"] for f in formatted
             ] else None
         return formatted

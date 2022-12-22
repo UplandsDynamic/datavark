@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}UAP Report{%endblock%}
+{% block stylesheets %}
+<link rel="stylesheet" href="{% static 'css/dataview_style.css' %}" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+    integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin="" />
+{% endblock %}
+{% block head-scripts %}
+<script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
+    integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
+{% endblock %}
+{% block page_title %}<h1>
+    <h1>UAP Report {{report.id}}</h1>
+</h1>{% endblock %}
+{% block content %}
+<div id="report">
+    {% autoescape off %}
+    <div>
+        <h2>Report Id</h2>
+        {{report.id}}
+    </div>
+    <div>
+        <h2>Report source</h2>
+        <ul>
+            <li>Source name: {{report.source_name}}</li>
+            <li>Source URL: {{report.source_url}}</li>
+        </ul>
+    </div>
+    <div>
+        <h2>Report text</h2>
+        {{report.obs_txt}}
+    </div>
+    <div>
+        <h2>Associated observation date(s)</h2>
+        <ul>
+            {% for date in report.obs_dates.all %}
+            <li>{{ date.date }}</li>
+            {% empty %}
+            <li>No dates recorded for this record</li>
+            {% endfor %}
+        </ul>
+    </div>
+    <h2>Associated observation time(s)</h2>
+    <ul>
+        {% for time in report.obs_times.all %}
+        <li>{{ time.time|time:"H:i" }}</li>
+        {% empty %}
+        <li>No times recorded for this record</li>
+        {% endfor %}
+    </ul>
+    <div>
+        <h2>Observation type(s)</h2>
+        <ul>
+            {% for type in report.obs_types.all %}
+            <li>{{ type.type }}</li>
+            {% empty %}
+            <li>No types recorded for this record</li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div>
+        <h2>Associated observation colour(s)</h2>
+        <ul>
+            {% for color in report.obs_colors.all %}
+            <li>{{ color.color }}</li>
+            {% empty %}
+            <li>No colours recorded for this record</li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div>
+        <h2>Associated observation locations</h2>
+        <ul>
+            {% for loc in report.obs_locs.all %}
+            <li>
+                <ul>
+                    <li>Place name: {{loc.place_name}}</li>
+                    {% if loc.coordinates.x and loc.coordinates.y %}
+                    <li>Place coordinates: Longitude: {{loc.coordinates.x}}, Latitude: {{loc.coordinates.y}}</li>
+                    <li>
+                        <div class="maps" id="map-{{ forloop.counter }}" data-long="{{loc.coordinates.x}}"
+                            data-lat="{{loc.coordinates.y}}"></div>
+                    </li>
+                    {% else %}
+                    <li>No coordinates data was extracted.</li>
+                    {% endif %}
+                </ul>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endautoescape %}
+</div>
+{% endblock %}
+{% block javascript %}
+<script type="text/javascript">
+    $(document).ready(() => {
+        for (let i = 1; i <= "{{report.obs_locs.all.count}}"; i++) {
+            long = $(`#map-${i}`).data('long')
+            lat = $(`#map-${i}`).data('lat')
+            var map = L.map(`map-${i}`).setView([lat, long], 5);
+            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+            }).addTo(map);
+            var marker = L.marker([lat, long]).addTo(map);
+        }
+    });
+</script>
+{% endblock %}

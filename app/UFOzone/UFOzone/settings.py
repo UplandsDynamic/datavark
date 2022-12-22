@@ -68,6 +68,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "ie.apps.IeConfig",
+    "dataview.apps.DataviewConfig",
     # 'email_service.apps.EmailServiceConfig,
     "corsheaders",
     "django_q",

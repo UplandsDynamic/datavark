@@ -7,7 +7,7 @@ from django_q.models import Schedule
 from django_q.tasks import schedule, result_group
 import logging
 from django import template
-from django_tables2 import SingleTableMixin, LazyPaginator
+from django_tables2 import SingleTableMixin, LazyPaginator, RequestConfig
 from .tables import ScheduleTable, ResultsTable
 from django.http import JsonResponse
 from django.core import serializers
@@ -29,13 +29,22 @@ class IEView(SingleTableMixin, View):
     def get(self, *args, **kwargs):
 
         form = self._form_class(initial=self._get_initial_form_values())
+
+        schedule_table = self._schedule_table_class(
+            self._schedule_model.objects.all(), prefix="sch-"
+        )
+
+        RequestConfig(self.request).configure(schedule_table)
+
+        results_table = self._results_table_class(
+            self._get_task_results(), prefix="results-"
+        ).paginate(page=self.request.GET.get("page", 1), per_page=5)
+
+        RequestConfig(self.request).configure(results_table)
+
         context = {
-            "schedule_table": self._schedule_table_class(
-                self._schedule_model.objects.all()
-            ),
-            "results_table": self._results_table_class(
-                self._get_task_results()
-            ).paginate(page=self.request.GET.get("page", 1), per_page=5),
+            "schedule_table": schedule_table,
+            "results_table": results_table,
             "request": self.request,
             "form": form,
             "sources": s.DA_SETTINGS["active_data_sources"],
@@ -76,5 +85,8 @@ class IEView(SingleTableMixin, View):
     def _get_task_results(self):
         results = []
         for source, config in s.DA_SETTINGS["data_sources"].items():
-            results += result_group(config["source_name"], failures=True).values()
+            try:
+                results += result_group(config["source_name"], failures=True).values()
+            except AttributeError as e:
+                logger.warning(f"No tasks were identified.")
         return results

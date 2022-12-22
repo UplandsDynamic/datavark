@@ -17,6 +17,8 @@ class ColorFactory:
         return color_list_expanded
 
     _color_list = [
+        "GREY",
+        "DARK GREY",
         "ABSOLUTE ZERO",
         "ACID GREEN",
         "AERO",

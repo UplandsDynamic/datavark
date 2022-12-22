@@ -13,7 +13,7 @@ data_dict = dict()
 def get_data(source=""):
     logger.info(f"Acquiring data from {source['source_name']}")
     if source == s.DA_SETTINGS["data_sources"]["nuforc"]:  # if NUFORC
-        return ("TESTING ... REMOVE LINE 16 of tasks.py to resume normal service!")
+        #return ("TESTING ... REMOVE LINE 16 of tasks.py to resume normal service!")
         data_acquired = DownloadNUFORC()  # returns true/false for success/failure
         if data_acquired:
             prepared_data = PrepareData(source=source)  # prepare the data CSV
@@ -33,7 +33,7 @@ def get_data(source=""):
                     data=processed_data
                 )  # return result (success message) to hook
     elif source == s.DA_SETTINGS["data_sources"]["reddit"]:
-        return ("TESTING ... REMOVE LINE 36 of tasks.py to resume normal service!")
+        #return ("TESTING ... REMOVE LINE 36 of tasks.py to resume normal service!")
         data_acquired = DownloadReddit()  # returns true/false for success/failure
         if data_acquired:
             prepared_data = PrepareData(source=source)  # prepare the data CSV

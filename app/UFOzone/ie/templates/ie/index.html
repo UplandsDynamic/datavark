@@ -3,18 +3,12 @@
 {% block title %}Scheduler{%endblock%}
 {% block stylesheets %}
 <link rel="stylesheet" href="{% static 'css/ie_style.css' %}" />{% endblock %}
+{% block page_title %}<h1>Data acquisition scheduler</h1>{%endblock%}
 {% block content %}
-<h1>Data acquisition scheduler</h1>
 <div id="schedule-table">
     {% load render_table from django_tables2 %}
     {% autoescape off %}
     {% render_table schedule_table %}
-    {% endautoescape %}
-</div>
-<div id="results-table">
-    {% load render_table from django_tables2 %}
-    {% autoescape off %}
-    {% render_table results_table %}
     {% endautoescape %}
 </div>
 <div>
@@ -28,6 +22,12 @@
         {% endfor %}
         <!-- <input type="submit" class="btn btn-primary" value="Change Scheduled" /> -->
         <form>
+</div>
+<div id="results-table">
+    {% load render_table from django_tables2 %}
+    {% autoescape off %}
+    {% render_table results_table %}
+    {% endautoescape %}
 </div>
 {% endblock %}
 {% block javascript %}

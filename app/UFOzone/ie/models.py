@@ -90,7 +90,7 @@ class Report(models.Model):
     source_url = models.URLField(
         verbose_name="Source URL",
         help_text="Web link to the original record (as of time of entry).",
-        unique=True
+        unique=True,
     )
     obs_txt = models.TextField(
         verbose_name="Report text", help_text="Unmodified text of the original report."

@@ -19,7 +19,8 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
-    path("ie/", include("ie.urls"), kwargs={"test": "this"}, name="ie"),
+    path("ie/", include("ie.urls"), kwargs={}, name="ie"),
+    path("data/", include("dataview.urls"), kwargs={}, name="dataview"),
     path("admin/", admin.site.urls),
 ] 
 

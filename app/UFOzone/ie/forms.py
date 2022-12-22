@@ -26,7 +26,7 @@ class ScheduleForm(forms.ModelForm):
             return Schedule.WEEKLY
 
     REDDIT = forms.ChoiceField(
-        label="Schedule Reddit data acquisition",
+        label="Reddit data acquisition",
         choices=CADENCE,
         widget=forms.Select(
             attrs={"class": "change-schedule form-control", "id": "REDDIT"}
@@ -34,7 +34,7 @@ class ScheduleForm(forms.ModelForm):
     )
 
     NUFORC = forms.ChoiceField(
-        label="Schedule NUFORC data acquisition",
+        label="NUFORC data acquisition",
         choices=CADENCE,
         widget=forms.Select(
             attrs={"class": "change-schedule form-control", "id": "NUFORC"}
@@ -43,6 +43,16 @@ class ScheduleForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(ScheduleForm, self).__init__(*args, **kwargs)
+
+    def _create_schedule(self, config, source_name, schedule):
+        Schedule.objects.create(
+            func="UFOzone.tasks.get_data",
+            args=f"{config}",
+            name=f"{source_name}",
+            hook="UFOzone.hooks.print_result",
+            schedule_type=schedule,  # update with additional options if new options added to config
+            repeats=-1,
+        )
 
     def save(self):
         for source, config in _data_sources.items():
@@ -57,28 +67,31 @@ class ScheduleForm(forms.ModelForm):
                     schedule = self._config_cadence(cadence=int(cadence))
                     try:
                         if not Schedule.objects.filter(name=source_name).exists():
-                            Schedule.objects.create(
-                                func="UFOzone.tasks.get_data",
-                                args=f"{config}",
-                                name=f"{source_name}",
-                                hook="UFOzone.hooks.print_result",
-                                schedule_type=schedule,  # update with additional options if new options added to config
-                                repeats=-1,
-                            )
+                            self._create_schedule(
+                                config, source_name, schedule
+                            )  # add new schedule if did not exist
+                        elif (
+                            Schedule.objects.get(name=source_name).schedule_type
+                            == schedule  # no change if remains the same
+                        ):
+                            logger.info(f"No change to {source_name}")
                         else:
-                            logger.info(
-                                f"Changing schedule for {source_name} ..."
-                            )
-                            Schedule.objects.filter(name=f"{source_name}").update(
-                                schedule_type=schedule
-                            )
+                            logger.info(f"Changing schedule for {source_name} ...")
+                            Schedule.objects.filter(
+                                name=f"{source_name}"
+                            ).delete()  # delete old schedule
+                            self._create_schedule(
+                                config, source_name, schedule
+                            )  # add new schedule
                     except Exception as e:
                         logger.error(
                             f"There was a problem setting the schedule: {str(e)}"
                         )
                 else:  # delete schedule
                     logger.info(f"Deleting schedule for {source_name}")
-                    Schedule.objects.filter(name=source_name).delete()
+                    Schedule.objects.filter(
+                        name=source_name
+                    ).delete()  # delete schedule
             except KeyError as e:
                 logger.warning(f"There is no form field for source {source_name}")
         return self.cleaned_data

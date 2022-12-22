@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}UAP Data Export{%endblock%}
+{% block stylesheets %}
+<link rel="stylesheet" href="{% static 'css/dataview_style.css' %}" />
+{% endblock %}
+{% block page_title %}<h1>Export data</h1>{%endblock%}
+{% block content %}
+<div>
+    {% autoescape off %}
+    <ul>
+        <li> <a class="btn btn-primary" href="?download=true&random=false" role="button">Export all data</a></li>
+        <li><a class="btn btn-primary" href="?download=true&random=true" role="button">Export random 25 records</a></li>
+    </ul>
+    <div class="alert alert-primary" role="alert">
+        {{status}}
+    </div>
+    {% endautoescape %}
+</div>
+{% endblock %}

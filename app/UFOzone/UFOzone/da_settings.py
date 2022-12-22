@@ -138,4 +138,10 @@ DA_SETTINGS = {
     "ner_model_path": "UFOzone/ner_models/trf-model-best-tuned/",  # NER model path
     "test": 0,  # setting to 1 does everything except pull from external source
     "test_source": "nuforc",  # from (currently): 'reddit', 'nuforc'. Only used for post-processing testing
+    "export_random": True,  # whether exported records should be a random selection
+    "total_export_records": 25,  # number of records to export from export view
+    "csv_export_path": os.path.join(
+        BASE_DIR, "data_collection", "exports"
+    ),  # path for exported CSVs
+    "csv_export_filename": "ufozone_records.csv",
 }

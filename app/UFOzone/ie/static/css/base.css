@@ -1,0 +1,103 @@
+body {
+    padding: 0 1em 1em 1em !important;
+    background-color: #222222;
+    color: #b9b8b8;
+}
+
+ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+li {
+    margin: 0.5em 0 0.5em 0;
+}
+
+div#content h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: rgb(81, 235, 255);
+    text-transform: capitalize !important;
+}
+
+.btn {
+    width: 100%;
+}
+
+div#pageTitle {
+    text-align: center;
+    color: rgb(81, 235, 255);
+    text-transform: capitalize !important;
+}
+
+div#sidebar {
+    position: fixed;
+    display: block;
+    float: left !important;
+    width: 18% !important;
+    margin: 0 1em 0 0;
+    padding: 0 0.5em 0.5em 0.5em;
+    background-color: #333333;
+    color: #b9b8b8;
+    border-radius: 11px;
+    text-transform: capitalize !important;
+}
+
+div#sidebar h1 {
+    font-size: 1.5em;
+    text-align: center;
+}
+
+div#content {
+    display: block;
+    float: right !important;
+    width: 80% !important;
+}
+
+div#content a {
+    color: rgb(81, 235, 255);
+    border-radius: 11px;
+}
+
+div#footer {
+    clear: both;
+    text-align: center;
+    padding: 1em;
+}
+
+ul.pagination {
+    margin: 1em;
+}
+
+ul.pagination li a {
+    color: #333333 !important;
+}
+
+div#backLink {
+    margin: 1em;
+    text-align: right;
+}
+
+table {
+    color: #b9b8b8 !important;
+}
+
+.form-group {
+    margin: 1em 0 1em 0;
+}
+
+label {
+    background-color: rgb(81, 235, 255);
+    color: #333333;
+    margin-bottom: 0.5em;
+    padding: 0.5em;
+}
+
+div.table-container {
+    display: inline-block !important;
+    position: relative !important;
+    overflow: auto !important;
+}

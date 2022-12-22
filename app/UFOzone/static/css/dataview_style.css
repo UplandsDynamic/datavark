@@ -1,0 +1,10 @@
+#reports-table {
+    display: block;
+    border: 1px solid silver;
+    border-radius: 11px;
+}
+
+.maps {
+    height: 500px;
+    width: 500px;
+}

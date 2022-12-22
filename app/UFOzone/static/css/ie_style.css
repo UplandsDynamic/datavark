@@ -1,0 +1,16 @@
+#schedule-table {
+    display:block;
+    border: 1px solid silver;
+    border-radius: 11px;
+}
+
+
+#results-table {
+    display:block;
+    border: 1px solid silver;
+    border-radius: 11px;
+}
+
+.change-schedule {
+    display: block;
+}

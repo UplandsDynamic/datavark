@@ -7,7 +7,7 @@ dev_notes.md
 *.mmdb
 ner_test.ipynb
 __pycache__
-static/
+UFOzone/static/
 media/
 dev_resources/
 praw.ini

@@ -18,7 +18,7 @@ class DownloadNUFORC:
     def __new__(cls, args=None, kwargs={}):
         obj = super().__new__(cls)
         # return success/fail code. Return success without downloading if testing the system
-        return 1 if s.DA_SETTINGS["test"] else obj._get_data()
+        return 1 if s.DA_SETTINGS["test_without_pull"] else obj._get_data()
 
     def _get_data(self):
         try:
@@ -83,7 +83,7 @@ class DownloadReddit:
 
     def __new__(cls, args=None, kwargs={}):
         obj = super().__new__(cls)
-        return 1 if s.DA_SETTINGS["test"] else obj._get_data()
+        return 1 if s.DA_SETTINGS["test_without_pull"] else obj._get_data()
 
     def _get_data(self):
         try:

@@ -136,9 +136,7 @@ DA_SETTINGS = {
     "most_recent_n": 500,  # limits how many records to process from latest downloaded data. Set 0 for everything.
     "ner_model_name": "trf-model-best-tuned",  # NER model used
     "ner_model_path": "UFOzone/ner_models/trf-model-best-tuned/",  # NER model path
-    "test": 0,  # setting to 1 does everything except pull from external source
-    "test_source": "nuforc",  # from (currently): 'reddit', 'nuforc'. Only used for post-processing testing
-    "export_random": True,  # whether exported records should be a random selection
+    "test_without_pull": 0,  # setting to 1 does everything except pull from external source
     "total_export_records": 25,  # number of records to export from export view
     "csv_export_path": os.path.join(
         BASE_DIR, "data_collection", "exports"

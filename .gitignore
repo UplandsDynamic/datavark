@@ -15,3 +15,4 @@ secrets/
 .dvc
 nuforc_sightings_data/
 reddit_sightings_data/
+exports/

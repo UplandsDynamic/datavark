@@ -37,7 +37,7 @@ class DownloadNUFORC:
             subprocess.check_output(
                 f"dvc --cd {self._scraper_path} repro",
                 shell=True,
-                executable="/bin/bash",
+                executable="/bin/bash"
             )
             return True
         except subprocess.CalledProcessError as e:

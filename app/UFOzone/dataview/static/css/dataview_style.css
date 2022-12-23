@@ -4,6 +4,10 @@
     border-radius: 11px;
 }
 
+#reports-table td {
+    max-width: 18ch;
+}
+
 .maps {
     height: 500px;
     width: 500px;

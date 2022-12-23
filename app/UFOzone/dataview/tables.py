@@ -10,7 +10,7 @@ logger = logging.getLogger("django")
 class ReportTable(tables.Table):
     class Meta:
         model = data_models.Report
-        template_name = "django_tables2/bootstrap.html"
+        template_name = "django_tables2/bootstrap4.html"
         fields = (
             "id",
             "obs_txt",

@@ -7,14 +7,14 @@ from django.utils.html import format_html
 class ScheduleTable(tables.Table):
     class Meta:
         model = Schedule
-        template_name = "django_tables2/bootstrap.html"
+        template_name = "django_tables2/bootstrap4.html"
         fields = ("id", "name", "schedule_type", "next_run")
 
 
 class ResultsTable(tables.Table):
     class Meta:
         model = Task
-        template_name = "django_tables2/bootstrap.html"
+        template_name = "django_tables2/bootstrap4.html"
         fields = ("id", "started", "stopped", "success", "result")
 
     def render_result(self, value, record):

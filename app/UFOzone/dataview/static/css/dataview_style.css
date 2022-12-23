@@ -6,6 +6,8 @@
 
 #reports-table td {
     max-width: 18ch;
+    overflow:hidden;
+    text-overflow: ellipsis;
 }
 
 .maps {

@@ -1,4 +1,4 @@
-from django.shortcuts import render, HttpResponse
+from django.shortcuts import render, redirect
 from django.views import View
 from django.conf import settings as s
 from django import template
@@ -52,15 +52,15 @@ class DetailView(SingleTableMixin, View):
 class DataExportView(View):
     _template_name = "dataview/dataexportview.html"
     _ds = s.DA_SETTINGS
-    _records_list = list(data_models.Report.objects.all())
     _export_path = _ds["csv_export_path"]
     _export_filename = _ds["csv_export_filename"]
 
     def get(self, *args, **kwargs):
         random_sample = True if self.request.GET.get("random", "") == "true" else False
+        source = self.request.GET.get("source", "")
         if self.request.GET.get("download", "false") == "true":
             try:
-                self._export_records_csv(self.request, random_sample)
+                self._export_records_csv(self.request, source, random_sample)
                 response = FileResponse(
                     open(os.path.join(self._export_path, self._export_filename), "rb")
                 )
@@ -70,17 +70,23 @@ class DataExportView(View):
                 return response
             except Exception as e:
                 logger.error(f"Data export failed: {str(e)}")
-                status = "Export failed"
+                status = f"Export failed: {str(e)}"
                 return render(self.request, self._template_name, {"status": status})
         else:
             return render(self.request, self._template_name, {})
 
-    def _export_records_csv(self, request, random_sample):
+    def _export_records_csv(self, request, source, random_sample):
+        # get record list for sources
+        records_list = (
+            list(data_models.Report.objects.filter(source_name=source.upper()))
+            if source
+            else list(data_models.Report.objects.all())
+        )
         # either export random selection, or all, depending on button user clicked
         records = (
-            random.sample(self._records_list, self._ds["total_export_records"])
+            random.sample(records_list, self._ds["total_export_records"])
             if random_sample
-            else self._records_list
+            else records_list
         )
         # create data including from related tables
         data = []

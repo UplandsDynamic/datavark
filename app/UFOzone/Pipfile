@@ -37,6 +37,7 @@ praw = "*"
 pmaw = "*"
 configparser = "*"
 django-tables2 = "*"
+dateparser = "*"
 
 [dev-packages]
 black = "*"

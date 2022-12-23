@@ -1,4 +1,5 @@
 import datetime, dateutil, re, logging
+from dateparser.search import search_dates
 from django.contrib.gis.geos import Point
 from django.conf import settings
 from dateutil.parser import ParserError
@@ -180,8 +181,11 @@ class PostProcess:
         discarded = []
         for date in date_strings:
             try:
-                parsed = dateutil.parser.parse(date, fuzzy=True).date()
-                formatted.append(parsed)
+                parsed = search_dates(date, settings={'STRICT_PARSING': True})
+                if parsed:
+                    formatted.append(parsed[0][1])
+                else:
+                    discarded.append(date)
             except ParserError:
                 discarded.append(date)
         return list(set(formatted)), discarded

@@ -44,6 +44,7 @@ div#sidebar {
     color: #b9b8b8;
     border-radius: 11px;
     text-transform: capitalize !important;
+    z-index: 11;
 }
 
 div#sidebar h1 {

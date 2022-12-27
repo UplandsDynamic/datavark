@@ -1,0 +1,16 @@
+[
+    {
+        "summary": "Summary of observation",
+        "city": "New York City",
+        "state": "NY",
+        "date_time": "2021-12-15T21:45:00",
+        "shape": "light",
+        "duration": "2 minutes",
+        "stats": "Occurred : 12/15/2021 21:45  (Entered as : 12/15/2021 9:45 PM) Reported: 12/15/2021 10:30:54 PM 22:30 Posted: 12/19/2021 Location: New York City, NY Shape: Light Duration:2 minutes",
+        "report_link": "http://www.nuforc.org/webreports/382/S165832.html",
+        "text": "Description of observation.",
+        "posted": "2021-12-19T00:00:00",
+        "city_latitude": 36.35665012722647,
+        "city_longitude": -119.34793664122137,
+    }
+]

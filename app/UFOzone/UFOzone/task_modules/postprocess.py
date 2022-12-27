@@ -1,10 +1,13 @@
 import datetime, dateutil, re, logging
-from dateparser.search import search_dates
+from dateparser import parse
+from dateparser_data.settings import default_parsers
 from django.contrib.gis.geos import Point
 from django.conf import settings
 from dateutil.parser import ParserError
 from .color_factory import ColorFactory
 from geopy.geocoders import Nominatim
+from django.core.validators import URLValidator
+from django.core.exceptions import ValidationError
 
 logger = logging.getLogger("django")
 
@@ -181,9 +184,15 @@ class PostProcess:
         discarded = []
         for date in date_strings:
             try:
-                parsed = search_dates(date, settings={'STRICT_PARSING': True})
+                parsers = [
+                    parser for parser in default_parsers if parser != "relative-time"
+                ]
+                parsed = parse(
+                    date,
+                    settings={"PARSERS": parsers, "REQUIRE_PARTS": ["day", "month"]},
+                )
                 if parsed:
-                    formatted.append(parsed[0][1])
+                    formatted.append(parsed)
                 else:
                     discarded.append(date)
             except ParserError:
@@ -215,8 +224,14 @@ class PostProcess:
 
     # process source URL
     def _process_source_url(self, url=""):
-        # do any URL processing here, if required
-        return url
+        # validate URL is formed correctly
+        validator = URLValidator()
+        try:
+            validator(url)
+            return url
+        except ValidationError as e:
+            logger.error(f"The URL was malformed - not saving.")
+            return ""
 
     # process raw text account
     def _process_text(self, text=""):
@@ -322,7 +337,7 @@ class Scrubbers:
     def _standardise_disk(self):
         self.input = re.sub(r"\b.*DISC.*\b", "DISK", self.input)
         self.input = re.sub(r"\b.*DISK.*\b", "DISK", self.input)
-        self.input = re.sub(r"\b.*SAUCER.*\b", "SAUCER", self.input)
+        self.input = re.sub(r"\b.*SAUCER.*\b", "DISK", self.input)
 
     # function to change standardise variations of 'circle'.
     def _standardise_circle(self):

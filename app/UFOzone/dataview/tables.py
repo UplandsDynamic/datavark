@@ -22,6 +22,7 @@ class ReportTable(tables.Table):
             "obs_dates",
             "obs_times",
         )
+        order_by = "-obs_dates.date"
 
     obs_colors = tables.Column(order_by="obs_colors.color")
     obs_types = tables.Column(order_by="obs_types.type")

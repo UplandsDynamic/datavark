@@ -166,9 +166,11 @@ class PostProcess:
     def _process_locs(self, locs=[]):
         formatted = []
         for loc in locs:
+            s = Scrubbers(loc[0])
+            place = s.run_place_scrubbers()
             formatted.append(
                 {
-                    "place_name": f"{loc[0]}".rstrip(", "),
+                    "place_name": f"{place}",
                     "coordinates": Point(loc[1], loc[2])
                     if loc[1] and loc[2]
                     else Point(0, 0),
@@ -191,7 +193,7 @@ class PostProcess:
                     date,
                     settings={"PARSERS": parsers, "REQUIRE_PARTS": ["day", "month"]},
                 )
-                if parsed:
+                if parsed and parsed <= datetime.datetime.today():
                     formatted.append(parsed)
                 else:
                     discarded.append(date)
@@ -201,7 +203,19 @@ class PostProcess:
 
     # process time from strings & return list of datetime.time objects
     def _process_times(self, time_strings=[]):
-        duration_indicators = ["MINUTES", "MIN", "MINS", "M" "HOURS", "HRS", "HRS", "H"]
+        duration_indicators = [
+            "MINUTES",
+            "MIN",
+            "MINS",
+            "M" "HOURS",
+            "HRS",
+            "HRS",
+            "H",
+            "SECOND",
+            "SECONDS",
+            "SEC",
+            "SECS",
+        ]
         formatted = []
         discarded = []  # likely durations. Not needed, but grab for possible future dev
         for time in time_strings:
@@ -242,6 +256,13 @@ class PostProcess:
 class Scrubbers:
     def __init__(self, input):
         self.input = input
+
+    def run_place_scrubbers(self):
+        self._remove_whitespace()
+        self._capitalize()
+        self._remove_nonalphanumeric()
+        self._remove_single_chars()
+        return self.input
 
     def run_color_scrubbers(self):
         self._remove_whitespace()

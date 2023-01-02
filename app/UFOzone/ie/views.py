@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views import View
 from django.conf import settings as s
 import pandas as pd
@@ -16,7 +16,6 @@ from .forms import ScheduleForm
 register = template.Library()
 logger = logging.getLogger("django")
 
-
 class IEView(SingleTableMixin, View):
 
     _template_name = "ie/index.html"
@@ -27,21 +26,15 @@ class IEView(SingleTableMixin, View):
     paginator_class = LazyPaginator
 
     def get(self, *args, **kwargs):
-
         form = self._form_class(initial=self._get_initial_form_values())
-
         schedule_table = self._schedule_table_class(
             self._schedule_model.objects.all(), prefix="sch-"
         )
-
         RequestConfig(self.request).configure(schedule_table)
-
         results_table = self._results_table_class(
             self._get_task_results(), prefix="results-"
         ).paginate(page=self.request.GET.get("page", 1), per_page=5)
-
         RequestConfig(self.request).configure(results_table)
-
         context = {
             "schedule_table": schedule_table,
             "results_table": results_table,

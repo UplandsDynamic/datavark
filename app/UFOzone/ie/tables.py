@@ -16,6 +16,8 @@ class ResultsTable(tables.Table):
         model = Task
         template_name = "django_tables2/bootstrap4.html"
         fields = ("id", "started", "stopped", "success", "result")
+        order_by = "-stopped"
+        
 
     def render_result(self, value, record):
         return (

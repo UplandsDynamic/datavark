@@ -1,0 +1,500 @@
+-.-.-.-.-.-.- 1 -.-.-.-.-.-.-
+
+Text: https://streamable.com/gmnnt5
+
+Types: []
+
+Colors: []
+
+Locs: []
+
+Resolved coordinates: []
+
+Dates: []
+
+Times: []
+
+
+
+-.-.-.-.-.-.- 2 -.-.-.-.-.-.-
+
+Text: I've never seen a UFO before in my life but tonight I saw THREE in rapid succession. They were very small, each had a blinking light (the first two yellowish, I saw them at the same time and they seemed to be interacting, the third I saw alone about a minute later and had a red light). Was too dark for me to even make out much of a shape since they were very small (or maybe the body minus the lights was invisible or cloaked?)
+ 
+They moved too quickly to be drones. Plus it's past midnight and I've never seen anyone flying drones around here.  Obviously weren't lights from a plane since at their lowest they were like 5 ft from the ground. I can't think of anything else they could possibly be! They each disappeared after a few seconds as well, or at least the lights were no longer on. 
+
+Location is the far south side of chicago! Anyone else see them? I know it's a long shot, it's late and it's cold. I was only outside to smoke some weed but I saw them before I even had time to light up.
+
+Types: ['LIGHT']
+
+Colors: ['RED', 'YELLOWISH']
+
+Locs: [('CHICAGO!', {'longitude': -87.6244212, 'latitude': 41.8755616})]
+
+Resolved coordinates: [[Location(Congress Plaza Hotel, 500-510, South Michigan Avenue, Printer's Row, Loop, Chicago, Cook County, Illinois, 60604, United States, (41.875375399999996, -87.62482736161188, 0.0))]]
+
+Dates: []
+
+Times: []
+
+
+
+-.-.-.-.-.-.- 3 -.-.-.-.-.-.-
+
+Text: [deleted]
+
+Types: []
+
+Colors: []
+
+Locs: []
+
+Resolved coordinates: []
+
+Dates: []
+
+Times: []
+
+
+
+-.-.-.-.-.-.- 4 -.-.-.-.-.-.-
+
+Text: https://youtu.be/2RKHoRuA65U
+
+My first UFO sighting is in description.  Sadly, I have no real video of my best and fifth UFO sighting, though possibly my one friend still has it somewhere.
+
+Types: []
+
+Colors: []
+
+Locs: []
+
+Resolved coordinates: []
+
+Dates: []
+
+Times: []
+
+
+
+-.-.-.-.-.-.- 5 -.-.-.-.-.-.-
+
+Text: There is a report on another board I am on about huge asteroid or something in sky seen for over 40 seconds over Gulf of Mexico off Louisiana. Did anyone else see it. The people reporting it where in cars and didn’t video.
+
+Types: []
+
+Colors: []
+
+Locs: [('GULF OF MEXICO', {'longitude': -89.5363207573838, 'latitude': 24.4870296}), ('LOUISIANA.', {'longitude': -92.007126, 'latitude': 30.8703881})]
+
+Resolved coordinates: [None, [Location(Dufour Road, Goudeau, Avoyelles Parish, Louisiana, 71356, United States, (30.86811, -92.006827, 0.0))]]
+
+Dates: []
+
+Times: []
+
+
+
+-.-.-.-.-.-.- 6 -.-.-.-.-.-.-
+
+Text: https://www.instagram.com/reel/CldGeH3Awta/?igshid=Nzg3NjI1NGI=
+This just happened upon my Instagram explore feed, anyone else have any insight into this?
+
+Types: []
+
+Colors: []
+
+Locs: []
+
+Resolved coordinates: []
+
+Dates: []
+
+Times: []
+
+
+
+-.-.-.-.-.-.- 7 -.-.-.-.-.-.-
+
+Text: https://twitter.com/stevencheah/status/1594472636830171136?s=46&t=C1xQRn831BCaR_oJ5rvY4g
+Does anyone have any videos around newark new jersey durring 6:00pm yesterday? This gentleman claims a sighting a the description of the “speed” seems all too common to think its fake.
+
+Types: []
+
+Colors: []
+
+Locs: [('NEWARK NEW JERSEY', {'longitude': -74.1723667, 'latitude': 40.735657})]
+
+Resolved coordinates: [[Location(171, Market Street, Teachers Village, Newark, Essex County, New Jersey, 07102, United States, (40.73571909090909, -74.17235981818182, 0.0))]]
+
+Dates: []
+
+Times: [datetime.time(18, 0)]
+
+
+
+-.-.-.-.-.-.- 8 -.-.-.-.-.-.-
+
+Text: Eastern Oregon Wednesday night. 3 "satellites"" heading towards each other. 120 degree angle between them
+
+Types: []
+
+Colors: []
+
+Locs: [('OREGON', {'longitude': -120.737257, 'latitude': 43.9792797})]
+
+Resolved coordinates: [[Location(Crook County, Oregon, United States, (44.1460291, -120.3839476, 0.0))]]
+
+Dates: []
+
+Times: []
+
+
+
+-.-.-.-.-.-.- 9 -.-.-.-.-.-.-
+
+Text: Sighting: Bucks County, Pennsylvania, 6:45 PM, December 27, 2022. I feel so so so dumb I didn’t take my cellphone outside with me. EDIT: some spelling and grammar mistakes 
+
+My partner was outside my house smoking and poked his head in. He asked what planets we could see from the house, and I told him, and he was like: “are any of them bright green?” Dumbfounded, I went outside and looked up where he indicated, in the western sky behind my house. Whatever he had seen was gone and he was like “it was right there.” It was a cloudy night with patches of clear sky. The clouds were moving pretty quickly, and revealed a big green star in the sky. Except it moved. I said: “I don’t think that’s a star”. A minute later it jumped altitude - I don’t know how high, I know nothing about altitudes aside from typical meteorological cloud heights - but one minute it was in one spot in the sky and the next it was way higher. I got excited and tapped him on the shoulder to look, but it blinked out of sight. I scanned the sky to see if it would come back. Out front of the house, to the southeast, more clouds cleared and I watched a big blue/whitish light moving at plane height. “I think that’s a plane,” I said to him. Almost as soon as I said that, it stopped dead, changed shape slightly from a ball-like/light shape to something elongated, back into a circle shape, and began to fly in a circle, vertically. I hope that makes sense - I mean in a circle vertically/counterclockwise I could see looking at it dead on not in a round/searching circle horizontally like a helicopter. Clouds covered it. I scanned the sky again - it appeared in the first location I’d seen it but further away, and traveled almost an identical path. It stopped dead again and hovered, reversed, then flew in a zig zag pattern. 
+
+The cloud cover grew too thick and though I stayed out a little longer I didn’t see anything else. I was excited and whispering like “Hi! Come back!” very excitedly because I’d never seen anything like it before, and behind me my boyfriend was becoming more and more frightened/agitated and he actually dragged me back into the house. 
+When we came back inside my boyfriend immediately threw up in the bathroom. My heart was beating like I’d just ran a marathon and I was elated. But within an hour I developed a terrible headache that I still have two hours after seeing the object. It has not gone away and I still feel a little nauseous.
+
+Before anyone asks, yes I’ve checked my carbon monoxide levels - we have new batteries in the detector and I tested it a week ago so it’s still working. We did not consume any hallucinogens, and he was smoking a non nicotine (non THC!) cigarette. (He’s trying to quit). I had no alcohol, had just drank water actually, and we had not eaten any of the same things that day yet - I work from home, he works outside of the home, and I hadn’t finished making dinner when this occurred. 
+
+I will freely admit I have been looking into methods to try and make contact/communicate with non-human entities - even way far out methods that I wasn’t sure I believed, so I guess something I tried worked?? Only way to know for sure is to try again, so I will attempt the same method again - on a night I’m not feeling sick. I’m pretty stoked about it still even though I feel ill. My boyfriend was completely freaked and I’m kind of sad because I only got good vibes from the whole experience. I think it would be incredible to make contact with something outside of our normal way of life. 
+
+
+TLDR: saw one or two very strange crafts outside tonight that did some very non-typical non-aircraft-like things. Not drunk or high or poisoned by carbon monoxide. I still feel sick after witnessing.
+
+Types: ['LIGHT']
+
+Colors: ['GREEN', 'BLUE']
+
+Locs: [('BUCKS COUNTY', {'longitude': -75.1263909, 'latitude': 40.3451668}), ('PENNSYLVANIA', {'longitude': -77.7278831, 'latitude': 40.9699889})]
+
+Resolved coordinates: [[Location(4567, Old Easton Road, Danboro, Plumstead Township, Bucks County, Pennsylvania, 18902, United States, (40.34514332653061, -75.12648514285715, 0.0))], [Location(1961, Old 220 Road, Curtin, Boggs Township, Centre County, Pennsylvania, 16841, United States, (40.97107845, -77.72830808404979, 0.0))]]
+
+Dates: [datetime.date(2022, 12, 27)]
+
+Times: [datetime.time(18, 45)]
+
+
+
+-.-.-.-.-.-.- 10 -.-.-.-.-.-.-
+
+Text: Between 7:30 & 8:00 pm central Saturday in East Texas  we saw what looked like the tail of a shooting star, but moving way too slow. It had what appeared to be a plane ahead of it and behind it, as there were red flashing lights.
+
+Types: ['LIGHT']
+
+Colors: ['RED']
+
+Locs: [('EAST TEXAS', {'longitude': -75.561297, 'latitude': 40.5475968})]
+
+Resolved coordinates: [[Location(5683, East Texas Road, East Texas, Lower Macungie Township, Lehigh County, Pennsylvania, 18046, United States, (40.547643364766046, -75.56134738722558, 0.0))]]
+
+Dates: []
+
+Times: [datetime.time(20, 0)]
+
+
+
+-.-.-.-.-.-.- 11 -.-.-.-.-.-.-
+
+Text: https://www.tiktok.com/t/ZTRqQMRqA/
+December 24, 2022 around 4am
+
+Sapphire Las Vegas Gentlemen's Club
+Las Vegas, Nevada… could be marketing
+
+Types: []
+
+Colors: []
+
+Locs: [('SAPPHIRE LAS VEGAS', {'longitude': -115.232015, 'latitude': 36.187059}), ('LAS VEGAS', {'longitude': -115.148516, 'latitude': 36.1672559}), ('NEVADA', {'longitude': -116.8537227, 'latitude': 39.5158825})]
+
+Resolved coordinates: [[Location(1560, Sapphire Springs Circle, Inner Northwest, Las Vegas, Clark County, Nevada, 89108, United States, (36.187018518811605, -115.23194373790683, 0.0))], [Location(Las Vegas City Hall, 495, South Main Street, Las Vegas, Clark County, Nevada, 89101, United States, (36.167282, -115.14851894692055, 0.0))], [Location(Lander County, Nevada, United States, (39.9059878, -116.9843374, 0.0))]]
+
+Dates: [datetime.date(2022, 12, 24)]
+
+Times: [datetime.time(4, 0)]
+
+
+
+-.-.-.-.-.-.- 12 -.-.-.-.-.-.-
+
+Text: Reported sighting over high school in Wentzville, MO
+
+https://youtu.be/6H7sXDHQH24
+
+Types: []
+
+Colors: []
+
+Locs: [('WENTZVILLE', {'longitude': -90.8683119, 'latitude': 38.8244136}), ('MO', {'longitude': -92.5617875, 'latitude': 38.7604815})]
+
+Resolved coordinates: [[Location(Wentzville City Hall, 1001, Schroeder Creek Boulevard, Wentzville, Saint Charles County, Missouri, 63385, United States, (38.8243418, -90.86815165223616, 0.0))], [Location(Moniteau County, Missouri, United States, (38.76056004951819, -92.563633952919, 0.0))]]
+
+Dates: []
+
+Times: []
+
+
+
+-.-.-.-.-.-.- 13 -.-.-.-.-.-.-
+
+Text: Would love some input on what I saw. Looking at the sky, southward in Miami, saw what looked like a drone without lights flying high above buildings. I’m in a flight path for MIA and at first through it was a plane without its lights on. Then it swerved back. The central v shape was very dynamic and dark but it was surrounded by fair tiny lights, did a loop and went out of sight. It looked almost bird like followed/surrounded by a mesh of fireflies.
+
+Types: ['LIGHT']
+
+Colors: []
+
+Locs: [('MIAMI', {'longitude': -80.19362, 'latitude': 25.7741728})]
+
+Resolved coordinates: [[Location(7-Eleven, 1, West Flagler Street, Miami, Miami-Dade County, Florida, 33128, United States, (25.7742987, -80.1937234, 0.0))]]
+
+Dates: []
+
+Times: []
+
+
+
+-.-.-.-.-.-.- 14 -.-.-.-.-.-.-
+
+Text: Wow nice, Check us out UFOnow.
+
+Types: []
+
+Colors: []
+
+Locs: []
+
+Resolved coordinates: []
+
+Dates: []
+
+Times: []
+
+
+
+-.-.-.-.-.-.- 15 -.-.-.-.-.-.-
+
+Text: UFO in the polar circle
+
+[An UFO in the polar circle:](https://youtu.be/VeokzhcM52U)
+
+The video has english subs
+
+Types: []
+
+Colors: []
+
+Locs: [('POLAR CIRCLE', {'longitude': -93.389381, 'latitude': 44.893692}), ('POLAR CIRCLE:](HTTPS://YOUTU.BE', {'longitude': 0.0, 'latitude': 0.0})]
+
+Resolved coordinates: [[Location(6543, Polar Circle, Bredesen Park, Edina, Hennepin County, Minnesota, 55436, United States, (44.89360050860416, -93.38937558317791, 0.0))], [Location(Soul Buoy, (-6e-07, 5e-07, 0.0))]]
+
+Dates: []
+
+Times: []
+
+
+
+-.-.-.-.-.-.- 16 -.-.-.-.-.-.-
+
+Text: It was about 4:30 p.m. I was driving north on Kedzie in Blue Island, ILLINOIS. I looked in the sky and seen what I figured was a hot air balloon or blimp of sorts, but it seemed made out of metal.
+
+It was flying low and slow.  Maybe 30 stories up. I wish to God I would've just pulled over and shot a video of it. It was huge, long and shaped somewhat like a formula 1 race car, meaning that it had these compartments that protruded outwardly. 
+
+It was just too surreal and I brushed it off as I figured "there's no way this it what I think it is"".... Looking back
+
+Types: []
+
+Colors: []
+
+Locs: [('KEDZIE', {'longitude': -87.7062325, 'latitude': 41.8842876}), ('BLUE ISLAND', {'longitude': -87.6801848, 'latitude': 41.6572753}), ('ILLINOIS.', {'longitude': -89.4337288, 'latitude': 40.0796606})]
+
+Resolved coordinates: [[Location(Kedzie, 3200, West Lake Street, East Garfield Park, Chicago, Cook County, Illinois, 60612, United States, (41.8842876, -87.7062325, 0.0))], [Location(Calumet Township Office, 2353, York Street, Blue Island, Calumet Township, Cook County, Illinois, 60406, United States, (41.65703235, -87.67971604940678, 0.0))], [Location(Old Route 66, Fogarty, Logan County, Illinois, 63634, United States, (40.07953862481671, -89.43358467140364, 0.0))]]
+
+Dates: []
+
+Times: [datetime.time(16, 30)]
+
+
+
+-.-.-.-.-.-.- 17 -.-.-.-.-.-.-
+
+Text: I tried to make a separate post and failed so hopefully it will work here. Wait.. how do I post my photos??? I don't see an option to upload them?   Help please! 
+
+I was on the beach in Cape Canaveral for the launch of the Falcon Heavy on Tuesday 11/1. With my naked eye I saw a stationary dark orb in the sky (pic taken at 9:48 a.m.) It was not a bird, plane or helicopter. iPhones take terrible photos from a distance. The first photo is the original, the second is a zoomed-in version so the dark orb can be seen. Obviously you can take the original and zoom in yourself... the orb is just above the clouds which are slightly below and to the right of the sun. (I am NOT referring to the blue dot lower right which is some kind of reflection of the sun on my camera lens) It was especially interesting that it happened during a rocket launch.  I'm thrilled to finally see one for myself.
+
+Types: ['ORB']
+
+Colors: []
+
+Locs: [('CAPE CANAVERAL', {'longitude': -80.52662, 'latitude': 28.45077})]
+
+Resolved coordinates: [[Location(Brevard County, Florida, United States, (28.4536507, -80.5284735, 0.0))]]
+
+Dates: [datetime.date(2022, 11, 1)]
+
+Times: [datetime.time(9, 48)]
+
+
+
+-.-.-.-.-.-.- 18 -.-.-.-.-.-.-
+
+Text: I just Saw a few minutes ago. Two steady red lights with a third on the front of the thing. The White one was blinking. Is that a plane? It Also have White blinking lights close to the red ones, but this ones were smaller than the red and Big White. Don't know what was It. I'm in uruguay
+
+Types: ['LIGHT']
+
+Colors: ['WHITE', 'RED']
+
+Locs: [('URUGUAY', {'longitude': -56.0201525, 'latitude': -32.8755548})]
+
+Resolved coordinates: [[Location(Durazno, Uruguay, (-33.0833329, -56.0833331, 0.0))]]
+
+Dates: []
+
+Times: []
+
+
+
+-.-.-.-.-.-.- 19 -.-.-.-.-.-.-
+
+Text: Sorry I don’t have any evidence, I was slow too slow to react. I saw something on my flight today it was pill shaped and white. It was over a city near a smoke stack type factory by a river; close to cloud level but far away. I was staring at the shadow at the end of the pill trying to figure out what it was and it was 3 seconds before I realized it was kind of fast . It was a blip on the horizon before I thought to take my phone out
+
+Types: ['PILL']
+
+Colors: ['WHITE']
+
+Locs: []
+
+Resolved coordinates: []
+
+Dates: []
+
+Times: []
+
+
+
+-.-.-.-.-.-.- 20 -.-.-.-.-.-.-
+
+Text: Spotted this slow-moving light tonight (Dec26 7:11 pm) in Pasquotank county NC. Facing SW.
+
+[https://www.youtube.com/watch?v=\_b4\_6O5cF3g](https://www.youtube.com/watch?v=_b4_6O5cF3g)
+
+Edit: For comparison, adding another orb-like light moving across the sky. Recorded Summer of 2021 in Wake County, NC.
+
+[https://youtu.be/Y6O3F55bZi8](https://youtu.be/Y6O3F55bZi8)
+
+Types: ['LIGHT', 'ORB']
+
+Colors: []
+
+Locs: [('PASQUOTANK COUNTY', {'longitude': -76.2149621, 'latitude': 36.2280793}), ('NC.', {'longitude': -79.0392919, 'latitude': 35.6729639}), ('SW.', {'longitude': -100.8928434, 'latitude': 37.1850331}), ('WAKE COUNTY', {'longitude': -78.6118311, 'latitude': 35.7979355})]
+
+Resolved coordinates: [[Location(Pasquotank County, North Carolina, United States, (36.2280793, -76.2149621, 0.0))], [Location(182, Woodhaven Drive, Chatham County, North Carolina, 27562, United States, (35.672517, -79.0388229, 0.0))], [Location(Seward County, Kansas, United States, (37.18456525797925, -100.89283486273685, 0.0))], [Location(Raleigh Boulevard, Woodcrest, Raleigh, Wake County, North Carolina, 27611, United States, (35.79802005863863, -78.61112849458452, 0.0))]]
+
+Dates: [datetime.date(2022, 12, 26)]
+
+Times: []
+
+
+
+-.-.-.-.-.-.- 21 -.-.-.-.-.-.-
+
+Text: I saw a flashing light falling quite quickly. It was completely blinking as in it went from the brightest thing in the sky (not insanely bright but definitely brighter than anything else) and then turned off entirely every 1/3 of a second or so. It fell about 1/5 of the sky in maybe 30 seconds so it was moving very fast. Anyone have an idea on what this could be? I guessed a plane crash but don’t really have a close
+
+Types: ['LIGHT']
+
+Colors: []
+
+Locs: []
+
+Resolved coordinates: []
+
+Dates: []
+
+Times: []
+
+
+
+-.-.-.-.-.-.- 22 -.-.-.-.-.-.-
+
+Text: We need to make a map of all of them sightings
+
+Types: []
+
+Colors: []
+
+Locs: []
+
+Resolved coordinates: []
+
+Dates: []
+
+Times: []
+
+
+
+-.-.-.-.-.-.- 23 -.-.-.-.-.-.-
+
+Text: I saw something about 3 nights ago. I was out walking my dog in a grass field right by the Nampa, ID school district office building. I was listening to some music while we walked as is our normal routine. Where I live though puts me pretty squarely in town so I don't have the greatest view of the sky at times with light pollution. That night though there was a very red light I didn't recognize as one of the stars I normally do see. It was solid red, unblinking. I've seen helicopters at night before and I know planes lights blink but this was not that at all. It moved from my perspective slowly about 2 feet across the sky before it finally went so far away that I could no longer see it.
+
+Types: ['LIGHT']
+
+Colors: ['RED']
+
+Locs: [('NAMPA', {'longitude': -116.559631, 'latitude': 43.5737361})]
+
+Resolved coordinates: [[Location(434, 15th Avenue South, Nampa, Canyon County, Idaho, 83651, United States, (43.57405569387755, -116.55988465306123, 0.0))]]
+
+Dates: []
+
+Times: []
+
+
+
+-.-.-.-.-.-.- 24 -.-.-.-.-.-.-
+
+Text: You guys are crazy wtf is this..
+
+There are also 600k people here
+
+Types: []
+
+Colors: []
+
+Locs: []
+
+Resolved coordinates: []
+
+Dates: []
+
+Times: []
+
+
+
+-.-.-.-.-.-.- 25 -.-.-.-.-.-.-
+
+Text: Well I'm going to add mine here since I have no photo or footage.  My office window looks at another building and clear bluebird sky with small clouds scattered about. 
+
+I was at my desk on the phone talking to my brother and I saw a white orb. Basically the brightest cleanest white possible. It entered my view and  within a second entered the cloud going left to right. It was going fairly fast so, I wanted to see it exit the cloud. The end of the cloud was obscured by an air unit on the building across from my office window.  When it didn't exit on the predicted straight line path, I stood up at my desk still on the phone and explained to him I saw an orb. As I was able to see it again it had turned back left and up and away vanishing in distant blue sky. 
+
+Of course being extremely curious I basically left my work and went out the back of the building to try and see it or make sense of it.  So that's that and now I'm just watching out the window instead of doing my job. Atleast I'm the department manager.  
+
+Today 11-2-22 2:25pm central  it would have been east- north east of Danville Arkansas.
+
+Types: ['ORB']
+
+Colors: ['WHITE', 'BLUE']
+
+Locs: [('DANVILLE', {'longitude': -87.6304614, 'latitude': 40.125222}), ('ARKANSAS', {'longitude': -92.4479108, 'latitude': 35.2048883})]
+
+Resolved coordinates: [[Location(Vermilion County Courthouse Annex, 6, North Vermilion Street, Danville, Vermilion County, Illinois, 61832, United States, (40.124659449999996, -87.63063449089066, 0.0))], [Location(11, Salter Lane, Wooster, Faulkner County, Arkansas, 72058, United States, (35.204883378674445, -92.4479147654786, 0.0))]]
+
+Dates: [datetime.date(2022, 11, 2)]
+
+Times: [datetime.time(14, 25)]
+
+
+

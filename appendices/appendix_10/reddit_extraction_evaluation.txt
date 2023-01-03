@@ -30,7 +30,7 @@ Colors: ['RED', 'YELLOWISH']
 
 Locs: [('CHICAGO!', {'longitude': -87.6244212, 'latitude': 41.8755616})]
 
-Resolved coordinates: [[Location(Congress Plaza Hotel, 500-510, South Michigan Avenue, Printer's Row, Loop, Chicago, Cook County, Illinois, 60604, United States, (41.875375399999996, -87.62482736161188, 0.0))]]
+Resolved coordinates: [[Location(Congress Plaza Hotel, 520, South Michigan Avenue, Printer's Row, Loop, Chicago, Cook County, Illinois, 60605, United States, (41.87490815, -87.62481942289932, 0.0))]]
 
 Dates: []
 

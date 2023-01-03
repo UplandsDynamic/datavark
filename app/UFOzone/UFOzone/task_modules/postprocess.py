@@ -207,7 +207,8 @@ class PostProcess:
             "MINUTES",
             "MIN",
             "MINS",
-            "M" "HOURS",
+            "M", 
+            "HOURS",
             "HRS",
             "HRS",
             "H",
@@ -329,6 +330,7 @@ class Scrubbers:
         self.input = re.sub(r"\b.*PIN\s*PRICK.*\b", "LIGHT", self.input)
         self.input = re.sub(r"\b.*STROBE.*\b", "LIGHT", self.input)
         self.input = re.sub(r"\b.*TWINKLE.*\b", "LIGHT", self.input)
+        self.input = re.sub(r"\bSATELLITE.*\b", "LIGHT", self.input)
 
     # function to change standardise 'fireball'
     def _standardise_fireball(self):

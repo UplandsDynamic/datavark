@@ -82,6 +82,10 @@ class Report(models.Model):
         verbose_name="Last modified",
         help_text="Date record was last modified in this database.",
     )
+    record_junked = models.BooleanField(
+        verbose_name="Record junked",
+        help_text="Record marked for deletion"
+    )
     source_name = models.CharField(
         max_length=200,
         verbose_name="Source name",

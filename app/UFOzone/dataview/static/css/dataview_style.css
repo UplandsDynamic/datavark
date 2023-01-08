@@ -4,6 +4,13 @@
     border-radius: 11px;
 }
 
+div#report {
+    display: block;
+    border: 1px solid silver;
+    border-radius: 11px;
+    padding: 1em;
+}
+
 #reports-table td {
     max-width: 18ch;
     overflow: hidden;
@@ -24,7 +31,7 @@ li {
 }
 
 input {
-    display:inline!important;
+    display: inline !important;
     margin-bottom: 0.5em;
     width: 45% !important;
     background-color: #111111 !important;
@@ -34,12 +41,12 @@ input {
 }
 
 input:disabled {
-    background-color: #555555!important;
+    background-color: #555555 !important;
 }
 
 textarea#report_txt {
     height: 200px;
-    background-color: #111111!important;
+    background-color: #111111 !important;
     color: #b9b8b8 !important;
 }
 
@@ -53,7 +60,7 @@ button {
     margin-bottom: 0.5em;
 }
 
-button#submit {
+button#submit, button#deleteRecord {
     max-width: 100% !important;
 }
 

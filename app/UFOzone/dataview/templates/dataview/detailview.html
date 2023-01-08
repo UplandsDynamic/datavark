@@ -202,7 +202,11 @@
         <div>
             <ul>
                 <li>
-                    <button id="submit" type="submit" class="btn btn-primary">Submit data edits</button>
+                    <button id="submit" type="submit" class="btn btn-success">Submit data edits</button>
+                </li>
+                <li>
+                    <button id="deleteRecord" class="btn btn-danger"><i
+                        class="fa fa-trash"></i> Remove record</button>
                 </li>
             </ul>
         </div>
@@ -310,6 +314,10 @@
             $(`input.colorData[data-listpos="${listPos}"]`).removeAttr("name");
             $(`li#${listPos}`).toggleClass("d-none");
         });
+        $("button#deleteRecord").click(e => {
+            e.preventDefault();
+
+        })
         // config date pickers
         for (let i = 0; i <= "{{report.obs_dates.all.count}}"; i++) {
             let dateEle = document.getElementById("date-" + i)

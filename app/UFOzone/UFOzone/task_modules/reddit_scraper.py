@@ -27,7 +27,7 @@ class RedditScraper:
         !Note: if changing download schedule to allow additional options to DAILY & WEEKLY, "limit" also has to change. Otherwise will still only get 7 days, as only the earliest 1 "submission" will be returned. E.g. 14 days in the timedelta function, requires a limit of at least 2 (equating to submission returns, which equals 2 weeks, as each "submission" under which its sighting report comments are posted is dedicated to 1 calendar week (as per the report submissions on the r/UFOs subreddit, here: https://www.reddit.com/r/UFOs/search?q=%22Weekly%20UFO%20Sightings%3A%22&restrict_sr=on&include_over_18=on&sort=new&t=all).
         """
         _all_submissions = reddit.subreddit("ufos")
-        for i in _all_submissions.search("Weekly UFO Sightings", limit=1):
+        for i in _all_submissions.search("Weekly UFO Sightings", limit=2):
             _weekly_report_page_ids.append(i.id)
         for report_page_id in _weekly_report_page_ids:
             submission = reddit.submission(report_page_id)

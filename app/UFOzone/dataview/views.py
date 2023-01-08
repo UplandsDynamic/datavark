@@ -2,13 +2,17 @@ from django.shortcuts import render, redirect
 from django.views import View
 from django.conf import settings as s
 from django import template
+from django.db.models import F
 from django_tables2 import SingleTableMixin, LazyPaginator, RequestConfig
 from .tables import ReportTable
 from pathlib import Path
-from django.http import FileResponse
+from django.http import FileResponse, JsonResponse
+from UFOzone.task_modules import db
+from UFOzone.task_modules.postprocess import Scrubbers, ProcessLocations
 import ie.models as data_models
 import logging, random, os
 import pandas as pd
+import datetime
 
 register = template.Library()
 logger = logging.getLogger("django")
@@ -23,7 +27,9 @@ class ReportsView(SingleTableMixin, View):
 
     def get(self, *args, **kwargs):
         report_table = self._report_table_class(
-            self._report_model.objects.all()
+            self._report_model.objects.all().order_by(
+                F("obs_dates__date").desc(nulls_last=True)
+            )
         ).paginate(page=self.request.GET.get("page", 1), per_page=15)
         RequestConfig(self.request).configure(report_table)
         _context = {
@@ -47,6 +53,119 @@ class DetailView(SingleTableMixin, View):
             except data_models.Report.DoesNotExist:
                 logger.error(f"Report ID {report_id} does not exist")
         return render(self.request, self._template_name, context)
+
+    def post(self, *args, **kwargs):
+        if self.request.method == "POST":
+            report_id = kwargs.get("id", None)
+            data = self.request.POST
+            if data:
+                update_data = {"report_id": report_id}
+                dates = data.getlist("date")
+                newDates = data.getlist("newDate")
+                times = data.getlist("time")
+                newTimes = data.getlist("newTime")
+                types = data.getlist("type")
+                newTypes = data.getlist("newTypes")
+                colors = data.getlist("color")
+                newColors = data.getlist("newColors")
+                locations = data.getlist("location")
+                newLocations = data.getlist("newLocations")
+                report_txt = data.getlist("report_txt")
+                # clear existing extracted data from record
+                db.ClearRelations(record_id=report_id)
+                if report_txt:
+                    try:
+                        update_data.update({"obs_txt": report_txt[0]})
+                    except Exception as e:
+                        logger.error(f"Adding report text failed: {e}")
+                if dates or newDates:  # add dates
+                    try:
+                        update_data.update(
+                            {
+                                "obs_dates": [
+                                    datetime.datetime.strptime(d, "%Y-%m-%d").date()
+                                    for d in dates
+                                ]
+                                + (
+                                    [
+                                        datetime.datetime.strptime(d, "%Y-%m-%d").date()
+                                        for d in newDates
+                                    ]
+                                    if newDates
+                                    else []
+                                )
+                            }
+                        )
+                    except Exception as e:
+                        logger.error(f"Adding date data failed: {e}")
+                if times or newTimes:  # add times
+                    try:
+                        update_data.update(
+                            {
+                                "obs_times": [
+                                    datetime.datetime.strptime(t, "%H:%M").time()
+                                    for t in times
+                                ]
+                                + (
+                                    [
+                                        datetime.datetime.strptime(t, "%H:%M").time()
+                                        for t in newTimes
+                                    ]
+                                    if newTimes
+                                    else []
+                                )
+                            }
+                        )
+                    except Exception as e:
+                        logger.error(f"Adding time data failed: {e}")
+                if types or newTypes:  # add types
+                    processed_types = []
+                    if newTypes:
+                        for t in newTypes[0].split(","):
+                            s = Scrubbers(t)
+                            t = s.run_base_scrubbers()
+                            processed_types.append(t)
+                    for t in types:
+                        for t in t.split(","):
+                            s = Scrubbers(t)
+                            t = s.run_base_scrubbers()
+                            processed_types.append(t)
+                    update_data.update({"obs_types": processed_types})
+                if colors or newColors:  # add colours
+                    processed_colors = []
+                    if newColors:
+                        for c in newColors[0].split(","):
+                            s = Scrubbers(c)
+                            c = s.run_base_scrubbers()
+                            processed_colors.append(c)
+                    for c in colors:
+                        for c in c.split(","):
+                            s = Scrubbers(c)
+                            c = s.run_base_scrubbers()
+                            processed_colors.append(c)
+                    update_data.update({"obs_colors": processed_colors})
+                if locations or newLocations:  # add locations
+                    processed_locs = (
+                        []
+                    )  # {"place_name": "example", "coordinates": Point(123,456)}
+                    if newLocations:
+                        # run geocoding & scrubbing, then append to processed
+                        processed_locs += ProcessLocations(
+                            [l.strip() for l in newLocations[0].split("/")],
+                            geocode=True,
+                        )
+                    for l in locations:
+                        processed_locs += ProcessLocations([l], geocode=True)
+                    # update obs_locs
+                    update_data.update({"obs_locs": processed_locs})
+                # make call to update db here
+                update_outcome = db.UpdateDB(update_data)
+                logger.info(f"Update outcome: {update_outcome}")
+                # return to UI
+                return JsonResponse({"success": True}, status=200)
+            else:
+                return JsonResponse({"success": False}, status=400)
+        return JsonResponse({"success": False}, status=400)
 
 
 class DataExportView(View):
@@ -73,7 +192,11 @@ class DataExportView(View):
                 status = f"Export failed: {str(e)}"
                 return render(self.request, self._template_name, {"status": status})
         else:
-            return render(self.request, self._template_name, {})
+            return render(
+                self.request,
+                self._template_name,
+                {"record_num": self._ds["total_export_records"]},
+            )
 
     def _export_records_csv(self, request, source, random_sample):
         # get record list for sources

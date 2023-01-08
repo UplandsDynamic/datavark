@@ -135,7 +135,7 @@ class PostProcess:
             formatted.append(type)
         return list(set(formatted))
 
-    # geocode locations with longitude & latitude
+    # geocode locations with longitude & latitude, local access, for scheduled tasks
     def _geocode(self, doc):
         for idx, entity in enumerate(doc["entities"]):
             if (
@@ -162,7 +162,7 @@ class PostProcess:
                     )
         return doc
 
-    # process place name. Returns list [{"place name": "name string", "coordinates": Point(longitude,latitude)})]
+    # process place name. Returns list [{"place_name": "name string", "coordinates": Point(longitude,latitude)})]
     def _process_locs(self, locs=[]):
         formatted = []
         for loc in locs:
@@ -207,7 +207,7 @@ class PostProcess:
             "MINUTES",
             "MIN",
             "MINS",
-            "M", 
+            "M",
             "HOURS",
             "HRS",
             "HRS",
@@ -254,30 +254,90 @@ class PostProcess:
         return text
 
 
+class ProcessLocations:
+    """
+    process locations class accessible externally (outwith task scheduler processes).
+    Includes geocode and formatting ready for DB insertion.
+    """
+
+    def __new__(cls, data=[], geocode=False):
+        """
+        incoming data (assigned to self._data), in form:
+            ["City, State, Country", "City2, ...] when geocode = True
+            ["City, State (longitude, latitude)", "City2, ...] when geocode = False
+        """
+        obj = super().__new__(cls)
+        obj._data = data
+        obj._geocode = geocode
+        return obj._process()
+
+    def _process(self):
+        """
+        return in form [{"place_name": "place name string", "coordinates": Point(longitude, latitude)}]
+        """
+        processed = []
+        for loc in self._data:
+            if self._geocode:
+                # remove existing coordinates from string in event record is being re-geocoded
+                loc = re.sub(r"[(].*[)]", "", loc)
+                # scrub location
+                s = Scrubbers(loc)
+                loc = s.run_place_scrubbers()
+                try:
+                    geolocator = Nominatim(user_agent="UAP_Database")
+                    location = geolocator.geocode(loc)
+                    processed.append(
+                        {
+                            "place_name": loc,
+                            "coordinates": Point(location.longitude, location.latitude),
+                        }
+                    )
+                except Exception as e:
+                    logger.error(
+                        f"A problem occurred during geocoding, {loc} has NOT been geocoded!: {str(e)}"
+                    )
+                    processed.append(
+                        {"place_name": loc, "coordinates": Point(0.0, 0.0)}
+                    )
+            else:
+                # extract coordinates from string
+                coordinates = re.findall("\(+(.*?)\)", loc)
+                coordinates = [float(c.strip()) for c in coordinates[0].split(",")]
+                coordinates = Point(coordinates[0], coordinates[1])
+                # remove coordinates from string, leaving place name
+                place_name = re.sub(r"[(].*[)]", "", loc)
+                # scrub & append to processed
+                s = Scrubbers(place_name)
+                place_name = s.run_place_scrubbers()
+                processed.append({"place_name": place_name, "coordinates": coordinates})
+        return processed
+
+
 class Scrubbers:
     def __init__(self, input):
         self.input = input
 
-    def run_place_scrubbers(self):
+    def run_base_scrubbers(self):
         self._remove_whitespace()
         self._capitalize()
         self._remove_nonalphanumeric()
+        self._remove_single_chars()
+        return self.input
+
+    def run_place_scrubbers(self):
+        self._remove_whitespace()
+        self._capitalize()
+        self._remove_nonalphanumeric(keep_commas=True)
         self._remove_single_chars()
         return self.input
 
     def run_color_scrubbers(self):
-        self._remove_whitespace()
-        self._capitalize()
-        self._remove_nonalphanumeric()
-        self._remove_single_chars()
+        self.run_base_scrubbers()
         self._standardise_color()
         return self.input
 
     def run_type_scrubbers(self):
-        self._remove_whitespace()
-        self._capitalize()
-        self._remove_nonalphanumeric()
-        self._remove_single_chars()
+        self.run_base_scrubbers()
         self._standardise_light()
         self._standardise_tictac()
         self._standardise_orb()
@@ -312,8 +372,11 @@ class Scrubbers:
         self.input = self.input.upper()
 
     # function to remove non-alphanumeric characters (preserve whitespace, replace with space)
-    def _remove_nonalphanumeric(self):
-        self.input = re.sub(r"[^\w\s]", " ", self.input)
+    def _remove_nonalphanumeric(self, keep_commas=False):
+        if keep_commas:
+            self.input = re.sub(r"[^\w\s,]", " ", self.input)
+        else:
+            self.input = re.sub(r"[^\w\s]", " ", self.input)
 
     # function to remove strings with single char
     def _remove_single_chars(self):

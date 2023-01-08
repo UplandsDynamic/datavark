@@ -10,7 +10,7 @@ class Loc(models.Model):
     )
     coordinates = PointField(
         verbose_name="Observation coordinates",
-        help_text="Coordinates of the location(s) of observation (latitude, longitude)",
+        help_text="Coordinates of the location(s) of observation (longitude, latitude)",
     )
 
     def __str__(self):

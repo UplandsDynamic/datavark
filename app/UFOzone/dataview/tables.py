@@ -22,13 +22,13 @@ class ReportTable(tables.Table):
             "obs_dates",
             "obs_times",
         )
-        order_by = "-obs_dates.date"
+        order_by = "obs_dates__date"
 
-    obs_colors = tables.Column(order_by="obs_colors.color")
-    obs_types = tables.Column(order_by="obs_types.type")
-    obs_locs = tables.Column(order_by="obs_locs.place_name")
-    obs_dates = tables.Column(order_by="-obs_dates.date")
-    obs_times = tables.Column(order_by="obs_times.time")
+    obs_colors = tables.Column(order_by="obs_colors__color")
+    obs_types = tables.Column(order_by="obs_types__type")
+    obs_locs = tables.Column(order_by="obs_locs__place_name")
+    obs_dates = tables.Column(order_by="obs_dates__date")
+    obs_times = tables.Column(order_by="obs_times__time")
 
     def render_id(self, value):
         return format_html(f"<a href='{value}'>{value}</a>")

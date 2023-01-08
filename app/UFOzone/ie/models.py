@@ -83,6 +83,7 @@ class Report(models.Model):
         help_text="Date record was last modified in this database.",
     )
     record_junked = models.BooleanField(
+        default=False,
         verbose_name="Record junked",
         help_text="Record marked for deletion"
     )

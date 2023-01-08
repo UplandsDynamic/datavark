@@ -27,7 +27,7 @@ class ReportsView(SingleTableMixin, View):
 
     def get(self, *args, **kwargs):
         report_table = self._report_table_class(
-            self._report_model.objects.all().order_by(
+            self._report_model.objects.filter(record_junked=False).order_by(
                 F("obs_dates__date").desc(nulls_last=True)
             )
         ).paginate(page=self.request.GET.get("page", 1), per_page=15)

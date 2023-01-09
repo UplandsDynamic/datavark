@@ -205,8 +205,7 @@
                     <button id="submit" type="submit" class="btn btn-success">Submit data edits</button>
                 </li>
                 <li>
-                    <button id="deleteRecord" class="btn btn-danger"><i
-                        class="fa fa-trash"></i> Remove record</button>
+                    <button id="deleteRecord" class="btn btn-danger"><i class="fa fa-trash"></i> Remove record</button>
                 </li>
             </ul>
         </div>
@@ -314,10 +313,6 @@
             $(`input.colorData[data-listpos="${listPos}"]`).removeAttr("name");
             $(`li#${listPos}`).toggleClass("d-none");
         });
-        $("button#deleteRecord").click(e => {
-            e.preventDefault();
-
-        })
         // config date pickers
         for (let i = 0; i <= "{{report.obs_dates.all.count}}"; i++) {
             let dateEle = document.getElementById("date-" + i)
@@ -359,7 +354,7 @@
                 var marker = L.marker([lat, long]).addTo(map);
             }
         }
-        // submit data with AJAX
+        // submit form data with AJAX
         $('#display-form').submit((e) => {
             e.preventDefault();
             let formData = $('#display-form').serializeArray();  // serialise form data
@@ -378,6 +373,23 @@
                 }
             });
         });
+        // send request to delete records with AJAX
+        $("button#deleteRecord").click(e => {
+            e.preventDefault();
+            $.ajax({
+                url: "/data/{{report.id}}",
+                data: { "delete_record": "true", "csrfmiddlewaretoken": "{{csrf_token}}" },
+                type: 'POST',
+                dataType: 'json',
+                success: (response) => {
+                    console.log(response.success)
+                    window.location.href = "/data/"
+                },
+                error: (response) => {
+                    console.log(response.success);
+                }
+            });
+        })
     });
 </script>
 {% endblock %}

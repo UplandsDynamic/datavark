@@ -48,10 +48,13 @@ class DetailView(SingleTableMixin, View):
         report_id = kwargs.get("id", None)
         if report_id:
             try:
-                report = data_models.Report.objects.filter(id=report_id)[0]
+                report = data_models.Report.objects.filter(
+                    id=report_id, record_junked=False
+                )[0]
                 context = {"report": report}
-            except data_models.Report.DoesNotExist:
-                logger.error(f"Report ID {report_id} does not exist")
+            except Exception as e:
+                logger.error(f"Report ID {report_id} cannot be retrieved!")
+                return redirect("dataview:reports-view")
         return render(self.request, self._template_name, context)
 
     def post(self, *args, **kwargs):
@@ -71,6 +74,12 @@ class DetailView(SingleTableMixin, View):
                 locations = data.getlist("location")
                 newLocations = data.getlist("newLocations")
                 report_txt = data.getlist("report_txt")
+                delete_record = data.get("delete_record")
+                # if delete record
+                if delete_record:
+                    junked = db.JunkRecord(record_id=report_id)
+                    logger.info(junked)
+                    return JsonResponse({"success": True}, status=200)
                 # clear existing extracted data from record
                 db.ClearRelations(record_id=report_id)
                 if report_txt:
@@ -201,9 +210,13 @@ class DataExportView(View):
     def _export_records_csv(self, request, source, random_sample):
         # get record list for sources
         records_list = (
-            list(data_models.Report.objects.filter(source_name=source.upper()))
+            list(
+                data_models.Report.objects.filter(
+                    source_name=source.upper(), record_junked=False
+                )
+            )
             if source
-            else list(data_models.Report.objects.all())
+            else list(data_models.Report.objects.filter(record_junked=False))
         )
         # either export random selection, or all, depending on button user clicked
         records = (

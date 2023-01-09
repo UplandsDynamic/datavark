@@ -106,6 +106,25 @@ class ClearRelations:
         return True
 
 
+class JunkRecord:
+
+    """
+    Set flag in record to render it "junked" (pending deletion)
+    """
+
+    def __new__(cls, record_id):
+        obj = super().__new__(cls)
+        obj.record_id = record_id
+        return obj._set_junked()
+
+    def _set_junked(self):
+        try:
+            Report.objects.filter(id=self.record_id).update(record_junked=True)
+            return f"Record {self.record_id} has been marked as junk!"
+        except Exception as e:
+            return f"Record junking failed: {e}"
+
+
 class UpdateDB:
 
     """

@@ -142,7 +142,7 @@ class PostProcess:
                 entity[1] in self._location_entity_class_types
             ):  # note: PLACE is custom class type added in NUFORC reshape to denote value obtained from structured NUFORC data rather than NER
                 try:
-                    geolocator = Nominatim(user_agent="UAP_Database")
+                    geolocator = Nominatim(user_agent="UAP_Database", timeout=11)
                     location = geolocator.geocode(entity[0])
                     doc["entities"][idx] = (
                         entity[0],
@@ -224,6 +224,15 @@ class PostProcess:
                 discarded.append(time)
             else:
                 try:
+                    # remove common qualifiers
+                    time = re.sub(r"approximately*|approx*|around*", r"", time).strip()
+                    # convert synonyms
+                    if time.upper() in ["MIDNIGHT", "MID NIGHT", "00:00"]:
+                        formatted.append(
+                            datetime.time(0, 0)
+                        )  # add directly, as "00:00" not accepted later, due to dateutil bug
+                    elif time.upper() in ["NOON"]:
+                        time = "12:00"
                     # substitute dots for colons so time's recognised by parser
                     time = re.sub(r"(\d{1,2})\.(\d{2})(\D*)$", r"\1:\2\3", time)
                     # do some light string operations (regex) to detect semantic equivalences
@@ -232,6 +241,7 @@ class PostProcess:
                     time = re.sub(r"half\s{0,3}(\d).*morning", r"\1:30am", time)
                     time = re.sub(r"half\s{0,3}(\d).*afternoon", r"\1:30pm", time)
                     parsed = dateutil.parser.parse(time, fuzzy=True).time()
+                    # do not add 0,0 as bag in dateutil erroneously defines some non-midnight to midnight
                     formatted.append(parsed) if parsed != datetime.time(0, 0) else None
                 except ParserError:
                     discarded.append(time)

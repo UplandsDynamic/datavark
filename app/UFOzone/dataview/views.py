@@ -28,9 +28,11 @@ class ReportsView(SingleTableMixin, View):
     def get(self, *args, **kwargs):
         report_table = self._report_table_class(
             self._report_model.objects.filter(record_junked=False).order_by(
-                F("obs_dates__date").desc(nulls_last=True)
+                F("last_mod").desc(nulls_last=True)
             )
-        ).paginate(page=self.request.GET.get("page", 1), per_page=15)
+        ).paginate(
+            page=self.request.GET.get("page", 1), per_page=15
+        )  # or, order by obs_dates__date for observation date
         RequestConfig(self.request).configure(report_table)
         _context = {
             "reports_table": report_table,

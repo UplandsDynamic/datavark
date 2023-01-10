@@ -37,7 +37,9 @@ class ReportTable(tables.Table):
         return value[0:50] + "..." if len(value) > 53 else value
 
     def render_source_url(self, value):
-        return value[0:15] + "..." if len(value) > 18 else value
+        return format_html(
+            f"<a href='{value}' target='_blank'>{value[0:15] + '...' if len(value) > 18 else value}</a>"
+        )
 
     def render_obs_txt(self, value):
         return value[0:99] + "..." if len(value) > 102 else value

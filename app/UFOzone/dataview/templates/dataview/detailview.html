@@ -2,8 +2,8 @@
 {% load static %}
 {% block title %}UAP Report{%endblock%}
 {% block stylesheets %}
-<link rel="stylesheet" href="{% static 'css/dataview_style.css'%}?v=1" />
-<link rel="stylesheet" href="{% static 'leaflet/leaflet.css' %}?v=1" />
+<link rel="stylesheet" href="{% static 'css/dataview_style.css'%}?v=5" />
+<link rel="stylesheet" href="{% static 'leaflet/leaflet.css' %}?v=5" />
 <link href=" https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
     integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
 <link rel="stylesheet"
@@ -11,7 +11,7 @@
     integrity="sha256-XPTBwC3SBoWHSmKasAk01c08M6sIA5gF5+sRxqak2Qs=" crossorigin="anonymous" />
 {% endblock %}
 {% block head-scripts %}
-<script src="{% static 'leaflet/leaflet.js' %}?v=1"></script>
+<script src="{% static 'leaflet/leaflet.js' %}?v=5"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
     integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
     crossorigin="anonymous"></script>
@@ -83,7 +83,7 @@
         </div>
         <ul>
             <label>Associated observation time</label>
-            <p>Local time to the observation.</p>
+            <p>Time local to the observation location.</p>
             {% for time in report.obs_times.all %}
             <li id="time-{{forloop.counter}}" data-time="{{ time.time|time:'H:i:s' }}">
                 <div class="input-group time" id="datetimepicker-time-{{forloop.counter}}" data-target-input="nearest">

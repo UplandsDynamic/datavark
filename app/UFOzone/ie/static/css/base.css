@@ -13,6 +13,11 @@ li {
     margin: 0.5em 0 0.5em 0;
 }
 
+nav ul {
+    border-bottom: 1px dashed silver;
+    padding-bottom: 0.5em;
+}
+
 div#content h1,
 h2,
 h3,

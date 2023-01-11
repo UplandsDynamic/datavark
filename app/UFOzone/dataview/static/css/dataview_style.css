@@ -26,10 +26,6 @@ ul {
     padding-bottom: 0.5em;
 }
 
-li {
-    border-bottom: 1px dotted #555555;
-}
-
 input {
     display: inline !important;
     margin-bottom: 0.5em;
@@ -80,4 +76,9 @@ div#addDate {
 
 .icon {
     margin: 0 1em !important;
+}
+
+div#failAlert {
+    background-color: #222222;
+    border: none!important;
 }

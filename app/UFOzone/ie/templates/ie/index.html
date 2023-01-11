@@ -2,10 +2,11 @@
 {% load static %}
 {% block title %}Scheduler{%endblock%}
 {% block stylesheets %}
-<link rel="stylesheet" href="{% static 'css/ie_style.css' %}?v=2" />
+<link rel="stylesheet" href="{% static 'css/ie_style.css' %}?v=5" />
 {% endblock %}
 {% block page_title %}<h1>Data acquisition scheduler</h1>{%endblock%}
 {% block content %}
+<h2>Currently scheduled</h2>
 <div id="schedule-table">
     {% load render_table from django_tables2 %}
     {% autoescape off %}
@@ -13,6 +14,7 @@
     {% endautoescape %}
 </div>
 <div>
+    <h2>Select schedule</h2>
     <form id="schedule-form">
         {% csrf_token %}
         {% for field in form %}
@@ -24,6 +26,7 @@
         <!-- <input type="submit" class="btn btn-primary" value="Change Scheduled" /> -->
         <form>
 </div>
+<h2>Task log</h2>
 <div id="results-table">
     {% load render_table from django_tables2 %}
     {% autoescape off %}

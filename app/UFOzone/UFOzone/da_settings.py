@@ -138,6 +138,7 @@ DA_SETTINGS = {
     "ner_model_path": "UFOzone/ner_models/trf-model-best-tuned/",  # NER model path
     "test_without_pull": 0,  # setting to 1 does everything except pull from external source
     "total_export_records": 25,  # number of records to export from export view
+    "restrict_duplicate_location_extractions": True,  # restrict extracting both cities & states as separate entities, etc
     "csv_export_path": os.path.join(
         BASE_DIR, "data_collection", "exports"
     ),  # path for exported CSVs

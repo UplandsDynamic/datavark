@@ -24,6 +24,9 @@ def get_data(source=""):
                     model_name=s.DA_SETTINGS["ner_model_name"],
                     model_url=s.DA_SETTINGS["ner_model_path"],
                     data_dict=data,
+                    restrict_loc_dupes=s.DA_SETTINGS[
+                        "restrict_duplicate_location_extractions"
+                    ],
                 )
                 # post-processing
                 processed_data = PostProcess(data=data_with_ents, source=source)
@@ -43,6 +46,9 @@ def get_data(source=""):
                     model_name=s.DA_SETTINGS["ner_model_name"],
                     model_url=s.DA_SETTINGS["ner_model_path"],
                     data_dict=data,
+                    restrict_loc_dupes=s.DA_SETTINGS[
+                        "restrict_duplicate_location_extractions"
+                    ],
                 )
                 # post-processing
                 processed_data = PostProcess(data=data_with_ents, source=source)

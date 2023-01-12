@@ -9,9 +9,12 @@ class Ner:
     Run the NER processes
     """
 
-    def __new__(cls, model_name="", model_url="", data_dict=[]):
+    def __new__(
+        cls, model_name="", model_url="", data_dict=[], restrict_loc_dupes=True
+    ):
         obj = super().__new__(cls)
         obj._data_dict = data_dict
+        obj._restrict_loc_dupes = restrict_loc_dupes
         obj._get_text()
         obj._init_ner(model_url, model_name)
         obj._get_entities()
@@ -43,7 +46,28 @@ class Ner:
             ents = []
             if processed_doc.ents:
                 for ent in processed_doc.ents:
-                    ents.append((ent.text, ent.label_))
+                    end_char_pos_of_last_loc_ent = 0
+                    valid_location_ents = ("GPE", "LOC", "PLACE")
+                    processed_doc = self.nlp(doc.lower())
+                    for ent in processed_doc.ents:
+                        # restrict extracting cities & states as separate entities, etc
+                        if ent.label_ in valid_location_ents:
+                            if (
+                                not self._restrict_loc_dupes
+                                or ent.start
+                                not in range(
+                                    (end_char_pos_of_last_loc_ent + 1),
+                                    (end_char_pos_of_last_loc_ent + 5),
+                                )
+                                or not end_char_pos_of_last_loc_ent
+                            ):
+                                ents.append((ent.text, ent.label_))
+                                end_char_pos_of_last_loc_ent = ent.end
+                            else:  # append to previous loc ent for geocoding, as likely to be state
+                                ents[-1] = (ents[-1][0] + f", {ent.text}", ents[-1][1])
+                        else:
+                            ents.append((ent.text, ent.label_))
+
             else:
                 ents.append(("NO-ENTS", "NONE"))
             self.extracted_entities.append(ents)

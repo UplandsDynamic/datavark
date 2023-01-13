@@ -43,8 +43,8 @@ div#sidebar {
     display: block;
     float: left !important;
     width: 18% !important;
-    margin: 0 1em 0 0;
-    padding: 0 0.5em 0.5em 0.5em;
+    margin: 0.5em 1em 0 0;
+    padding: 0.5em 0.5em 0.5em 0.5em;
     background-color: #333333;
     color: #b9b8b8;
     border-radius: 11px;
@@ -52,9 +52,12 @@ div#sidebar {
     z-index: 11;
 }
 
-div#sidebar h1 {
+div#sidebar h1#navTitle {
+    clear:both;
+    display: block;
     font-size: 1.5em;
     text-align: center;
+    margin: 1em 0 0 0;
 }
 
 div#content {
@@ -107,3 +110,17 @@ div.table-container {
     position: relative !important;
     overflow: auto !important;
 }
+
+div#siteIcon img {
+    float: left!important;
+    max-width: 55px;
+    margin: 0 1em 1em 0;
+}
+
+div#siteTitle h1 {
+    position: relative;
+    font-size: 0.7em;
+    color: rgb(81, 235, 255) !important;
+}
+
+

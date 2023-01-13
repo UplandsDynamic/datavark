@@ -8,16 +8,20 @@
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}?v=5" />
     <link rel="stylesheet" href="{% static 'css/base.css' %}?v=5" />
     <script src="{% static 'js/jquery-3.3.1.js' %}"></script>
+    <link rel="shortcut icon" href="{%  static 'img/favicon.ico' %}">
     {% block stylesheets %}{% endblock %}
     {% block head-scripts %}{% endblock %}
 </head>
 
 <body>
-    <div id="pageTitle">{% block page_title %}{%endblock%}</div>
     <div id="sidebar">
+        <div id="siteIcon"><img src="{% static 'img/android-chrome-512x512.png' %}" /></div>
+        <div id="siteTitle">
+            <h1>UFOzone Data Collector</h1>
+        </div>
         {% block sidebar %}
         <nav>
-            <h1>Navigation</h1>
+            <h1 id="navTitle">Navigation</h1>
             <ul>
                 <li><a class="btn btn-info" href="{% url 'ie:index' %}" role="button">Data Acquisition Scheduler</a>
                 </li>
@@ -31,6 +35,7 @@
         </nav>
         {% endblock %}
     </div>
+    <div id="pageTitle">{% block page_title %}{%endblock%}</div>
     <div id="content">
         {% block content %}{% endblock %}
     </div>

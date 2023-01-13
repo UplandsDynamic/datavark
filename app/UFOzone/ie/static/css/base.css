@@ -113,13 +113,14 @@ div.table-container {
 
 div#siteIcon img {
     float: left!important;
-    max-width: 55px;
+    max-width: 60px;
     margin: 0 1em 1em 0;
 }
 
 div#siteTitle h1 {
+    top: 25px;
     position: relative;
-    font-size: 0.7em;
+    font-size: 0.8em;
     color: rgb(81, 235, 255) !important;
 }
 

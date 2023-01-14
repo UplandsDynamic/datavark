@@ -111,6 +111,10 @@ div.table-container {
     overflow: auto !important;
 }
 
+div#leftHeader a:link {
+    text-decoration: none!important;
+}
+
 div#siteIcon img {
     float: left!important;
     max-width: 60px;

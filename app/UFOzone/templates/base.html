@@ -15,9 +15,14 @@
 
 <body>
     <div id="sidebar">
-        <div id="siteIcon"><a href="/"><img src="{% static 'img/android-chrome-512x512.png' %}" /></a></div>
-        <div id="siteTitle">
-            <h1>UFOzone Data Collector</h1>
+        <div id="leftHeader">
+            <a href="/">
+                <div id="siteIcon"><img src="{% static 'img/android-chrome-512x512.png' %}" />
+                </div>
+                <div id="siteTitle">
+                    <h1>UFOzone Data Collector</h1>
+                </div>
+            </a>
         </div>
         {% block sidebar %}
         <nav>

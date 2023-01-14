@@ -46,11 +46,11 @@ class PrepareData:
             if n:
                 df.sort_values(
                     "posted", ascending=False, inplace=True
-                )  # sort by date of submission
+                )  # now sort latest n rows by date of submission - most recent first
                 df = df.head(n)
             df.to_csv(self._filename_latest, index=False)
             if exists(self._prev_filename_latest):
-                # compare data from previous pull & put changes in dict
+                # compare data from previous pull & put changes (i.e. new records) in dict
                 return_dict = compare(
                     load_csv(
                         open(self._prev_filename_latest),

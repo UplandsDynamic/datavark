@@ -1,0 +1,90 @@
+#reports-table {
+    display: block;
+    border: 1px solid silver;
+    border-radius: 11px;
+}
+
+div#report {
+    display: block;
+    border: 1px solid silver;
+    border-radius: 11px;
+    padding: 1em;
+}
+
+div#dataExport {
+    border: 1px solid silver;
+    border-radius: 11px;
+    padding: 1em;
+}
+
+#reports-table td {
+    max-width: 18ch;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+div#report ul {
+    margin-bottom: 1em;
+}
+
+ul {
+    border-bottom: 1px dashed silver;
+    padding-bottom: 0.5em;
+}
+
+input {
+    display: inline !important;
+    margin-bottom: 0.5em;
+    width: 45% !important;
+    background-color: #111111 !important;
+    color: #b9b8b8 !important;
+    padding: 0.5em;
+    border: none;
+}
+
+input:disabled {
+    background-color: #555555 !important;
+}
+
+textarea#report_txt {
+    height: 200px;
+    background-color: #111111 !important;
+    color: #b9b8b8 !important;
+}
+
+label {
+    margin: 0 0.5em 0.5em 0;
+    min-width: 7em;
+}
+
+button {
+    max-width: 7em !important;
+    margin-bottom: 0.5em;
+}
+
+button#submit, button#deleteRecord {
+    max-width: 100% !important;
+}
+
+div#addTime {
+    margin: 1em 0 !important;
+}
+
+div#addDate {
+    margin: 1em 0 !important;
+}
+
+.maps {
+    height: 500px;
+    width: 500px;
+    margin-bottom: 1em;
+}
+
+.icon {
+    margin: 0 1em !important;
+}
+
+div#failAlert {
+    background-color: #222222;
+    border: none!important;
+}

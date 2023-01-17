@@ -1,0 +1,22 @@
+#schedule-table {
+    display:block;
+    border: 1px solid silver;
+    border-radius: 11px;
+}
+
+
+#results-table {
+    display:block;
+    border: 1px solid silver;
+    border-radius: 11px;
+    margin-top:1em;
+}
+
+.change-schedule {
+    display: block;
+}
+
+h2 {
+    margin: 0.5em 0;
+    text-transform: none!important;
+}

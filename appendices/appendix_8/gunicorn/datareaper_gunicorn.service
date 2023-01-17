@@ -4,8 +4,8 @@ Before=nginx.service
 After=network.target
 
 [Service]
-WorkingDirectory=/home/django/datareaper/DataReaper
-ExecStart=/home/django/.local/share/virtualenvs/DataReaper-FrfBYLl8/bin/gunicorn --name=DataReaper --pythonpath=/home/django/datareaper/DataReaper --bind unix:/home/django/gunicorn-datareaper.socket --config /home/django/datareaper/DataReaper/DataReaper/gunicorn.py DataReaper.wsgi:application
+WorkingDirectory=/home/django/datavark/Datavark
+ExecStart=/home/django/.local/share/virtualenvs/Datavark-FrfBYLl8/bin/gunicorn --name=Datavark --pythonpath=/home/django/datavark/Datavark --bind unix:/home/django/gunicorn-datavark.socket --config /home/django/datavark/Datavark/Datavark/gunicorn.py Datavark.wsgi:application
 Restart=always
 SyslogIdentifier=gunicorn
 User=django

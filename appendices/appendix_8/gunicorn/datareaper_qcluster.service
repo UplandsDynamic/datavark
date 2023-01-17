@@ -4,8 +4,8 @@ Before=nginx.service
 After=network.target
 
 [Service]
-WorkingDirectory=/home/django/datareaper/DataReaper
-ExecStart=/home/django/.local/share/virtualenvs/DataReaper-FrfBYLl8/bin/python /home/django/datareaper/DataReaper/manage.py qcluster
+WorkingDirectory=/home/django/datavark/Datavark
+ExecStart=/home/django/.local/share/virtualenvs/Datavark-FrfBYLl8/bin/python /home/django/datavark/Datavark/manage.py qcluster
 Restart=always
 SyslogIdentifier=djangoQ
 User=django

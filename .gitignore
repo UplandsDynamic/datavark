@@ -18,3 +18,4 @@ reddit_sightings_data/
 exports/
 dev/
 ._.DS_Store
+app/Datavark/static/

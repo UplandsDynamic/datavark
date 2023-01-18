@@ -30,7 +30,7 @@ class RedditScraper:
         """
         _all_submissions = reddit.subreddit("ufos")
         for i in _all_submissions.search(
-            "Weekly AND UFO AND Sightings: AND -", syntax="lucene", time_filter="week"
+            '"Weekly UFO Sightings:" AND - ', syntax="lucene", time_filter="week"
         ):
             _weekly_report_page_ids.append(i.id)
         for report_page_id in _weekly_report_page_ids:

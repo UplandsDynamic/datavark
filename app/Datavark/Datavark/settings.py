@@ -53,7 +53,7 @@ DEBUG = True
 # static files
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "ie", "static"),
-    os.path.join(BASE_DIR),
+    os.path.join(BASE_DIR, "dataview", "static"),
 ]
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")

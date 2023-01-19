@@ -116,8 +116,7 @@ div#leftHeader a:link {
 }
 
 div#siteIcon img {
-    float: left!important;
-    max-width: 60px;
+    max-width: 105px;
     margin: 0 1em 1em 0;
 }
 

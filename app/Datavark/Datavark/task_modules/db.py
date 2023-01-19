@@ -2,6 +2,7 @@ from ie.models import Report, Loc, Date, Time, Color, Type
 import logging
 from .postprocess import PostProcess
 from django.conf import settings
+from django.db import IntegrityError
 
 logger = logging.getLogger("django")
 
@@ -24,12 +25,17 @@ class WriteToDB:
         for doc in self.data:
             try:
                 self._write_to_database(data=doc)
+            except IntegrityError as e:
+                if "duplicate key value violates unique constraint" in str(e):
+                    logger.warning("This record was already databased.")
+                else:
+                    errors.append(e)
             except Exception as e:
                 errors.append(e)
         success_report = (
             f"There were some errors writing to the database: {' | '.join([str(e) for e in errors])}"
             if errors
-            else "All records were successfully databased."
+            else "All records were successfully processed."
             if self.data
             else "There was no data to process!"
         )

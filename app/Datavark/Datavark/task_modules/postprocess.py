@@ -18,13 +18,20 @@ class PostProcess:
     Processes the data to produce standardised input for the model fields
     """
 
+    _location_entity_class_types = []
+
     def __new__(cls, data=[], source=""):
         obj = super().__new__(cls)
         obj._data = data
         obj._source = source
+        """
+        note: "PLACE" is custom class type added in NUFORC reshape to denote value that was obtained 
+        from structured NUFORC data rather than NER
+        """
         obj._location_entity_class_types = [
             "GPE",
             "LOC",
+            "PLACE",
         ]
         return obj._process()
 
@@ -34,7 +41,7 @@ class PostProcess:
         for doc in self._data:  # for every document
             # REDDIT
             if self._source["source_name"] == "REDDIT":
-                doc = self._geocode(
+                doc = self._geocode_extracted_locations(
                     doc
                 )  # add long/lat to GPE & LOC & PLACE entity tuples
                 # attribute data to variables - default structure
@@ -66,15 +73,14 @@ class PostProcess:
                 )
             # NUFORC
             elif self._source["source_name"] == "NUFORC":
-                self._location_entity_class_types = ["PLACE"]
                 doc = self._reshape_nuforc_data(doc)  # reshape data for NUFORC
-                doc = self._geocode(doc)
+                doc = self._geocode_extracted_locations(doc)
                 source_name = self._source["source_name"]
                 source_url = self._process_source_url(doc["report_link"])
                 obs_txt = self._process_text(doc["text"])
                 obs_dates = self._process_dates([doc["date_time"]])[0]
                 obs_times = self._process_times([doc["date_time"]])[0]
-                obs_types = obs_types = self._process_types(
+                obs_types = self._process_types(
                     [e[0] for e in doc["entities"] if e[1] == "TYPE"]
                 ) + [doc["shape"]]
                 obs_colors = self._process_colors(
@@ -136,26 +142,27 @@ class PostProcess:
         return list(set(formatted))
 
     # geocode locations with longitude & latitude, local access, for scheduled tasks
-    def _geocode(self, doc):
+    def _geocode_extracted_locations(self, doc):
         for idx, entity in enumerate(doc["entities"]):
-            if (
-                entity[1] in self._location_entity_class_types
-            ):  # note: PLACE is custom class type added in NUFORC reshape to denote value obtained from structured NUFORC data rather than NER
+            if any(e == entity[1] for e in self._location_entity_class_types):
+                # clean the place name before attempting to geocode
+                s = Scrubbers(entity[0])
+                place_name = s.run_place_scrubbers()
                 try:
                     geolocator = Nominatim(user_agent="UAP_Database", timeout=11)
-                    location = geolocator.geocode(entity[0])
+                    location = geolocator.geocode(place_name)
                     doc["entities"][idx] = (
-                        entity[0],
+                        place_name,
                         entity[1],
                         location.longitude,
                         location.latitude,
                     )
                 except Exception as e:
-                    logger.error(
-                        f"A problem occurred during geocoding - entity {idx} has NOT been geocoded!: {str(e)}"
+                    logger.warning(
+                        f"Extracted entity {idx} - {place_name} - has NOT been geocoded!: {str(e)}"
                     )
                     doc["entities"][idx] = (
-                        entity[0],
+                        place_name,
                         entity[1],
                         0,
                         0,

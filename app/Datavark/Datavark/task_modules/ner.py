@@ -49,25 +49,23 @@ class Ner:
                     end_char_pos_of_last_loc_ent = 0
                     valid_location_ents = ("GPE", "LOC", "PLACE")
                     processed_doc = self.nlp(doc.lower())
-                    for ent in processed_doc.ents:
-                        # restrict extracting cities & states as separate entities, etc
-                        if ent.label_ in valid_location_ents:
-                            if (
-                                not self._restrict_loc_dupes
-                                or ent.start
-                                not in range(
-                                    (end_char_pos_of_last_loc_ent + 1),
-                                    (end_char_pos_of_last_loc_ent + 5),
-                                )
-                                or not end_char_pos_of_last_loc_ent
-                            ):
-                                ents.append((ent.text, ent.label_))
-                                end_char_pos_of_last_loc_ent = ent.end
-                            else:  # append to previous loc ent for geocoding, as likely to be state
-                                ents[-1] = (ents[-1][0] + f", {ent.text}", ents[-1][1])
-                        else:
+                    # restrict extracting cities & states as separate entities, etc
+                    if ent.label_ in valid_location_ents:
+                        if (
+                            not self._restrict_loc_dupes
+                            or ent.start
+                            not in range(
+                                (end_char_pos_of_last_loc_ent + 1),
+                                (end_char_pos_of_last_loc_ent + 5),
+                            )
+                            or not end_char_pos_of_last_loc_ent
+                        ):
                             ents.append((ent.text, ent.label_))
-
+                            end_char_pos_of_last_loc_ent = ent.end
+                        else:  # append to previous loc ent for geocoding, as likely to be state
+                            ents[-1] = (ents[-1][0] + f", {ent.text}", ents[-1][1])
+                    else:
+                        ents.append((ent.text, ent.label_))
             else:
                 ents.append(("NO-ENTS", "NONE"))
             self.extracted_entities.append(ents)

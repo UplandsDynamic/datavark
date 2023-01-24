@@ -19,6 +19,8 @@ class PostProcess:
     """
 
     _location_entity_class_types = []
+    _data = []
+    _source = ""
 
     def __new__(cls, data=[], source=""):
         obj = super().__new__(cls)
@@ -41,9 +43,6 @@ class PostProcess:
         for doc in self._data:  # for every document
             # REDDIT
             if self._source["source_name"] == "REDDIT":
-                doc = self._geocode_extracted_locations(
-                    doc
-                )  # add long/lat to GPE & LOC & PLACE entity tuples
                 # attribute data to variables - default structure
                 obs_dates = self._process_dates(
                     [e[0] for e in doc["entities"] if e[1] == "DATE"]
@@ -62,19 +61,14 @@ class PostProcess:
                 )
                 obs_locs = self._process_locs(
                     [
-                        [
-                            e[0],
-                            float(e[2]) if e[2] else float(0),
-                            float(e[3]) if e[3] else float(0),
-                        ]
+                        e
                         for e in doc["entities"]
-                        if e[1] in self._location_entity_class_types
+                        if any(t == e[1] for t in self._location_entity_class_types)
                     ]
                 )
             # NUFORC
             elif self._source["source_name"] == "NUFORC":
                 doc = self._reshape_nuforc_data(doc)  # reshape data for NUFORC
-                doc = self._geocode_extracted_locations(doc)
                 source_name = self._source["source_name"]
                 source_url = self._process_source_url(doc["report_link"])
                 obs_txt = self._process_text(doc["text"])
@@ -88,13 +82,9 @@ class PostProcess:
                 )
                 obs_locs = self._process_locs(
                     [
-                        [
-                            e[0],
-                            float(e[2]) if e[2] else float(0),
-                            float(e[3]) if e[3] else float(0),
-                        ]
+                        e
                         for e in doc["entities"]
-                        if e[1] in self._location_entity_class_types
+                        if any(t == e[1] for t in self._location_entity_class_types)
                     ]
                 )
             # add results to list
@@ -141,51 +131,9 @@ class PostProcess:
             formatted.append(type)
         return list(set(formatted))
 
-    # geocode locations with longitude & latitude, local access, for scheduled tasks
-    def _geocode_extracted_locations(self, doc):
-        for idx, entity in enumerate(doc["entities"]):
-            if any(e == entity[1] for e in self._location_entity_class_types):
-                # clean the place name before attempting to geocode
-                s = Scrubbers(entity[0])
-                place_name = s.run_place_scrubbers()
-                try:
-                    geolocator = Nominatim(user_agent="UAP_Database", timeout=11)
-                    location = geolocator.geocode(place_name)
-                    doc["entities"][idx] = (
-                        place_name,
-                        entity[1],
-                        location.longitude,
-                        location.latitude,
-                    )
-                except Exception as e:
-                    logger.warning(
-                        f"Extracted entity {idx} - {place_name} - has NOT been geocoded!: {str(e)}"
-                    )
-                    doc["entities"][idx] = (
-                        place_name,
-                        entity[1],
-                        0,
-                        0,
-                    )
-        return doc
-
     # process place name. Returns list [{"place_name": "name string", "coordinates": Point(longitude,latitude)})]
     def _process_locs(self, locs=[]):
-        formatted = []
-        for loc in locs:
-            s = Scrubbers(loc[0])
-            place = s.run_place_scrubbers()
-            formatted.append(
-                {
-                    "place_name": f"{place}",
-                    "coordinates": Point(loc[1], loc[2])
-                    if loc[1] and loc[2]
-                    else Point(0, 0),
-                }
-            ) if Point(loc[1], loc[2]) not in [
-                f["coordinates"] for f in formatted
-            ] else None
-        return formatted
+        return ProcessLocations(data=[loc[0] for loc in locs], geocode=True)
 
     # process date from strings & return list of datetime.date objects
     def _process_dates(self, date_strings=[]):
@@ -274,7 +222,7 @@ class PostProcess:
 
 class ProcessLocations:
     """
-    process locations class accessible externally (outwith task scheduler processes).
+    process locations class - also accessible externally (outwith task scheduler processes).
     Includes geocode and formatting ready for DB insertion.
     """
 
@@ -311,8 +259,8 @@ class ProcessLocations:
                         }
                     )
                 except Exception as e:
-                    logger.error(
-                        f"A problem occurred during geocoding, {loc} has NOT been geocoded!: {str(e)}"
+                    logger.warning(
+                        f"The token '{loc}' was not geocoded as it was unrecognised location, or an incorrect NER extraction."
                     )
                     processed.append(
                         {"place_name": loc, "coordinates": Point(0.0, 0.0)}

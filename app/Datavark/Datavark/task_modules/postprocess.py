@@ -261,7 +261,8 @@ class PostProcess:
     # process raw text account
     def _process_text(self, text=""):
         # do any string processing here, if required
-        return text
+        s = Scrubbers(text)
+        return s.run_text_scrubbers()
 
 
 class ProcessLocations:
@@ -327,18 +328,24 @@ class Scrubbers:
     def __init__(self, input):
         self.input = input
 
+    def run_text_scrubbers(self):
+        self._strip_quotes()
+        self._remove_only_single_char()
+        self._remove_whitespace()
+        return self.input
+
     def run_base_scrubbers(self):
         self._remove_whitespace()
         self._capitalize()
         self._remove_nonalphanumeric()
-        self._remove_single_chars()
+        self._remove_only_single_char()
         return self.input
 
     def run_place_scrubbers(self):
         self._remove_whitespace()
         self._capitalize()
         self._remove_nonalphanumeric(keep_commas=True)
-        self._remove_single_chars()
+        self._remove_only_single_char()
         return self.input
 
     def run_color_scrubbers(self):
@@ -389,8 +396,12 @@ class Scrubbers:
             self.input = re.sub(r"[^\w\s]", " ", self.input)
 
     # function to remove strings with single char
-    def _remove_single_chars(self):
+    def _remove_only_single_char(self):
         self.input = "" if len(self.input) <= 1 else self.input
+
+    # function to strip quotation marks from beginning & end of string
+    def _strip_quotes(self):
+        self.input = self.input.strip('"')
 
     # function to change standardise 'light'
     def _standardise_light(self):

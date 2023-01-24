@@ -61,10 +61,18 @@ class RedditScraper:
         https://praw.readthedocs.io/en/stable/code_overview/models/subreddit.html
         """
 
+        # get data tagged with "Witness/Sighting" flair
         for i in _all_submissions.search(
             'flair:"Witness/Sighting"', syntax="lucene", time_filter="week"
         ):
             _weekly_report_page_ids.append(i.id)
+
+        # get data tagged with "Report" flair
+        for i in _all_submissions.search(
+            'flair:"Report"', syntax="lucene", time_filter="week"
+        ):
+            _weekly_report_page_ids.append(i.id)
+
         for report_page_id in _weekly_report_page_ids:
             submission = reddit.submission(report_page_id)
             if submission.selftext:

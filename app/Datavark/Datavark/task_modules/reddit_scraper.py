@@ -71,7 +71,7 @@ class RedditScraper:
                 _data.append(
                     {
                         "report_link": f"{_root_url}{submission.permalink}",
-                        "text": submission.selftext,
+                        "text": f'"{submission.selftext}"',
                         "posted": datetime.fromtimestamp(
                             submission.created_utc
                         ).strftime("%Y-%m-%dT%H:%M:%S"),

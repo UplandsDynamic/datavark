@@ -375,10 +375,11 @@ class Scrubbers:
     def _standardise_fireball(self):
         self.input = re.sub(r"\b.*FIREBALL.*\b", "FIREBALL", self.input)
 
-    # function to change standardise 'orb'
+    # function to change standardise 'orb' (includes 'round').
     def _standardise_orb(self):
         self.input = re.sub(r"\b.*\s*ORB.*\b", "ORB", self.input)
         self.input = re.sub(r"\b.*ROUND\s*ORB.*\b", "ORB", self.input)
+        self.input = re.sub(r"\bROUND\b", "ORB", self.input)
         self.input = re.sub(r"\bBALL.*\b", "ORB", self.input)
 
     # function to change standardise 'tic tac'.

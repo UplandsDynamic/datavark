@@ -30,7 +30,7 @@
         <nav>
             <h1 id="navTitle">Navigation</h1>
             <ul>
-                <li><a class="btn btn-info" href="{% url 'ie:index' %}" role="button">Data Acquisition Scheduler</a>
+                <li><a class="btn btn-info" href="{% url 'ie:index' %}" role="button">Acquisition Scheduler</a>
                 </li>
                 <li><a class="btn btn-info" href="{% url 'dataview:reports-view' %}" role="button">View Data</a></li>
                 <li><a class="btn btn-info" href="{% url 'dataview:data-export-view' %}" role="button">Export Data</a>
@@ -42,8 +42,8 @@
         </nav>
         {% endblock %}
     </div>
-    <div id="pageTitle">{% block page_title %}{%endblock%}</div>
     <div id="content">
+        <div id="pageTitle">{% block page_title %}{%endblock%}</div>
         {% block content %}{% endblock %}
     </div>
     <div id="footer">

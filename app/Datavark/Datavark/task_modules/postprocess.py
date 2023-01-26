@@ -189,7 +189,7 @@ class PostProcess:
                     elif time.upper() in ["NOON"]:
                         time = "12:00"
                     # substitute dots for colons so time's recognised by parser
-                    time = re.sub(r"(\d{1,2})\.(\d{2})(\D*)$", r"\1:\2\3", time)
+                    time = re.sub(r"(\d{1,2})\.?(\d{2})(\D*)$", r"\1:\2\3", time)
                     # do some light string operations (regex) to detect semantic equivalences
                     time = re.sub(r"half past (\d).*morning", r"\1:30am", time)
                     time = re.sub(r"half past (\d).*afternoon", r"\1:pm", time)

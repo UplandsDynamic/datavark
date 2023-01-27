@@ -1,0 +1,15 @@
+[
+    {
+    'source_name': 'REDDIT', 
+    'source_url': '/r/UFOs/comments/zc4wxi/weekly_ufo_sightings_december_04_december_10_2022/iyx6712/', 
+    'obs_txt': 'Heads up: if you saw a shiny silver cylinder in Brisbane, Sunday 5th December, it was a Mylar balloon from the TISM set.', 
+    'obs_types': ['CYLINDER'], 
+    'obs_colors': ['SILVER'], 
+    'obs_dates': [datetime.date(2022, 12, 5)], 
+    'obs_times': [], 
+    'obs_locs': [
+        {'place_name': 'Brisbane', 'coordinates': <Point object at 0x113b0b208>}
+        ]
+    }
+]
+

@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}DatavArk - Data Records Browser{%endblock%}
+{% block stylesheets %}
+<link rel="stylesheet" href="{% static 'css/dataview_style.css'%}?v=5" />{% endblock %}
+{% block page_title %}<h1>UAP Observation Reports Data</h1>{% endblock %}
+{% block content %}
+<div id="reports-table">
+    {% load render_table from django_tables2 %}
+    {% autoescape off %}
+    {% render_table reports_table %}
+    {% endautoescape %}
+</div>
+{% endblock %}

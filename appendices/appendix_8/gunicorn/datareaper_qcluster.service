@@ -1,0 +1,16 @@
+[Unit]
+Description=DjangoQ daemon
+Before=nginx.service
+After=network.target
+
+[Service]
+WorkingDirectory=/home/django/datavark/Datavark
+ExecStart=/home/django/.local/share/virtualenvs/Datavark-FrfBYLl8/bin/python /home/django/datavark/Datavark/manage.py qcluster
+Restart=always
+SyslogIdentifier=djangoQ
+User=django
+Group=django
+
+
+[Install]
+WantedBy=multi-user.target

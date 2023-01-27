@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}DatavArk - Scheduler{%endblock%}
+{% block stylesheets %}
+<link rel="stylesheet" href="{% static 'css/ie_style.css' %}?v=5" />
+{% endblock %}
+{% block page_title %}<h1>Data acquisition scheduler</h1>{%endblock%}
+{% block content %}
+<h2>Currently scheduled</h2>
+<div id="schedule-table">
+    {% load render_table from django_tables2 %}
+    {% autoescape off %}
+    {% render_table schedule_table %}
+    {% endautoescape %}
+</div>
+<div>
+    <h2>Select schedule</h2>
+    <form id="schedule-form">
+        {% csrf_token %}
+        {% for field in form %}
+        <div class="form-group col-4">
+            <label class="col-8">{{ field.label }}</label>
+            <span class="col-4">{{ field }}</span>
+        </div>
+        {% endfor %}
+        <!-- <input type="submit" class="btn btn-primary" value="Change Scheduled" /> -->
+        <form>
+</div>
+<h2>Task log</h2>
+<div id="results-table">
+    {% load render_table from django_tables2 %}
+    {% autoescape off %}
+    {% render_table results_table %}
+    {% endautoescape %}
+</div>
+{% endblock %}
+{% block javascript %}
+<script type="text/javascript">
+    $(document).ready(() => {
+        $('.change-schedule').change(() => {
+            let formData = $('#schedule-form').serialize();
+            console.log('Posting: ', formData);
+            $.ajax({
+                url: "{% url 'ie:index' %}",
+                data: formData,
+                type: 'POST',
+                dataType: 'json',
+                success: (response) => {
+                    console.log(response.status_report)
+                    window.location.href = "/"
+                },
+                error: (response) => {
+                    console.log(response.status_report);
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}

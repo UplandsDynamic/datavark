@@ -1,0 +1,1 @@
+{"classes":["TYPE","DATE","GPE","LOC","TIME","COLOR"],"annotations":[["I just saw an UFO tonight above San Diego, California.",{"entities":[[32,41,"GPE"],[43,53,"GPE"]]}],["I uploaded the video to youtube, click on the link below to watch:",{"entities":[]}],["https://www.youtube.com/watch?v=UIXnimyNB6M",{"entities":[]}]]}

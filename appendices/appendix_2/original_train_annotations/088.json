@@ -1,0 +1,1 @@
+{"classes":["TYPE","DATE","GPE","LOC","TIME","COLOR"],"annotations":[["I shot this yesterday from my balcony. What do you think it is? A balloon?",{"entities":[]}],["Stockholm, Sweden. June 3, 2022, 8:29 PM.",{"entities":[[0,9,"GPE"],[11,18,"GPE"],[19,31,"DATE"],[33,40,"TIME"]]}]]}

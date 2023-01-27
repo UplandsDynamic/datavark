@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}DatavArk - Data Export{%endblock%}
+{% block stylesheets %}
+<link rel="stylesheet" href="{% static 'css/dataview_style.css'%}?v=5" />
+{% endblock %}
+{% block page_title %}
+<h1>Data Export</h1>
+{% endblock %}
+{% block content %}
+<div id="dataExport">
+        {% autoescape off %}
+        <ul id="exportButtons">
+                <li><a class="btn btn-primary" href="?download=true&random=false&source=reddit" role="button">Export all
+                                REDDIT
+                                data</a></li>
+                <li><a class="btn btn-primary" href="?download=true&random=false&source=nuforc" role="button">Export all
+                                NUFORC
+                                data</a></li>
+                <li><a class="btn btn-primary" href="?download=true&random=false" role="button">Export all data from all
+                                sources</a></li>
+                <li><a class="btn btn-primary" href="?download=true&random=true&source=reddit" role="button">Export
+                                random {{record_num}}
+                                records from REDDIT</a></li>
+                <li><a class="btn btn-primary" href="?download=true&random=true&source=nuforc" role="button">Export
+                                random {{record_num}}
+                                records from NUFORC</a></li>
+                <li><a class="btn btn-primary" href="?download=true&random=true" role="button">Export random
+                                {{record_num}} records from all
+                                sources</a></li>
+        </ul>
+        <div id="failAlert" class="alert alert-primary" role="alert">
+                <span id="status">{{status}}</span>
+        </div>
+        {% endautoescape %}
+</div>
+{% endblock %}
+{% block javascript %}
+<script type="text/javascript">
+        $(document).ready(() => {
+                let current = window.location.href;
+                let url = (current.split(window.location.host)[1]).split("?")[0];
+                window.history.pushState({}, document.title, url);
+                setTimeout(() => { $('#status').remove(); }, 3000);
+        });
+</script>
+{% endblock %}

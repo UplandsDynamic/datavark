@@ -188,13 +188,21 @@ class PostProcess:
                         )  # add directly, as "00:00" not accepted later, due to dateutil bug
                     elif time.upper() in ["NOON"]:
                         time = "12:00"
-                    # substitute dots for colons so time's recognised by parser
-                    time = re.sub(r"(\d{1,2})\.?(\d{2})(\D*)$", r"\1:\2\3", time)
                     # do some light string operations (regex) to detect semantic equivalences
-                    time = re.sub(r"half past (\d).*morning", r"\1:30am", time)
-                    time = re.sub(r"half past (\d).*afternoon", r"\1:pm", time)
-                    time = re.sub(r"half\s{0,3}(\d).*morning", r"\1:30am", time)
-                    time = re.sub(r"half\s{0,3}(\d).*afternoon", r"\1:30pm", time)
+                    time = re.sub(r"(\d{1,2})\.{1}(\d{2})(\D*)$", r"\1:\2\3", time)
+                    time = re.sub(r"half past (\d{0,2}).*morning", r"\1:30am", time)
+                    time = re.sub(r"half past (\d{0,2}).*afternoon", r"\1:30pm", time)
+                    time = re.sub(r"half past (\d{0,2}).*night", r"\1:30pm", time)
+                    time = re.sub(r"half past (\d{0,2}).*evening", r"\1:30pm", time)
+                    time = re.sub(r"half\s{0,3}(\d{0,2}).*morning", r"\1:30am", time)
+                    time = re.sub(r"(\d{0,4}).*morning", r"\1am", time)
+                    time = re.sub(r"half\s{0,3}(\d{0,2}).*afternoon", r"\1:30pm", time)
+                    time = re.sub(r"(\d{0,4}).*afternoon", r"\1pm", time)
+                    time = re.sub(r"half\s{0,3}(\d{0,2}).*night", r"\1:30pm", time)
+                    time = re.sub(r"(\d{0,4}).*night", r"\1pm", time)
+                    time = re.sub(r"half\s{0,3}(\d{0,2}).*evening", r"\1:30pm", time)
+                    time = re.sub(r"(\d{0,4}).*evening", r"\1pm", time)
+                    time = re.sub(r"(\d{2})(\d{2})", r"\1:\2", time)
                     parsed = dateutil.parser.parse(time, fuzzy=True).time()
                     # do not add 0,0 as bag in dateutil erroneously defines some non-midnight to midnight
                     formatted.append(parsed) if parsed != datetime.time(0, 0) else None

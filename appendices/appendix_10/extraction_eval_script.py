@@ -3,8 +3,8 @@ import ast
 from datetime import datetime
 from geopy.geocoders import Nominatim
 
-results = "/Users/dan/Dev/education/uhi/dissertation/finals/github_repo/appendices/appendix_10/exported_reddit_records_random.csv"
-output_file = "/Users/dan/Dev/education/uhi/dissertation/finals/github_repo/appendices/appendix_10/reddit_extraction_evaluation.txt"
+results = "exported_reddit_records_random.csv"
+output_file = "reddit_extraction_evaluation.txt"
 output = []
 df = pd.read_csv(results, index_col="id")
 d = df.to_dict("records")

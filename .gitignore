@@ -19,3 +19,4 @@ exports/
 dev/
 ._.DS_Store
 app/Datavark/static/
+.ipynb_checkpoints/

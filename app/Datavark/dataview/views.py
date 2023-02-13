@@ -78,7 +78,9 @@ class GetData:
             )
             # order by last modified, or order by obs_dates__date for observation date
             reports = reports.order_by(F("last_mod").desc(nulls_last=True))
-        return reports.distinct()
+            # ensure no duplicated (fix for Django bug where dupes returned filters M2M fields)
+            reports = reports.distinct()
+        return reports
 
 
 class ReportsView(SingleTableMixin, View):
@@ -112,7 +114,7 @@ class DetailView(SingleTableMixin, View):
                 report = GetData(id=report_id)
                 context = {"report": report}
             except Exception as e:
-                logger.error(f"Report ID {report_id} cannot be retrieved!")
+                logger.error(f"Report ID {report_id} cannot be retrieved! {str(e)}")
                 return redirect("dataview:reports-view")
         return render(self.request, self._template_name, context)
 

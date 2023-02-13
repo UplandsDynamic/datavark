@@ -39,7 +39,7 @@ class GetData:
             reports = reports[0]
         else:
             # get all reports in database
-            reports = self._report_model.objects
+            reports = self._report_model.objects.all()
             # filter out junked records if configured in settings
             reports = (
                 reports.filter(record_junked=False)
@@ -77,8 +77,8 @@ class GetData:
                 else reports
             )
             # order by last modified, or order by obs_dates__date for observation date
-            reports.order_by(F("last_mod").desc(nulls_last=True))
-        return reports
+            reports = reports.order_by(F("last_mod").desc(nulls_last=True))
+        return reports.distinct()
 
 
 class ReportsView(SingleTableMixin, View):

@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.views import View
 from django.conf import settings as s
+from Datavark.da_settings import DA_SETTINGS as d_set
 from django import template
 from django.db.models import F
 from django_tables2 import SingleTableMixin, LazyPaginator, RequestConfig
@@ -18,19 +19,77 @@ register = template.Library()
 logger = logging.getLogger("django")
 
 
+class GetData:
+    _report_model = data_models.Report
+
+    def __new__(cls, id=None):
+        obj = super().__new__(cls)
+        obj._id = id
+        return obj._get_data()
+
+    def _get_data(self):
+        # get one record, by ID
+        if self._id:
+            reports = self._report_model.objects.filter(id=self._id)
+            reports = (
+                reports.filter(record_junked=False)
+                if d_set["exclude_junked"]
+                else reports
+            )
+            reports = reports[0]
+        else:
+            # get all reports in database
+            reports = self._report_model.objects
+            # filter out junked records if configured in settings
+            reports = (
+                reports.filter(record_junked=False)
+                if d_set["exclude_junked"]
+                else reports
+            )
+            # only return records with dates (if configured in settings)
+            reports = (
+                reports.filter(obs_dates__isnull=False)
+                if d_set["exclude_no_date"]
+                else reports
+            )
+            # only return records with times (if configured in settings)
+            reports = (
+                reports.filter(obs_times__isnull=False)
+                if d_set["exclude_no_time"]
+                else reports
+            )
+            # only return records with locations (if configured in settings)
+            reports = (
+                reports.filter(obs_locs__isnull=False)
+                if d_set["exclude_no_loc"]
+                else reports
+            )
+            # only return records with types (if configured in settings)
+            reports = (
+                reports.filter(obs_types__isnull=False)
+                if d_set["exclude_no_type"]
+                else reports
+            )
+            # only return records with colours (if configured in settings)
+            reports = (
+                reports.filter(obs_colors__isnull=False)
+                if d_set["exclude_no_color"]
+                else reports
+            )
+            # order by last modified, or order by obs_dates__date for observation date
+            reports.order_by(F("last_mod").desc(nulls_last=True))
+        return reports
+
+
 class ReportsView(SingleTableMixin, View):
 
     _template_name = "dataview/reportsview.html"
-    _report_model = data_models.Report
+
     _report_table_class = ReportTable
     paginator_class = LazyPaginator
 
     def get(self, *args, **kwargs):
-        report_table = self._report_table_class(
-            self._report_model.objects.filter(record_junked=False).order_by(
-                F("last_mod").desc(nulls_last=True)
-            )
-        )  # or, order by obs_dates__date for observation date
+        report_table = self._report_table_class(GetData())
         RequestConfig(self.request, paginate={"per_page": 25}).configure(report_table)
         _context = {
             "reports_table": report_table,
@@ -48,9 +107,7 @@ class DetailView(SingleTableMixin, View):
         report_id = kwargs.get("id", None)
         if report_id:
             try:
-                report = data_models.Report.objects.filter(
-                    id=report_id, record_junked=False
-                )[0]
+                report = GetData(id=report_id)
                 context = {"report": report}
             except Exception as e:
                 logger.error(f"Report ID {report_id} cannot be retrieved!")
@@ -179,9 +236,8 @@ class DetailView(SingleTableMixin, View):
 
 class DataExportView(View):
     _template_name = "dataview/dataexportview.html"
-    _ds = s.DA_SETTINGS
-    _export_path = _ds["csv_export_path"]
-    _export_filename = _ds["csv_export_filename"]
+    _export_path = d_set["csv_export_path"]
+    _export_filename = d_set["csv_export_filename"]
 
     def get(self, *args, **kwargs):
         random_sample = True if self.request.GET.get("random", "") == "true" else False
@@ -204,23 +260,22 @@ class DataExportView(View):
             return render(
                 self.request,
                 self._template_name,
-                {"record_num": self._ds["total_export_records"]},
+                {"record_num": d_set["total_export_records"]},
             )
 
     def _export_records_csv(self, request, source, random_sample):
         # get record list for sources
+        records = GetData()
         records_list = (
-            list(
-                data_models.Report.objects.filter(
-                    source_name=source.upper(), record_junked=False
-                )
-            )
+            # get records from the specified source
+            list(records.filter(source_name=source.upper()))
             if source
-            else list(data_models.Report.objects.filter(record_junked=False))
+            # or, get all records if no source specified
+            else list(records)
         )
         # either export random selection, or all, depending on button user clicked
         records = (
-            random.sample(records_list, self._ds["total_export_records"])
+            random.sample(records_list, d_set["total_export_records"])
             if random_sample
             else records_list
         )

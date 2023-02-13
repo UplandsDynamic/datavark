@@ -139,6 +139,12 @@ DA_SETTINGS = {
     "test_without_pull": 0,  # setting to 1 does everything except pull from external source
     "total_export_records": 25,  # number of records to export from export view
     "restrict_duplicate_location_extractions": True,  # restrict extracting both cities & states as separate entities, etc
+    "exclude_junked": True, # whether to exclude records marked as junked
+    "exclude_no_date": True,  # whether to exclude record with no date data from display & export
+    "exclude_no_time": False,  # whether to exclude record with no time data from display & export
+    "exclude_no_loc": True,  # whether to exclude records with no location data from display & export
+    "exclude_no_type": False,  # whether to exclude records with no types data from display & export
+    "exclude_no_color": False,  # whether to exclude records with no colours data from display & export
     "csv_export_path": os.path.join(
         BASE_DIR, "data_collection", "exports"
     ),  # path for exported CSVs

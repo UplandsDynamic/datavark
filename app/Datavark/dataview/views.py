@@ -90,7 +90,9 @@ class ReportsView(SingleTableMixin, View):
 
     def get(self, *args, **kwargs):
         report_table = self._report_table_class(GetData())
-        RequestConfig(self.request, paginate={"per_page": 25}).configure(report_table)
+        RequestConfig(
+            self.request, paginate={"per_page": d_set["records_to_display_per_page"]}
+        ).configure(report_table)
         _context = {
             "reports_table": report_table,
             "request": self.request,

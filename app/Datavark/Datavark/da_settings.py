@@ -138,6 +138,7 @@ DA_SETTINGS = {
     "ner_model_path": "Datavark/ner_models/trf-model-best-tuned/",  # NER model path
     "test_without_pull": 0,  # setting to 1 does everything except pull from external source
     "total_export_records": 25,  # number of records to export from export view
+    "records_to_display_per_page": 25,  # number of records per page to display to user in data view
     "restrict_duplicate_location_extractions": True,  # restrict extracting both cities & states as separate entities, etc
     "exclude_junked": True, # whether to exclude records marked as junked
     "exclude_no_date": True,  # whether to exclude record with no date data from display & export

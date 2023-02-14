@@ -32,6 +32,10 @@ ul {
     padding-bottom: 0.5em;
 }
 
+li {
+    position: relative !important;
+}
+
 input {
     display: inline !important;
     margin-bottom: 0.5em;
@@ -62,7 +66,8 @@ button {
     margin-bottom: 0.5em;
 }
 
-button#submit, button#deleteRecord {
+button#submit,
+button#deleteRecord {
     max-width: 100% !important;
 }
 
@@ -86,5 +91,5 @@ div#addDate {
 
 div#failAlert {
     background-color: #222222;
-    border: none!important;
+    border: none !important;
 }

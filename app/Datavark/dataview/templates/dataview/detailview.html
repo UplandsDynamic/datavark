@@ -60,7 +60,7 @@
                         data-target-input="nearest">
                         <input type="text" class="form-control-md datetimepicker-input dateData"
                             data-target="#datetimepicker-date-{{forloop.counter}}"
-                            data-listpos="date-{{ forloop.counter }}" name="date" />
+                            data-listpos="date-{{ forloop.counter }}" name="date" onkeydown="event.preventDefault()"/>
                         <button class="btn btn-danger delDate" data-listpos="date-{{ forloop.counter }}"><i
                                 class="fa fa-trash"></i></button>
                     </div>
@@ -73,7 +73,7 @@
                         <div class="input-group d-none" id="datetimepicker-date-0" data-target-input="nearest">
                             <label>New observation date</label>
                             <input id="newDate" type="text" class="form-control-md datetimepicker-input"
-                                data-target="#datetimepicker-date-0" />
+                                data-target="#datetimepicker-date-0" onkeydown="event.preventDefault()"/>
                         </div>
                         <button id="addDate" class="form-control-md btn btn-primary"><i
                                 class="fa fa-plus-circle"></i></button>
@@ -89,7 +89,7 @@
                 <div class="input-group time" id="datetimepicker-time-{{forloop.counter}}" data-target-input="nearest">
                     <input type="text" class="form-control-md datetimepicker-input timeData"
                         data-target="#datetimepicker-time-{{forloop.counter}}" data-listpos="time-{{ forloop.counter }}"
-                        name="time" />
+                        name="time" onkeydown="event.preventDefault()"/>
                     <button class="btn btn-danger delTime" data-listpos="time-{{ forloop.counter }}"><i
                             class="fa fa-trash"></i></button>
                 </div>
@@ -101,7 +101,7 @@
                 <div class="input-group d-none" id="datetimepicker-time-0" data-target-input="nearest">
                     <label>New observation time</label>
                     <input id="newTime" type="text" class="form-control-md datetimepicker-input"
-                        data-target="#datetimepicker-time-0" />
+                        data-target="#datetimepicker-time-0" onkeydown="event.preventDefault()"/>
                 </div>
                 <div class="icon"><button id="addTime" class="form-control-md btn btn-primary"><i
                             class="fa fa-plus-circle"></i></button></div>
@@ -324,9 +324,9 @@
                     format: 'YYYY-MM-DD',
                     useCurrent: false,
                     maxDate: moment().millisecond(999).second(59).minute(59).hour(23),
-                    allowInputToggle: true
+                    allowInputToggle: true,
                 }
-            );
+            )
         }
         // config time pickers
         for (let i = 0; i <= "{{report.obs_times.all.count}}"; i++) {
@@ -338,7 +338,7 @@
                     defaultDate: datetime,
                     format: 'HH:mm',
                     useCurrent: false,
-                    allowInputToggle: true
+                    allowInputToggle: true,
                 }
             );
         }

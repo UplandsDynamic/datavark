@@ -139,7 +139,6 @@ class DetailView(SingleTableMixin, View):
                 # if delete record
                 if delete_record:
                     junked = db.JunkRecord(record_id=report_id)
-                    logger.info(junked)
                     return JsonResponse({"success": True}, status=200)
                 # clear existing extracted data from record
                 db.ClearRelations(record_id=report_id)

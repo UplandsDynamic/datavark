@@ -15,7 +15,7 @@ class ResultsTable(tables.Table):
     class Meta:
         model = Task
         template_name = "django_tables2/bootstrap4.html"
-        fields = ("id", "started", "stopped", "success", "result")
+        fields = ("id", "group", "started", "stopped", "success", "result")
         order_by = "-stopped"
         
 

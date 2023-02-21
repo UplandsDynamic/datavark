@@ -2,7 +2,6 @@ from django_q.models import Schedule
 from django import forms
 import logging
 from django_q.models import Schedule
-from django_q.tasks import schedule
 from django.conf import settings as s
 
 logger = logging.getLogger("django")
@@ -11,6 +10,10 @@ _data_sources = s.DA_SETTINGS["data_sources"]
 
 
 class ScheduleForm(forms.ModelForm):
+    """
+    Class to define the form for user task scheduling
+    """
+
     class Meta:
         model = Schedule
         fields = ()  # ("field name",) or __all__ for all fields
@@ -50,7 +53,7 @@ class ScheduleForm(forms.ModelForm):
             args=f"{config}",
             name=f"{source_name}",
             hook="Datavark.hooks.print_result",
-            schedule_type=schedule,  # update with additional options if new options added to config
+            schedule_type=schedule,  # may update with additional options if new options added to config
             repeats=-1,
         )
 

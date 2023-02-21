@@ -3,6 +3,10 @@ from django.contrib.gis.db.models import PointField
 
 
 class Loc(models.Model):
+    """
+    Class to define the model to hold report locations relations
+    """
+
     place_name = models.CharField(
         max_length=200,
         verbose_name="Observation place name(s)",
@@ -26,6 +30,10 @@ class Loc(models.Model):
 
 
 class Date(models.Model):
+    """
+    Class to define the model to hold report dates relations
+    """
+
     date = models.DateField(
         unique=True,
         verbose_name="Observation date(s)",
@@ -37,6 +45,10 @@ class Date(models.Model):
 
 
 class Time(models.Model):
+    """
+    Class to define the model to hold report times relations
+    """
+
     time = models.TimeField(
         unique=True,
         verbose_name="Observation time(s)",
@@ -48,6 +60,10 @@ class Time(models.Model):
 
 
 class Color(models.Model):
+    """
+    Class to define the model to hold report colours relations
+    """
+
     color = models.CharField(
         max_length=200,
         unique=True,
@@ -60,6 +76,10 @@ class Color(models.Model):
 
 
 class Type(models.Model):
+    """
+    Class to define the model to hold report observation type relations
+    """
+
     type = models.CharField(
         max_length=200,
         unique=True,
@@ -72,6 +92,10 @@ class Type(models.Model):
 
 
 class Report(models.Model):
+    """
+    Class to define the model to hold observation reports
+    """
+
     record_created = models.DateTimeField(
         auto_now_add=True,
         verbose_name="Record created",
@@ -85,7 +109,7 @@ class Report(models.Model):
     record_junked = models.BooleanField(
         default=False,
         verbose_name="Record junked",
-        help_text="Record marked for deletion"
+        help_text="Record marked for deletion",
     )
     source_name = models.CharField(
         max_length=200,

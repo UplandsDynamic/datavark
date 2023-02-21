@@ -1,12 +1,10 @@
 from django.shortcuts import render, redirect
 from django.views import View
-from django.conf import settings as s
 from Datavark.da_settings import DA_SETTINGS as d_set
 from django import template
 from django.db.models import F
 from django_tables2 import SingleTableMixin, LazyPaginator, RequestConfig
 from .tables import ReportTable
-from pathlib import Path
 from django.http import FileResponse, JsonResponse
 from Datavark.task_modules import db
 from Datavark.task_modules.postprocess import Scrubbers, ProcessLocations
@@ -20,6 +18,10 @@ logger = logging.getLogger("django")
 
 
 class GetData:
+    """
+    Class to get the data from the database
+    """
+
     _report_model = data_models.Report
 
     def __new__(cls, id=None):
@@ -78,18 +80,23 @@ class GetData:
             )
             # order by last modified, or order by obs_dates__date for observation date
             reports = reports.order_by(F("last_mod").desc(nulls_last=True))
-            # ensure no duplicated (fix for Django bug where dupes returned filters M2M fields)
+            # ensure no duplicated (fix for Django 'bug' where filtering M2M fields returns duplicates)
             reports = reports.distinct()
         return reports
 
 
 class ReportsView(SingleTableMixin, View):
+    """
+    Class to present all data to the user,
+    in tabular format
+    """
 
     _template_name = "dataview/reportsview.html"
 
     _report_table_class = ReportTable
     paginator_class = LazyPaginator
 
+    # handle GET requests
     def get(self, *args, **kwargs):
         report_table = self._report_table_class(GetData())
         RequestConfig(
@@ -103,9 +110,14 @@ class ReportsView(SingleTableMixin, View):
 
 
 class DetailView(SingleTableMixin, View):
+    """
+    Class to present a single record to the user,
+    & to enable modifying/deletion of that record
+    """
 
     _template_name = "dataview/detailview.html"
 
+    # define GET requests
     def get(self, *args, **kwargs):
         context = dict()
         report_id = kwargs.get("id", None)
@@ -118,6 +130,7 @@ class DetailView(SingleTableMixin, View):
                 return redirect("dataview:reports-view")
         return render(self.request, self._template_name, context)
 
+    # define POST requests
     def post(self, *args, **kwargs):
         if self.request.method == "POST":
             report_id = kwargs.get("id", None)
@@ -216,7 +229,7 @@ class DetailView(SingleTableMixin, View):
                 if locations or newLocations:  # add locations
                     processed_locs = (
                         []
-                    )  # {"place_name": "example", "coordinates": Point(123,456)}
+                    )  # in format {"place_name": "example", "coordinates": Point(123,456)}
                     if newLocations:
                         # run geocoding & scrubbing, then append to processed
                         processed_locs += ProcessLocations(
@@ -238,10 +251,15 @@ class DetailView(SingleTableMixin, View):
 
 
 class DataExportView(View):
+    """
+    Class to exports the data upon user request, as CSV files
+    """
+
     _template_name = "dataview/dataexportview.html"
     _export_path = d_set["csv_export_path"]
     _export_filename = d_set["csv_export_filename"]
 
+    # handle GET requests
     def get(self, *args, **kwargs):
         random_sample = True if self.request.GET.get("random", "") == "true" else False
         source = self.request.GET.get("source", "")
@@ -306,6 +324,5 @@ class DataExportView(View):
                     "obs_times": [t.time for t in report.obs_times.all()],
                 }
             )
-        # df = pd.DataFrame(o.__dict__ for o in records)
         df = pd.DataFrame(data)
         df.to_csv(os.path.join(self._export_path, self._export_filename))

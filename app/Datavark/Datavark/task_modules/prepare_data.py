@@ -10,7 +10,7 @@ logger = logging.getLogger("django")
 
 class PrepareData:
     """
-    class to prepare the data CSV. Gets latest n (defined in settings)
+    Class to prepare the data CSV. Gets latest n (defined in settings)
     rows of data from the downloaded CSV and compares that with the
     previously downloaded CSV. The differences are returned.
     """

@@ -1,14 +1,11 @@
 from ie.models import Report, Loc, Date, Time, Color, Type
 import logging
-from .postprocess import PostProcess
-from django.conf import settings
 from django.db import IntegrityError
 
 logger = logging.getLogger("django")
 
 
 class WriteToDB:
-
     """
     Write the data to the model (insert into database)
     """
@@ -19,19 +16,24 @@ class WriteToDB:
         return obj._insert_data()
 
     def _insert_data(self):
+        """
+        function to iterate documents (observation reports),
+        pass to database write function & return success/error
+        status
+        """
         logger.info(f"Inserting data into database.")
         errors = []
-        # write to database, one doc (observation report) at a time
         for doc in self.data:
             try:
                 self._write_to_database(data=doc)
-            except IntegrityError as e:
+            except IntegrityError as e:  # handle duplicate records
                 if "duplicate key value violates unique constraint" in str(e):
                     logger.warning("This record was already databased.")
                 else:
-                    errors.append(e)
+                    errors.append(e)  # append any error to errors list
             except Exception as e:
                 errors.append(e)
+        # write success status message
         success_report = (
             f"There were some errors writing to the database: {' | '.join([str(e) for e in errors])}"
             if errors
@@ -39,9 +41,12 @@ class WriteToDB:
             if self.data
             else "There was no data to process!"
         )
-        return success_report
+        return success_report  # return status message
 
     def _write_to_database(self, data):
+        """
+        function to perform the database writes
+        """
         # create a report object
         report = Report.objects.create(
             source_name=data["source_name"],
@@ -49,37 +54,30 @@ class WriteToDB:
             obs_txt=data["obs_txt"],
         )
         # create the relations if do not already exist
-
         for _loc in data["obs_locs"]:
             loc, created = Loc.objects.get_or_create(
                 place_name=_loc["place_name"].upper(),
                 coordinates=_loc["coordinates"],  # order is Long,Lat
             )
             report.obs_locs.add(loc)
-
-        # datetime.datetime.strptime("01-10-2023", "%d-%m-%Y")
         for _date in data["obs_dates"]:
             date, created = Date.objects.get_or_create(date=_date)
             report.obs_dates.add(date)
-
-        # datetime.datetime.strptime("15:26", "%H:%M")
         for _time in data["obs_times"]:
             time, created = Time.objects.get_or_create(time=_time)
             report.obs_times.add(time)
-
         for _color in data["obs_colors"]:
             color, created = Color.objects.get_or_create(color=_color.upper())
             report.obs_colors.add(color)
-
         for _type in data["obs_types"]:
             type, created = Type.objects.get_or_create(type=_type.upper())
             report.obs_types.add(type)  # can be multiple, comma separated
 
 
 class ClearRelations:
-
     """
-    Clear relations (Many-To-Many field objects) from record.
+    Class to clear relations (Many-To-Many field objects)
+    from a record.
     """
 
     def __new__(cls, record_id):
@@ -113,9 +111,9 @@ class ClearRelations:
 
 
 class JunkRecord:
-
     """
-    Set flag in record to render it "junked" (pending deletion)
+    Class to set a 'junk' flag in a record to render
+    it "junked" (pending deletion)
     """
 
     def __new__(cls, record_id):
@@ -132,18 +130,19 @@ class JunkRecord:
 
 
 class UpdateDB:
-
     """
-    Update the data model (update database).
+    Class to UPDATE a database record.
 
-    Note: All relations (many-to-many fields references) are cleared in previous step and written anew.
+    Note: All relations (many-to-many fields references) are cleared in previous steps and written anew.
     In the interests of codebase maintainability vis-a-vis the KISS principe (keep it simple stupid),
     this simplifies the update process code, as negates need to determine whether fields have been amended
-    or not in client.
+    or not in the client.
+
     The slight hit on performance of deleting all relations then re-writing is negligible,
     being this is a manual process where only one record is updated at a time.
-    Moreover, defaulting to re-writes has the potential to leverage subsequent upgrades of post-processing
-    and geocoding code - if desired - thus improving record quality over time.
+    Moreover, defaulting to re-writes of EVERY field has the potential to leverage subsequent
+    upgrades of post-processing and geocoding code - if desired - thus improving record
+    quality over time.
     """
 
     def __new__(cls, data=[]):
@@ -157,9 +156,13 @@ class UpdateDB:
         return obj._insert_data()
 
     def _insert_data(self):
+        """
+        function to iterate documents (observation reports),
+        pass to database write function & return success/error
+        status
+        """
         logger.info(f"Updating data in database ...")
         errors = []
-        # write to database, one doc (observation report) at a time
         try:
             self._write_to_database()
         except Exception as e:
@@ -174,7 +177,6 @@ class UpdateDB:
         return success_report
 
     def _write_to_database(self):
-
         # update the report object.
         report, created = Report.objects.update_or_create(
             id=self.data["report_id"],
@@ -183,9 +185,7 @@ class UpdateDB:
                 # source_name & source_url should not be updated, as they are what they are.
             },
         )
-
         # # update the relations
-
         if "obs_locs" in self.data:
             for _loc in self.data["obs_locs"]:
                 loc, created = Loc.objects.get_or_create(
@@ -193,24 +193,18 @@ class UpdateDB:
                     coordinates=_loc["coordinates"],  # order is Long,Lat
                 )
                 report.obs_locs.add(loc)
-
         if "obs_dates" in self.data:
-            # datetime.datetime.strptime("01-10-2023", "%d-%m-%Y")
             for _date in self.data["obs_dates"]:
                 date, created = Date.objects.get_or_create(date=_date)
                 report.obs_dates.add(date)
-
         if "obs_times" in self.data:
-            # datetime.datetime.strptime("15:26", "%H:%M")
             for _time in self.data["obs_times"]:
                 time, created = Time.objects.get_or_create(time=_time)
                 report.obs_times.add(time)
-
         if "obs_colors" in self.data:
             for _color in self.data["obs_colors"]:
                 color, created = Color.objects.update_or_create(color=_color.upper())
                 report.obs_colors.add(color)
-
         if "obs_types" in self.data:
             for _type in self.data["obs_types"]:
                 type, created = Type.objects.get_or_create(type=_type.upper())

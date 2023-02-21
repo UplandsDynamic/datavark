@@ -19,7 +19,7 @@ def get_data(source=""):
             if prepared_data:
                 # create the data dictionary
                 data = prepared_data["added"]
-                # get ents for each doc and add to the data
+                # get ents for each doc and adds to the data
                 data_with_ents = Ner(
                     model_name=s.DA_SETTINGS["ner_model_name"],
                     model_url=s.DA_SETTINGS["ner_model_path"],

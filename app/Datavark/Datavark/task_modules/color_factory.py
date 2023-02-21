@@ -1,4 +1,9 @@
 class ColorFactory:
+    """
+    Class to create a list of acceptable values for
+    colour names, including variations
+    """
+
     def __new__(cls, endings=["ISH", "EY", "Y"]):
         obj = super().__new__(cls)
         obj.endings = endings

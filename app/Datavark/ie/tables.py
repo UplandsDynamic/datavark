@@ -5,6 +5,11 @@ from django.utils.html import format_html
 
 
 class ScheduleTable(tables.Table):
+    """
+    Class to define the table to display
+    currently scheduled tasks
+    """
+
     class Meta:
         model = Schedule
         template_name = "django_tables2/bootstrap4.html"
@@ -12,12 +17,16 @@ class ScheduleTable(tables.Table):
 
 
 class ResultsTable(tables.Table):
+    """
+    Class to define the table to display
+    task execution results
+    """
+
     class Meta:
         model = Task
         template_name = "django_tables2/bootstrap4.html"
         fields = ("id", "group", "started", "stopped", "success", "result")
         order_by = "-stopped"
-        
 
     def render_result(self, value, record):
         return (

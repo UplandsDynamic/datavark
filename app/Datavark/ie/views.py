@@ -1,22 +1,25 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from django.views import View
 from django.conf import settings as s
-import pandas as pd
-from django.template.loader import get_template
 from django_q.models import Schedule
-from django_q.tasks import schedule, result_group
-import logging
+from django_q.tasks import result_group
 from django import template
 from django_tables2 import SingleTableMixin, LazyPaginator, RequestConfig
 from .tables import ScheduleTable, ResultsTable
 from django.http import JsonResponse
-from django.core import serializers
 from .forms import ScheduleForm
+import logging
 
 register = template.Library()
 logger = logging.getLogger("django")
 
+
 class IEView(SingleTableMixin, View):
+    """
+    Main IE view class, that provides the
+    scheduling functionality and the
+    task log
+    """
 
     _template_name = "ie/index.html"
     _schedule_model = Schedule
@@ -25,6 +28,7 @@ class IEView(SingleTableMixin, View):
     _results_table_class = ResultsTable
     paginator_class = LazyPaginator
 
+    # handle GET requests
     def get(self, *args, **kwargs):
         form = self._form_class(initial=self._get_initial_form_values())
         schedule_table = self._schedule_table_class(
@@ -44,6 +48,7 @@ class IEView(SingleTableMixin, View):
         }
         return render(self.request, self._template_name, context)
 
+    # handle POST requests
     def post(self, *args, **kwargs):
         if self.request.method == "POST":
             form = self._form_class(self.request.POST)

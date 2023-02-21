@@ -1,4 +1,3 @@
-# tutorial/tables.py
 import django_tables2 as tables
 import ie.models as data_models
 from django.utils.html import format_html
@@ -8,6 +7,11 @@ logger = logging.getLogger("django")
 
 
 class ReportTable(tables.Table):
+    """
+    Class to create the table showing all
+    reports data to the user
+    """
+
     class Meta:
         model = data_models.Report
         template_name = "django_tables2/bootstrap4.html"
@@ -23,7 +27,7 @@ class ReportTable(tables.Table):
             "obs_times",
         )
         order_by = "-id"
-        order_by_field = "id" # or "obs_dates__date" for observation date
+        order_by_field = "id"  # or "obs_dates__date" to order by observation date
 
     obs_colors = tables.Column(order_by="obs_colors__color")
     obs_types = tables.Column(order_by="obs_types__type")

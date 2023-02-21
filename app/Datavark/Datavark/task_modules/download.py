@@ -7,6 +7,9 @@ logger = logging.getLogger("django")
 
 
 class DownloadNUFORC:
+    """
+    Class to acquire the NUFORC data
+    """
 
     _data = []
     _current_data_csv_path = s.DA_SETTINGS["data_sources"]["nuforc"]["data_path"]
@@ -37,7 +40,7 @@ class DownloadNUFORC:
             subprocess.check_output(
                 f"dvc --cd {self._scraper_path} repro",
                 shell=True,
-                executable="/bin/bash"
+                executable="/bin/bash",
             )
             return True
         except subprocess.CalledProcessError as e:
@@ -74,6 +77,9 @@ class DownloadNUFORC:
 
 
 class DownloadReddit:
+    """
+    Class to acquire the Reddit data
+    """
 
     _data = []
     _current_data_csv_path = s.DA_SETTINGS["data_sources"]["reddit"]["data_path"]

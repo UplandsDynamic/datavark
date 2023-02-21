@@ -7,6 +7,10 @@ logger = logging.getLogger("django")
 
 
 class RedditScraper:
+    """
+    Class to acquire the data from Reddit
+    """
+
     def __new__(cls, args=None, kwargs={}):
         obj = super().__new__(cls)
         return obj._get_data()
@@ -26,7 +30,9 @@ class RedditScraper:
         _all_submissions = reddit.subreddit("ufos")
 
         """
-        legacy - this was how weekly sighting reports were formatted on r/UFOs prior to January 2023
+        Legacy: The below commented code was used to retrieve weekly sighting reports 
+        by targetting their formatting on r/UFOs as it was prior to the change 
+        by the subreddit administrators in January 2023.
         """
 
         # for i in _all_submissions.search(
@@ -50,14 +56,14 @@ class RedditScraper:
         #             )
 
         """
-        sighting reports are now formatted as new submissions (posts) 
-        with the "Witness/Sighting" flair, as of January 2023, with the 
-        weekly submission with reports as comments being retired
-        """
+        Sighting reports are now formatted as new submissions (posts) 
+        with the "Witness/Sighting" 'flair', as of January 2023. This is 
+        targetted in the code, below.
+        
+        !Note: Increase the time_filter if needing to extract more than one 
+        previous week's reports in one go.
 
-        """
-        !Note: increase time_filter if needing to extract more than the last week's.
-        Official documentation for search parameters available here: 
+        Official documentation for all search parameters are available here: 
         https://praw.readthedocs.io/en/stable/code_overview/models/subreddit.html
         """
 

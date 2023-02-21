@@ -2,7 +2,6 @@ import datetime, dateutil, re, logging
 from dateparser import parse
 from dateparser_data.settings import default_parsers
 from django.contrib.gis.geos import Point
-from django.conf import settings
 from dateutil.parser import ParserError
 from .color_factory import ColorFactory
 from geopy.geocoders import Nominatim
@@ -13,9 +12,9 @@ logger = logging.getLogger("django")
 
 
 class PostProcess:
-
     """
-    Processes the data to produce standardised input for the model fields
+    Class to process the data to produce
+    standardised input for the model fields
     """
 
     _location_entity_class_types = []
@@ -27,8 +26,10 @@ class PostProcess:
         obj._data = data
         obj._source = source
         """
-        note: "PLACE" is custom class type added in NUFORC reshape to denote value that was obtained 
-        from structured NUFORC data rather than NER
+        Note: "PLACE" is custom class type added in NUFORC reshaped data,
+        used to signify a value that was obtained 
+        from the *structured* NUFORC data & distinguish it from LOC & GPE
+        entities extracted by NER from *unstructured* text.
         """
         obj._location_entity_class_types = [
             "GPE",
@@ -38,10 +39,11 @@ class PostProcess:
         return obj._process()
 
     def _process(self):
+        # function to initiate the processing functions
         _processed_docs = []
         logger.info(f"Running post-processing for {self._source['source_name']} data.")
         for doc in self._data:  # for every document
-            # REDDIT
+            # REDDIT data
             if self._source["source_name"] == "REDDIT":
                 # attribute data to variables - default structure
                 obs_dates = self._process_dates(
@@ -66,7 +68,7 @@ class PostProcess:
                         if any(t == e[1] for t in self._location_entity_class_types)
                     ]
                 )
-            # NUFORC
+            # NUFORC data
             elif self._source["source_name"] == "NUFORC":
                 doc = self._reshape_nuforc_data(doc)  # reshape data for NUFORC
                 source_name = self._source["source_name"]
@@ -230,8 +232,9 @@ class PostProcess:
 
 class ProcessLocations:
     """
-    process locations class - also accessible externally (outwith task scheduler processes).
-    Includes geocode and formatting ready for DB insertion.
+    Class to process locations. This is also accessible externally
+    (outwith task scheduler processes). Includes geocode and
+    formatting ready for DB insertion.
     """
 
     def __new__(cls, data=[], geocode=False):
@@ -247,7 +250,8 @@ class ProcessLocations:
 
     def _process(self):
         """
-        return in form [{"place_name": "place name string", "coordinates": Point(longitude, latitude)}]
+        Function to initiate the processing functions.
+        Returns in the form [{"place_name": "place name string", "coordinates": Point(longitude, latitude)}]
         """
         processed = []
         for loc in self._data:
@@ -288,15 +292,22 @@ class ProcessLocations:
 
 
 class Scrubbers:
+    """
+    Class that provides the functions to clean and
+    standardise the data
+    """
+
     def __init__(self, input):
         self.input = input
 
+    # runs set of functions to clean & standardise unstructured text field input
     def run_text_scrubbers(self):
         self._strip_quotes()
         self._remove_only_single_char()
         self._remove_whitespace()
         return self.input
 
+    # runs set of functions to apply base cleaning & standardisation to any input text
     def run_base_scrubbers(self):
         self._remove_whitespace()
         self._capitalize()
@@ -304,6 +315,7 @@ class Scrubbers:
         self._remove_only_single_char()
         return self.input
 
+    # runs set of functions to clean & standardise place text (from LOC, GPE & PLACE fields)
     def run_place_scrubbers(self):
         self._remove_whitespace()
         self._capitalize()
@@ -311,11 +323,13 @@ class Scrubbers:
         self._remove_only_single_char()
         return self.input
 
+    # runs set of functions to clean & standardise colours
     def run_color_scrubbers(self):
         self.run_base_scrubbers()
         self._standardise_color()
         return self.input
 
+    # runs functions to clean & standardise observation types
     def run_type_scrubbers(self):
         self.run_base_scrubbers()
         self._standardise_light()

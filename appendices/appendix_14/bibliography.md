@@ -1,4 +1,4 @@
-Bibliography
+# Bibliography  
 
 The following is a list of background reading that was not directly referenced in the main body of dissertation text.
 

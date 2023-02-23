@@ -1,3 +1,3 @@
-Additional information about the most_recent_n variable in the da_settings.py file
+# Additional information about the most_recent_n variable in the da_settings.py file  
 
 The most_recent_n variable may be set such as to balance system resources against the likely number of new records available after each scheduled download. Under normal circumstances, it was estimated that a daily or weekly data download from any given source would be unlikely to result in any missed records, should most_recent_n be set to a reasonable level, since there are rarely hundreds of reports per source every day or week. However, most_recent_n was implemented to ensure a safeguard against system instability and to provide a way of managing the initial bulk data download from a newly added source, where none of the records had been seen before. 

@@ -1,0 +1,31 @@
+# List of tokens annotated as the TYPE label  
+
+- Light
+- Boomerang
+- Triangle
+- Wing
+- Crescent
+- Chevron
+- Disk
+- Saucer
+- Cylinder
+- Pyramid
+- Tic tac
+- Orb
+- Globe
+- Round
+- Square
+- Rectangle
+- Cube
+- Fireball
+- Wheel
+- Top
+- Cigar
+- Pill
+- Starlike
+- Rod
+- Trapezoid
+- Diamond
+- Lightbulb
+- Dome
+- Dot

@@ -1,4 +1,4 @@
-Adjustments made to calculations during the analysis are described below.
+# Adjustments made to calculations during the analysis
 
 The “missing_extracted” variable was adjusted during the entity matching process to account for the occurrences of multi-token entities. An example of why this was necessary is as follows: Incrementing the true positive total twice for two annotated tokens that were represented by only one NER identified token would have artificially inflated the true positives total. Therefore, the script only incremented true positives once if the NER entity had already been seen (i.e., processed in the loop). Moreover, in this scenario, the false negatives total was also decremented by one for each annotated entity that fell within the character bounds of the NER identified token. This was because although only one token was found by NER, all of those associated annotated entities had nevertheless been accounted for – ergo false negatives should not be registered.
 

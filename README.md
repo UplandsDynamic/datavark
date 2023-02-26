@@ -1,8 +1,7 @@
 # Dissertation
-This is the repository for a dissertation undertaken as part of a University of Highlands & Islands (UHI) MSc in Web Technologies. 
-Improve date parsing 
+This is the repository for a dissertation undertaken as part of a University of the Highlands & Islands (UHI) MSc in Web Technologies. 
 
-The project consisted of the development of an automated UAP observation information extraction tool and database, for use with 3rd party analytics software.
+The project consisted of the development of a prototype of an automated information acquisition and extraction platform. The prototype use-case was to support the work of the Scientific Coalition for UAP Studies (SCU).
 
 ## Project author
-This dissertation was authored by Dan Bright, student number 12004727.
+This dissertation was authored by Dan Bright, 12004727@uhi.ac.uk.

@@ -21,3 +21,4 @@ dev/
 app/Datavark/static/
 .ipynb_checkpoints/
 appendices/*/*/._*
+**/._*

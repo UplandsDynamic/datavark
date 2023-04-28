@@ -22,3 +22,4 @@ app/Datavark/static/
 .ipynb_checkpoints/
 appendices/*/*/._*
 **/._*
+**/appendices

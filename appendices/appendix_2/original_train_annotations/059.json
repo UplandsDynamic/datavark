@@ -1,1 +1,0 @@
-{"classes":["TYPE","DATE","GPE","LOC","TIME","COLOR"],"annotations":[["Two red lights very high in the sky ",{"entities":[[4,7,"COLOR"],[8,14,"TYPE"]]}],["Two red lights appeared to almost collide but quickly made chevron pattern and disappeared. They were much higher than planes fly.",{"entities":[[4,7,"COLOR"],[8,14,"TYPE"],[59,66,"TYPE"]]}]]}

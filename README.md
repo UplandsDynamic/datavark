@@ -1,5 +1,7 @@
 # DatavArk
 
+*IMPORTANT: This appliction is for reference use only. It is NOT maintained and contains references to now outdated libraries that include security vulnerabilities.*
+
 DatavArk is an automated, domain-specific information acquisition and extraction platform. 
 
 This prototype was developed to gather data in the domain of Unexplained Anomalous Phenomena (UAP). The app ingests unstructured textual reports submitted to NUFORC.org and posted on Reddit.com. Extracted entities are recorded in a PostGIS SQL database.
